@@ -178,7 +178,7 @@ namespace MsCrmExtensions.Tests
 
             DateTime? actualAttributeValue2 = actualEntity.GetAttributeValue<DateTime?>(attributeLogicalName2);
             Assert.IsNotNull(actualAttributeValue2);
-            Assert.AreEqual<DateTime?> (value2, actualAttributeValue2);
+            Assert.AreEqual<DateTime?>(value2, actualAttributeValue2);
 
             /// Test without alias
             actualEntity = entity.GetAliasedEntity(linkedEntityLogicalName2);
@@ -198,6 +198,39 @@ namespace MsCrmExtensions.Tests
             actualEntity = entity.GetAliasedEntity("quote");
             Assert.IsNotNull(actualEntity);
             Assert.AreEqual<int>(0, actualEntity.Attributes.Count);
+        }
+
+        [TestMethod()]
+        public void MergeAttributesTest()
+        {
+            /// Setup test data
+            Entity target = new Entity();
+            target.Attributes.Add("firstname", "Artem"); //exist in both
+            target.Attributes.Add("lastname", "Grunin"); //exist in both 
+            target.Attributes.Add("middlename", "Igorevich"); // exist only in target
+
+            Entity source = new Entity();
+            source.Attributes.Add("firstname", "Artem the great"); //changed in source
+            source.Attributes.Add("lastname", "Grunin"); //exist in both
+            source.Attributes.Add("birthdate", new DateTime(1985, 8, 8)); // exist only in source
+
+            /// Run test
+            target.MergeAttributes(source);
+
+            /// Should be one more attribute
+            Assert.AreEqual(4, target.Attributes.Count);
+
+            /// Should have original value
+            String firstname = target.GetAttributeValue<String>("firstname");
+            Assert.AreEqual("Artem", firstname);
+
+            /// Test for existing attribute
+            String lastname = target.GetAttributeValue<String>("lastname");
+            Assert.AreEqual("Grunin", lastname);
+
+            /// Test for new attribute 
+            DateTime birthdate = target.GetAttributeValue<DateTime>("birthdate");
+            Assert.AreEqual(new DateTime(1985, 8, 8), birthdate);
         }
     }
 }

@@ -83,6 +83,24 @@ namespace MsCrmExtensions
             return GetAliasedEntity(entity, entityLogicalName, alias).ToEntity<T>();
         }
 
+        /// <summary>
+        /// Add attributes form source Entity if they don't exist in target Entity
+        /// </summary>
+        /// <param name="source">Entity to take attributes form </param>
+        public static void MergeAttributes(this Entity target, Entity source)
+        {
+            if (source != null)
+            {
+                foreach (var attribute in source.Attributes)
+                {
+                    if (target.Attributes.ContainsKey(attribute.Key) == false)
+                    {
+                        target.Attributes.Add(attribute);
+                    }
+                }
+            }
+        }
+
         private static void СheckParam(Object parameter, String name)
         {
             if (parameter == null)
