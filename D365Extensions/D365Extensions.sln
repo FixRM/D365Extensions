@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D365Extensions", "MsCrmExtensions\D365Extensions.csproj", "{0FD54081-45D9-41C1-8732-13034BDBB8E6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D365Extensions", "D365Extensions\D365Extensions.csproj", "{0FD54081-45D9-41C1-8732-13034BDBB8E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D365Extensions.Tests", "MsCrmExtensions.Tests\D365Extensions.Tests.csproj", "{57AD9ED0-3237-44B4-BAB6-D80870CC46D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D365Extensions.Tests", "D365Extensions.Tests\D365Extensions.Tests.csproj", "{57AD9ED0-3237-44B4-BAB6-D80870CC46D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

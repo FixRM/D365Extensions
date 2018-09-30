@@ -76,7 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MsCrmExtensions\D365Extensions.csproj">
+    <ProjectReference Include="..\D365Extensions\D365Extensions.csproj">
       <Project>{0FD54081-45D9-41C1-8732-13034BDBB8E6}</Project>
       <Name>D365Extensions</Name>
     </ProjectReference>
