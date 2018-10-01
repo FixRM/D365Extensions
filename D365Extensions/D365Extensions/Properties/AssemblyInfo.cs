@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MsCrmExtensions")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("D365Extensions")]
+[assembly: AssemblyDescription("A collection of Extension methods for Microsoft Dynamics CRM/D365 SDK base classes")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MsCrmExtensions")]
+[assembly: AssemblyCompany("Artem Grunin")]
+[assembly: AssemblyProduct("D365Extensions")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
