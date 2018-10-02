@@ -1,9 +1,8 @@
-﻿using MsCrmExtensions;
-using System;
+﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 
-namespace MsCrmExtensions.Tests
+namespace D365Extensions.Tests
 {
     [TestClass]
     public class EntityExtensionsTests
@@ -198,6 +197,61 @@ namespace MsCrmExtensions.Tests
             actualEntity = entity.GetAliasedEntity("quote");
             Assert.IsNotNull(actualEntity);
             Assert.AreEqual<int>(0, actualEntity.Attributes.Count);
+        }
+
+        [TestMethod()]
+        public void GetAliasedEntityGenericTest()
+        {
+            /// Setup test data
+            String mainEntityLogicalName = "account";
+            String linkedEntityLogicalName1 = "fixrm_testentity";
+
+            String attributeLogicalName1 = "name";
+            String value1 = "Grunin Artem";
+            AliasedValue aliasedValue1 = new AliasedValue(linkedEntityLogicalName1, attributeLogicalName1, value1);
+
+            String attributeLogicalName2 = "birthdate";
+            DateTime? value2 = new DateTime(1985, 8, 8);
+            AliasedValue aliasedValue2 = new AliasedValue(linkedEntityLogicalName1, attributeLogicalName2, value2);
+
+            /// Create Entity
+            String alias1 = "ac";
+            String aliasedName1 = $"{alias1}.{attributeLogicalName1}";
+            String aliasedName2 = $"{alias1}.{attributeLogicalName2}";
+
+            /// Create main entity
+            Entity entity = new Entity(mainEntityLogicalName);
+
+            /// Add main entity attributes
+            entity.Attributes.Add("name", "FixRM");
+            entity.Attributes.Add("accountnumber", "1");
+            entity.Attributes.Add("statecode", new OptionSetValue(0));
+
+            /// Add linked entity attributes
+            entity.Attributes.Add(aliasedName1, aliasedValue1);
+            entity.Attributes.Add(aliasedName2, aliasedValue2);
+
+            TestEntity actualEntity;
+
+            /// Test
+            actualEntity = entity.GetAliasedEntity<TestEntity>(linkedEntityLogicalName1, alias1);
+
+            /// Instance is correct type
+            Assert.IsNotNull(actualEntity);
+            Assert.IsInstanceOfType(actualEntity, typeof(TestEntity));
+
+            /// attribite values of erly bound entity are ok
+            Assert.AreEqual<String>(actualEntity.LogicalName, linkedEntityLogicalName1);
+            Assert.AreEqual<int>(2, actualEntity.Attributes.Count);
+
+            String actualAttributeValue1 = actualEntity.GetAttributeValue<String>(attributeLogicalName1);
+            Assert.IsNotNull(actualAttributeValue1);
+            Assert.AreEqual<String>(value1, actualAttributeValue1);
+
+            DateTime? actualAttributeValue2 = actualEntity.GetAttributeValue<DateTime?>(attributeLogicalName2);
+            Assert.IsNotNull(actualAttributeValue2);
+            Assert.AreEqual<DateTime?>(value2, actualAttributeValue2);
+
         }
 
         [TestMethod()]
