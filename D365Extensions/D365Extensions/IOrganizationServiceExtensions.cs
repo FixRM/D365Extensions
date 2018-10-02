@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using D365Extensions;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
@@ -18,7 +19,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>        
         public static void Associate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities)
         {
-            СheckParam(primaryEntity, nameof(primaryEntity));
+            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
         }
@@ -28,7 +29,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Associate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
-            СheckParam(primaryEntity, nameof(primaryEntity));
+            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
         }
@@ -39,7 +40,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="reference">Entity to delete</param>
         public static void Delete(this IOrganizationService service, EntityReference reference)
         {
-            СheckParam(reference, nameof(reference));
+            СheckParam.СheckForNull(reference, nameof(reference));
 
             service.Delete(reference.LogicalName, reference.Id);
         }
@@ -50,7 +51,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="entity">Entity to delete</param>
         public static void Delete(this IOrganizationService service, Entity entity)
         {
-            СheckParam(entity, nameof(entity));
+            СheckParam.СheckForNull(entity, nameof(entity));
 
             service.Delete(entity.LogicalName, entity.Id);
         }
@@ -60,7 +61,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities)
         {
-            СheckParam(primaryEntity, nameof(primaryEntity));
+            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
         }
@@ -70,7 +71,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
-            СheckParam(primaryEntity, nameof(primaryEntity));
+            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
         }
@@ -81,7 +82,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="reference">Entity to retrieve</param>
         public static Entity Retrieve(this IOrganizationService service, EntityReference reference, ColumnSet columnSet)
         {
-            СheckParam(reference, nameof(reference));
+            СheckParam.СheckForNull(reference, nameof(reference));
 
             return service.Retrieve(reference.LogicalName, reference.Id, columnSet);
         }
@@ -101,7 +102,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="reference">Entity to retrieve</param>
         public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, ColumnSet columnSet) where T : Entity
         {
-            СheckParam(reference, nameof(reference));
+            СheckParam.СheckForNull(reference, nameof(reference));
 
             Entity entity = service.Retrieve(reference.LogicalName, reference.Id, columnSet);
             return entity?.ToEntity<T>();
@@ -114,14 +115,6 @@ namespace Microsoft.Xrm.Sdk
         public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, params String[] columns) where T : Entity
         {
             return service.Retrieve<T>(reference, new ColumnSet(columns));
-        }
-
-        private static void СheckParam(Object parameter, String name)
-        {
-            if (parameter == null)
-            {
-                throw new ArgumentNullException(name);
-            }
-        }
+        }        
     }
 }

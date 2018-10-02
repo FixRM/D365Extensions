@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using D365Extensions;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
@@ -16,11 +17,9 @@ namespace Microsoft.Xrm.Sdk
         /// <returns>Attribute formated value</returns>
         public static String GetFormatedValue(this Entity entity, String attributeLogicalName)
         {
-            СheckParam(attributeLogicalName, nameof(attributeLogicalName));
+            СheckParam.СheckForNull(attributeLogicalName, nameof(attributeLogicalName));
 
-            String outValue;
-            entity.FormattedValues.TryGetValue(attributeLogicalName, out outValue);
-
+            entity.FormattedValues.TryGetValue(attributeLogicalName, out string outValue);
             return outValue;
         }
 
@@ -34,8 +33,8 @@ namespace Microsoft.Xrm.Sdk
         /// <returns>Attribute value</returns>
         public static T GetAliasedValue<T>(this Entity entity, String attributeLogicalName, String alias)
         {
-            СheckParam(attributeLogicalName, nameof(attributeLogicalName));
-            СheckParam(alias, nameof(alias));
+            СheckParam.СheckForNull(attributeLogicalName, nameof(attributeLogicalName));
+            СheckParam.СheckForNull(alias, nameof(alias));
 
             String aliasedAttributeName = alias + "." + attributeLogicalName;
             AliasedValue aliasedValue = entity.GetAttributeValue<AliasedValue>(aliasedAttributeName);
@@ -98,14 +97,6 @@ namespace Microsoft.Xrm.Sdk
                         target.Attributes.Add(attribute);
                     }
                 }
-            }
-        }
-
-        private static void СheckParam(Object parameter, String name)
-        {
-            if (parameter == null)
-            {
-                throw new ArgumentNullException(name);
             }
         }
     }
