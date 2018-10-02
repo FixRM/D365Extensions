@@ -26,3 +26,38 @@ After edit you .cproj file should be looking like the folowing:
 You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies.
 
 >**!!! Never merge SDK assemblies in your code. It will cause runtime errors !!!**
+
+# Extensions
+
+## Entity Extensions
+Set of extension methods for Microsoft.Xrm.Sdk.Entity base class.
+
+### GetFormatedValue
+Simplifies getting values from Entity.FormattedValues collection
+```C#
+public String GetFormatedValue(String attributeLogicalName);
+```
+
+### GetAliasedValue
+Simplifies getting values from linked entities attributes wraped in AliasedValue class. This kind of attributes can be queried by FetchExpression or QueryExpression using Linked Entities 
+```C#
+public T GetAliasedValue<T>(String attributeLogicalName, String alias);
+```
+
+### GetAliasedEntity
+Simplifies getting multiple linked entitiy attrubutes by allocating them to separate Entity
+```C#
+public Entity GetAliasedEntity(String entityLogicalName, String alias = null);
+```
+
+### GetAliasedEntity\<T\>
+Generic version of GetAliasedEntity
+```C#
+public T GetAliasedEntity<T>(String entityLogicalName, String alias = null) where T : Entity;
+```
+
+### MergeAttributes
+Add attributes form source Entity if they don't exist in target Entity. Very convenient way to compose attribute values from plugin Target and PreImage to operate single Entity instance.
+```C#
+public void MergeAttributes(Entity source);
+```
