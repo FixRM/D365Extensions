@@ -2,6 +2,9 @@
 # D365Extensions
 A collection of Extension methods for Microsoft Dynamics CRM/D365 SDK base classes
 
+# Setup
+All extension methods are declared in the same namespace as related SDK types. No additional `using` statements required.
+
 # Usage
 This assembly is assumed to be used for plugin development. As D365 for CE currently doesn't support assembly dependencies you have to merge it in your primary plugin assembly. We recommend using this tool:
 
@@ -60,4 +63,37 @@ public T GetAliasedEntity<T>(String entityLogicalName, String alias = null) wher
 Add attributes form source Entity if they don't exist in target Entity. Very convenient way to compose attribute values from plugin Target and PreImage to operate single Entity instance.
 ```C#
 public void MergeAttributes(Entity source);
+```
+## IOrganizationService Extensions
+Set of extension methods for IOrganizationService base class. Basically these are simple overrides of existing methods which take EntityReference or Entity instead of separate `Id` and `LogicalName` parameters.
+
+### Associate & Disassociate
+Associate & Disassociate methods override. Take EntityReference (insted of separate Id + LogicalName) input parameter
+```C#
+public void Associate(EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities);
+public void Associate(EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
+
+public void Disassociate(EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities);
+public void Disassociate(EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
+```
+
+### Delete
+Delete method override. Take EntityReference (insted of separate Id + LogicalName) input parameter
+```C#
+public void Delete(EntityReference reference);
+public void Delete(Entity entity);
+```
+
+### Retrieve
+Retrieve method override.  Take EntityReference (insted of separate Id + LogicalName) input parameter
+```C#
+public Entity Retrieve(EntityReference reference, ColumnSet columnSet);
+public Entity Retrieve(EntityReference reference, params String[] columns);
+```
+
+### Retrieve\<T\>
+Generic version of Retrieve
+```C#
+public T Retrieve<T>(EntityReference reference, ColumnSet columnSet) where T : Entity;
+public T Retrieve<T>(EntityReference reference, params String[] columns) where T : Entity;
 ```
