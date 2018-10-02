@@ -15,13 +15,10 @@ namespace MsCrmExtensions
     {
         /// <summary>
         /// Associate method override. Takes EntityReference as primary entity input parameter
-        /// </summary>
-        /// <param name="reference">Entity to delete</param>
+        /// </summary>        
         public static void Associate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities)
         {
             СheckParam(primaryEntity, nameof(primaryEntity));
-            СheckParam(relationship, nameof(relationship));
-            СheckParam(relatedEntities, nameof(relatedEntities));
 
             service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
         }
@@ -29,12 +26,9 @@ namespace MsCrmExtensions
         /// <summary>
         /// Associate method override. Takes EntityReference as primary entity input parameter and list of EntityReferences as related entities parameter
         /// </summary>
-        /// <param name="reference">Entity to delete</param>
         public static void Associate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
             СheckParam(primaryEntity, nameof(primaryEntity));
-            СheckParam(relationship, nameof(relationship));
-            СheckParam(relatedEntities, nameof(relatedEntities));
 
             service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
         }
@@ -64,12 +58,9 @@ namespace MsCrmExtensions
         /// <summary>
         /// Disassociate method override. Takes EntityReference as primary entity input parameter
         /// </summary>
-        /// <param name="reference">Entity to delete</param>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities)
         {
             СheckParam(primaryEntity, nameof(primaryEntity));
-            СheckParam(relationship, nameof(relationship));
-            СheckParam(relatedEntities, nameof(relatedEntities));
 
             service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
         }
@@ -77,12 +68,9 @@ namespace MsCrmExtensions
         /// <summary>
         /// Disassociate method override. Takes EntityReference as primary entity input parameter and list of EntityReferences as related entities parameter
         /// </summary>
-        /// <param name="reference">Entity to delete</param>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
             СheckParam(primaryEntity, nameof(primaryEntity));
-            СheckParam(relationship, nameof(relationship));
-            СheckParam(relatedEntities, nameof(relatedEntities));
 
             service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
         }
@@ -90,26 +78,42 @@ namespace MsCrmExtensions
         /// <summary>
         /// Retrieve method override. Takes EntityReference as input parameter
         /// </summary>
-        /// <param name="reference">Entity to delete</param>
+        /// <param name="reference">Entity to retrieve</param>
         public static Entity Retrieve(this IOrganizationService service, EntityReference reference, ColumnSet columnSet)
         {
             СheckParam(reference, nameof(reference));
-            СheckParam(columnSet, nameof(columnSet));
 
             return service.Retrieve(reference.LogicalName, reference.Id, columnSet);
         }
 
         /// <summary>
+        /// Retrieve method override. Takes EntityReference as input parameter and array of attribute names to retrieve
+        /// </summary>
+        /// <param name="reference">Entity to retrieve</param>
+        public static Entity Retrieve(this IOrganizationService service, EntityReference reference, params String[] columns)
+        {
+            return service.Retrieve(reference, new ColumnSet(columns));
+        }
+
+        /// <summary>
         /// Retrieve method override. Takes EntityReference as input parameter and return strongly typed entity object
         /// </summary>
-        /// <param name="reference">Entity to delete</param>
+        /// <param name="reference">Entity to retrieve</param>
         public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, ColumnSet columnSet) where T : Entity
         {
             СheckParam(reference, nameof(reference));
-            СheckParam(columnSet, nameof(columnSet));
 
             Entity entity = service.Retrieve(reference.LogicalName, reference.Id, columnSet);
             return entity?.ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Retrieve method override. Takes EntityReference as input parameter and return strongly typed entity object
+        /// </summary>
+        /// <param name="reference">Entity to retrieve</param>
+        public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, params String[] columns) where T : Entity
+        {
+            return service.Retrieve<T>(reference, new ColumnSet(columns));
         }
 
         private static void СheckParam(Object parameter, String name)
