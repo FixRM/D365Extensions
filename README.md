@@ -71,7 +71,7 @@ Set of extension methods for IOrganizationService base class. Basically these ar
 Associate & Disassociate methods override. Take EntityReference (insted of separate Id + LogicalName) input parameter
 ```C#
 public void Associate(EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities);
-public void Associate(EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
+public void Associate(EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities);
 
 public void Disassociate(EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities);
 public void Disassociate(EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
