@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 
-namespace MsCrmExtensions
+namespace Microsoft.Xrm.Sdk
 {
     public static class EntityExtensions
     {
