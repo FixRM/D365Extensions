@@ -7,6 +7,8 @@
     <authors>$author$</authors>
     <owners>$author$</owners>
     <projectUrl>https://github.com/FixRM/D365Extensions</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/FixRM/D365Extensions/master/fixrmlogo_64.png</iconUrl>
+    <repository type="git" url="https://github.com/FixRM/D365Extensions" />
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <copyright>Copyright 2018</copyright>
