@@ -19,7 +19,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>        
         public static void Associate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities)
         {
-            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
+            CheckParam.CheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
         }
@@ -29,7 +29,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Associate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
-            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
+            CheckParam.CheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
         }
@@ -40,7 +40,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="reference">Entity to delete</param>
         public static void Delete(this IOrganizationService service, EntityReference reference)
         {
-            СheckParam.СheckForNull(reference, nameof(reference));
+            CheckParam.CheckForNull(reference, nameof(reference));
 
             service.Delete(reference.LogicalName, reference.Id);
         }
@@ -51,7 +51,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="entity">Entity to delete</param>
         public static void Delete(this IOrganizationService service, Entity entity)
         {
-            СheckParam.СheckForNull(entity, nameof(entity));
+            CheckParam.CheckForNull(entity, nameof(entity));
 
             service.Delete(entity.LogicalName, entity.Id);
         }
@@ -61,7 +61,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities)
         {
-            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
+            CheckParam.CheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
         }
@@ -71,7 +71,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
-            СheckParam.СheckForNull(primaryEntity, nameof(primaryEntity));
+            CheckParam.CheckForNull(primaryEntity, nameof(primaryEntity));
 
             service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
         }
@@ -82,7 +82,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="reference">Entity to retrieve</param>
         public static Entity Retrieve(this IOrganizationService service, EntityReference reference, ColumnSet columnSet)
         {
-            СheckParam.СheckForNull(reference, nameof(reference));
+            CheckParam.CheckForNull(reference, nameof(reference));
 
             return service.Retrieve(reference.LogicalName, reference.Id, columnSet);
         }
@@ -102,7 +102,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="reference">Entity to retrieve</param>
         public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, ColumnSet columnSet) where T : Entity
         {
-            СheckParam.СheckForNull(reference, nameof(reference));
+            CheckParam.CheckForNull(reference, nameof(reference));
 
             Entity entity = service.Retrieve(reference.LogicalName, reference.Id, columnSet);
             return entity?.ToEntity<T>();

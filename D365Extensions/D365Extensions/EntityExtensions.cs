@@ -17,7 +17,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns>Attribute formated value</returns>
         public static String GetFormatedValue(this Entity entity, String attributeLogicalName)
         {
-            СheckParam.СheckForNull(attributeLogicalName, nameof(attributeLogicalName));
+            CheckParam.CheckForNull(attributeLogicalName, nameof(attributeLogicalName));
 
             entity.FormattedValues.TryGetValue(attributeLogicalName, out string outValue);
             return outValue;
@@ -33,8 +33,8 @@ namespace Microsoft.Xrm.Sdk
         /// <returns>Attribute value</returns>
         public static T GetAliasedValue<T>(this Entity entity, String attributeLogicalName, String alias)
         {
-            СheckParam.СheckForNull(attributeLogicalName, nameof(attributeLogicalName));
-            СheckParam.СheckForNull(alias, nameof(alias));
+            CheckParam.CheckForNull(attributeLogicalName, nameof(attributeLogicalName));
+            CheckParam.CheckForNull(alias, nameof(alias));
 
             String aliasedAttributeName = alias + "." + attributeLogicalName;
             AliasedValue aliasedValue = entity.GetAttributeValue<AliasedValue>(aliasedAttributeName);
