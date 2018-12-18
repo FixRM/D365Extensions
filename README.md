@@ -97,3 +97,107 @@ Generic version of Retrieve
 public T Retrieve<T>(EntityReference reference, ColumnSet columnSet) where T : Entity;
 public T Retrieve<T>(EntityReference reference, params String[] columns) where T : Entity;
 ```
+
+## IPluginExecutionContextExtensions Extensions
+
+### GetOrganization
+Return OrganizationId and OrganizationName fields as single EntityReference
+```C#
+public EntityReference GetOrganization();
+```
+
+### GetPrimaryEntity
+Return PrimaryEntityId and PrimaryEntityName fields as single EntityReference
+```C#
+public EntityReference GetPrimaryEntity();
+```
+
+### GetUser
+Return UserId field as EntityReference
+```C#
+public EntityReference GetUser();
+```
+
+### GetInitiatingUser
+Return InitiatingUserId field as EntityReference
+```C#
+public EntityReference GetInitiatingUser();
+```
+
+### GetBusinessUnit
+Return BusinessUnitId field as EntityReference
+```C#
+public EntityReference GetBusinessUnit();
+```
+
+### GetInputParameter\<T\>
+Gets input paramer
+```C#
+public T GetInputParameter<T>(String name) where T : class;
+```
+
+### GetOutputParameter\<T\>
+Gets output paramer
+```C#
+public T GetOutputParameter<T>(String name) where T : class;
+```
+
+### GetPreImage
+Gets pre image
+```C#
+public Entity GetPreImage(String name);
+```
+
+### GetPreImage\<T\>
+Gets pre image as the specified type
+```C#
+public T GetPreImage<T>(String name) where T : Entity;
+```
+
+### GetPostImage
+Gets post image
+```C#
+public Entity GetPostImage(String name);
+```
+
+### GetPostImage\<T\>
+Gets post image as the specified type
+```C#
+public T GetPostImage<T>(String name) where T : Entity;
+```
+
+### GetTarget
+Shortcut for getting "Target" input parameter of type Entity
+```C#
+public Entity GetTarget();
+```
+
+### GetTarget\<T\>
+Shortcut for getting "Target" input parameter  as the specified type
+```C#
+public T GetTarget<T>() where T : Entity;
+```
+
+### GetPreTarget\<T\>
+Get "Target" entity parameter merged with specified pre image 
+```C#
+public T GetPreTarget<T>(String name) where T : Entity;
+```
+
+### GetPostTarget\<T\>
+Get "Target" entity parameter merged with specified post image 
+```C#
+public T GetPostTarget<T>(String name) where T : Entity;
+```
+
+### GetSharedVariable\<T\>
+Gets shared Variable
+```C#
+public T GetSharedVariable<T>(String name) where T : class;
+```
+
+### GetRelatedEntitiesByTarget
+Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type, furthermore two options possible: when "À" entity is associated with array of "B", or "B" is associated with array of "A". This method generates universal dictionary of arguments which is suitable in all cases
+```C#
+public Dictionary<EntityReference, EntityReferenceCollection> GetRelatedEntitiesByTarget(String keyEntity, String valueEntity);
+```

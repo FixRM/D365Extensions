@@ -76,8 +76,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="EntityExtensionsTests.cs" />
+    <Compile Include="IPluginExecutionContextExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestEntity.cs" />
+    <Compile Include="TestPluginExecutionContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\D365Extensions\D365Extensions.csproj">

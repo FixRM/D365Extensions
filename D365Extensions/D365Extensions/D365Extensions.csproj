@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityExtensions.cs" />
+    <Compile Include="IPluginExecutionContextExtensions.cs" />
     <Compile Include="СheckParam.cs" />
     <Compile Include="IOrganizationServiceExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
