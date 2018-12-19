@@ -209,7 +209,7 @@ namespace Microsoft.Xrm.Sdk
 
         /// <summary>
         /// Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type, furthermore
-        /// two options possible: when "А" entity is associated with array of "B", or "B" is associated with array of "A".
+        /// two options possible: when "A" entity is associated with array of "B", or "B" is associated with array of "A".
         /// 
         /// This method generates universal dictionary of arguments which is suitable in all cases
         /// </summary>

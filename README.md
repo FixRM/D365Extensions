@@ -197,7 +197,7 @@ public T GetSharedVariable<T>(String name) where T : class;
 ```
 
 ### GetRelatedEntitiesByTarget
-Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type, furthermore two options possible: when "À" entity is associated with array of "B", or "B" is associated with array of "A". This method generates universal dictionary of arguments which is suitable in all cases
+Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type, furthermore two options possible: when "A" entity is associated with array of "B", or "B" is associated with array of "A". This method generates universal dictionary of arguments which is suitable in all cases
 ```C#
 public Dictionary<EntityReference, EntityReferenceCollection> GetRelatedEntitiesByTarget(String keyEntity, String valueEntity);
 ```
