@@ -201,3 +201,24 @@ Simplifies handling of Associate and Disassociate messages. This messages can't 
 ```C#
 public Dictionary<EntityReference, EntityReferenceCollection> GetRelatedEntitiesByTarget(String keyEntity, String valueEntity);
 ```
+
+## CodeActivityContext Extensions
+Set of extension methods for System.Activities.CodeActivityContext base class. Short cut methods for getting D365 related services from workflow execution context.
+
+### GetWorkflowContext
+Gets IWorkflowContext extension from CodeActivityContext
+```C#
+public IWorkflowContext GetWorkflowContext();
+```
+
+### GetOrganizationServiceFactory
+Gets IOrganizationServiceFactory extension from CodeActivityContext
+```C#
+public IOrganizationServiceFactory GetOrganizationServiceFactory();
+```
+
+### GetTracingService
+Gets ITracingService extension from CodeActivityContext
+```C#
+public ITracingService GetTracingService();
+```
