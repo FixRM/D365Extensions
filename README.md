@@ -222,3 +222,24 @@ Gets ITracingService extension from CodeActivityContext
 ```C#
 public ITracingService GetTracingService();
 ```
+
+## IServiceProviderExtensions
+Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just shortcut methods to save you few lines of code during plugin development.
+
+### GetPluginExecutionContext
+Gets IPluginExecutionContext from service provider
+```C#
+public IPluginExecutionContext GetPluginExecutionContext();
+```
+
+### GetOrganizationServiceFactory
+Gets IOrganizationServiceFactory from service provider
+```C#
+public IOrganizationServiceFactory GetOrganizationServiceFactory();
+```
+
+### GetTracingService
+Gets ITracingService extension from service provider
+```C#
+public ITracingService GetTracingService();
+```
