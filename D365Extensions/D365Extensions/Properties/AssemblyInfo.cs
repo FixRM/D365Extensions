@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("D365Extensions")]
-[assembly: AssemblyDescription("A collection of Extension methods for Microsoft Dynamics CRM/D365 SDK base classes")]
+[assembly: AssemblyDescription("A collection of extension methods for Microsoft Dynamics CRM/D365 SDK base classes")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Artem Grunin")]
 [assembly: AssemblyProduct("D365Extensions")]
