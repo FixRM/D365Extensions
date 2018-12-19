@@ -36,25 +36,25 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 Set of extension methods for Microsoft.Xrm.Sdk.Entity base class.
 
 ### GetFormatedValue
-Simplifies getting values from Entity.FormattedValues collection
+Simplifies getting values from Entity.FormattedValues collection.
 ```C#
 public String GetFormatedValue(String attributeLogicalName);
 ```
 
 ### GetAliasedValue
-Simplifies getting values from linked entities attributes wraped in AliasedValue class. This kind of attributes can be queried by FetchExpression or QueryExpression using Linked Entities 
+Simplifies getting values from linked entities attributes wraped in AliasedValue class. This kind of attributes can be queried by FetchExpression or QueryExpression using Linked Entities.
 ```C#
 public T GetAliasedValue<T>(String attributeLogicalName, String alias);
 ```
 
 ### GetAliasedEntity
-Simplifies getting multiple linked entitiy attrubutes by allocating them to separate Entity
+Simplifies getting multiple linked entitiy attrubutes by allocating them to separate Entity.
 ```C#
 public Entity GetAliasedEntity(String entityLogicalName, String alias = null);
 ```
 
 ### GetAliasedEntity\<T\>
-Generic version of GetAliasedEntity
+Generic version of GetAliasedEntity.
 ```C#
 public T GetAliasedEntity<T>(String entityLogicalName, String alias = null) where T : Entity;
 ```
@@ -68,7 +68,7 @@ public void MergeAttributes(Entity source);
 Set of extension methods for IOrganizationService base class. Basically these are simple overrides of existing methods which take EntityReference or Entity instead of separate `Id` and `LogicalName` parameters.
 
 ### Associate & Disassociate
-Associate & Disassociate methods override. Take EntityReference (insted of separate Id + LogicalName) input parameter
+Associate & Disassociate methods override. Take EntityReference (insted of separate Id + LogicalName) input parameter.
 ```C#
 public void Associate(EntityReference primaryEntity, Relationship relationship, EntityReferenceCollection relatedEntities);
 public void Associate(EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities);
@@ -78,21 +78,21 @@ public void Disassociate(EntityReference primaryEntity, Relationship relationshi
 ```
 
 ### Delete
-Delete method override. Take EntityReference (insted of separate Id + LogicalName) input parameter
+Delete method override. Take EntityReference (insted of separate Id + LogicalName) input parameter.
 ```C#
 public void Delete(EntityReference reference);
 public void Delete(Entity entity);
 ```
 
 ### Retrieve
-Retrieve method override.  Take EntityReference (insted of separate Id + LogicalName) input parameter
+Retrieve method override.  Take EntityReference (insted of separate Id + LogicalName) input parameter.
 ```C#
 public Entity Retrieve(EntityReference reference, ColumnSet columnSet);
 public Entity Retrieve(EntityReference reference, params String[] columns);
 ```
 
 ### Retrieve\<T\>
-Generic version of Retrieve
+Generic version of Retrieve.
 ```C#
 public T Retrieve<T>(EntityReference reference, ColumnSet columnSet) where T : Entity;
 public T Retrieve<T>(EntityReference reference, params String[] columns) where T : Entity;
@@ -101,103 +101,103 @@ public T Retrieve<T>(EntityReference reference, params String[] columns) where T
 ## IPluginExecutionContext Extensions
 Set of extension methods for Microsoft.Xrm.Sdk.IPluginExecutionContext base class. Most of this helpers are shortcuts for existing properties but provides additional checks or type casts. Unlike Entity class extensions most of the following extensions are not exception safe! It is done so because you most likely want to get an error if plugin is registered for a wrong message or you have a typo in parameter name.
 ### GetOrganization
-Return OrganizationId and OrganizationName fields as single EntityReference
+Return OrganizationId and OrganizationName fields as single EntityReference.
 ```C#
 public EntityReference GetOrganization();
 ```
 
 ### GetPrimaryEntity
-Return PrimaryEntityId and PrimaryEntityName fields as single EntityReference
+Return PrimaryEntityId and PrimaryEntityName fields as single EntityReference.
 ```C#
 public EntityReference GetPrimaryEntity();
 ```
 
 ### GetUser
-Return UserId field as EntityReference
+Return UserId field as EntityReference.
 ```C#
 public EntityReference GetUser();
 ```
 
 ### GetInitiatingUser
-Return InitiatingUserId field as EntityReference
+Return InitiatingUserId field as EntityReference.
 ```C#
 public EntityReference GetInitiatingUser();
 ```
 
 ### GetBusinessUnit
-Return BusinessUnitId field as EntityReference
+Return BusinessUnitId field as EntityReference.
 ```C#
 public EntityReference GetBusinessUnit();
 ```
 
 ### GetInputParameter\<T\>
-Gets input paramer
+Gets input paramer as the specified type.
 ```C#
 public T GetInputParameter<T>(String name) where T : class;
 ```
 
 ### GetOutputParameter\<T\>
-Gets output paramer
+Gets output paramer as the specified type.
 ```C#
 public T GetOutputParameter<T>(String name) where T : class;
 ```
 
 ### GetPreImage
-Gets pre image
+Gets pre image.
 ```C#
 public Entity GetPreImage(String name);
 ```
 
 ### GetPreImage\<T\>
-Gets pre image as the specified type
+Gets pre image as the specified type.
 ```C#
 public T GetPreImage<T>(String name) where T : Entity;
 ```
 
 ### GetPostImage
-Gets post image
+Gets post image.
 ```C#
 public Entity GetPostImage(String name);
 ```
 
 ### GetPostImage\<T\>
-Gets post image as the specified type
+Gets post image as the specified type.
 ```C#
 public T GetPostImage<T>(String name) where T : Entity;
 ```
 
 ### GetTarget
-Shortcut for getting "Target" input parameter of type Entity
+Shortcut for getting "Target" input parameter of type Entity.
 ```C#
 public Entity GetTarget();
 ```
 
 ### GetTarget\<T\>
-Shortcut for getting "Target" input parameter  as the specified type
+Shortcut for getting "Target" input parameter  as the specified type.
 ```C#
 public T GetTarget<T>() where T : Entity;
 ```
 
 ### GetPreTarget\<T\>
-Get "Target" entity parameter merged with specified pre image 
+Get "Target" entity parameter merged with specified pre image.
 ```C#
 public T GetPreTarget<T>(String name) where T : Entity;
 ```
 
 ### GetPostTarget\<T\>
-Get "Target" entity parameter merged with specified post image 
+Get "Target" entity parameter merged with specified post image.
 ```C#
 public T GetPostTarget<T>(String name) where T : Entity;
 ```
 
 ### GetSharedVariable\<T\>
-Gets shared Variable
+Gets shared Variable.
 ```C#
 public T GetSharedVariable<T>(String name) where T : class;
 ```
 
 ### GetRelatedEntitiesByTarget
-Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type, furthermore two options possible: when "A" entity is associated with array of "B", or "B" is associated with array of "A". This method generates universal dictionary of arguments which is suitable in all cases
+Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type, furthermore two options possible: when "A" entity is associated with array of "B", or "B" is associated with array of "A". This method generates universal dictionary of arguments which is suitable in all cases.
 ```C#
 public Dictionary<EntityReference, EntityReferenceCollection> GetRelatedEntitiesByTarget(String keyEntity, String valueEntity);
 ```
@@ -206,40 +206,55 @@ public Dictionary<EntityReference, EntityReferenceCollection> GetRelatedEntities
 Set of extension methods for System.Activities.CodeActivityContext base class. Short cut methods for getting D365 related services from workflow execution context.
 
 ### GetWorkflowContext
-Gets IWorkflowContext extension from CodeActivityContext
+Gets IWorkflowContext extension from CodeActivityContext.
 ```C#
 public IWorkflowContext GetWorkflowContext();
 ```
 
 ### GetOrganizationServiceFactory
-Gets IOrganizationServiceFactory extension from CodeActivityContext
+Gets IOrganizationServiceFactory extension from CodeActivityContext.
 ```C#
 public IOrganizationServiceFactory GetOrganizationServiceFactory();
 ```
 
 ### GetTracingService
-Gets ITracingService extension from CodeActivityContext
+Gets ITracingService extension from CodeActivityContext.
 ```C#
 public ITracingService GetTracingService();
 ```
 
-## IServiceProviderExtensions
+## IServiceProvider Extensions
 Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just shortcut methods to save you few lines of code during plugin development.
 
 ### GetPluginExecutionContext
-Gets IPluginExecutionContext from service provider
+Gets IPluginExecutionContext from service provider.
 ```C#
 public IPluginExecutionContext GetPluginExecutionContext();
 ```
 
 ### GetOrganizationServiceFactory
-Gets IOrganizationServiceFactory from service provider
+Gets IOrganizationServiceFactory from service provider.
 ```C#
 public IOrganizationServiceFactory GetOrganizationServiceFactory();
 ```
 
 ### GetTracingService
-Gets ITracingService extension from service provider
+Gets ITracingService extension from service provider.
 ```C#
 public ITracingService GetTracingService();
+```
+
+## EntityReference Extensions
+Set of extension methods for Microsoft.Xrm.Sdk.EntityReference base class. At the moment just two simple but sometimes useful type conversion methods.
+
+### ToEntity
+Gets the entity based on the EntityReference.
+```C#
+public Entity ToEntity();
+```
+
+### ToEntity\<T\>
+Gets the entity based on the EntityReference as the specified type.
+```C#
+public T ToEntity<T>() where T : Entity;
 ```

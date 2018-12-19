@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Xrm.Sdk
 {
+    /// <summary>
+    /// Set of extension methods for Microsoft.Xrm.Sdk.EntityReference base class. At the moment just two simple but sometimes useful type conversion methods.
+    /// </summary>
     public static class EntityReferenceExtensions
     {
         /// <summary>
-        /// Gets the entity based on the EntityReference
+        /// Gets the entity based on the EntityReference.
         /// </summary>
         /// <returns></returns>
         public static Entity ToEntity(this EntityReference entityReference)
@@ -22,7 +25,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Gets the entity based on the EntityReference as the specified type
+        /// Gets the entity based on the EntityReference as the specified type.
         /// </summary>
         /// <returns></returns>
         public static T ToEntity<T>(this EntityReference entityReference) where T : Entity
