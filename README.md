@@ -98,8 +98,8 @@ public T Retrieve<T>(EntityReference reference, ColumnSet columnSet) where T : E
 public T Retrieve<T>(EntityReference reference, params String[] columns) where T : Entity;
 ```
 
-## IPluginExecutionContextExtensions Extensions
-
+## IPluginExecutionContext Extensions
+Set of extension methods for Microsoft.Xrm.Sdk.IPluginExecutionContext base class. Most of this helpers are shortcuts for existing properties but provides additional checks or type casts. Unlike Entity class extensions most of the following extensions are not exception safe! It is done so because you most likely want to get an error if plugin is registered for a wrong message or you have a typo in parameter name.
 ### GetOrganization
 Return OrganizationId and OrganizationName fields as single EntityReference
 ```C#
