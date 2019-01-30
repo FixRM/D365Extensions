@@ -1,6 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
+using System;
 
 namespace D365Extensions.Tests
 {
@@ -285,6 +285,36 @@ namespace D365Extensions.Tests
             /// Test for new attribute 
             DateTime birthdate = target.GetAttributeValue<DateTime>("birthdate");
             Assert.AreEqual(new DateTime(1985, 8, 8), birthdate);
+        }
+
+        [TestMethod()]
+        public void SetValueTest()
+        {
+            /// Setup test data 
+            String existingAttributeLogicalName = "name";
+            String existingAttributeValue = "Artem Grunin";
+
+            String nonexistentAttributeLogicalName = "birthdate";
+            DateTime? nonexistentAttributeValue = new DateTime(1985, 8, 8);
+
+            Entity entity = new Entity();
+            entity.Attributes.Add(existingAttributeLogicalName, existingAttributeValue);
+
+            /// Act: Set existing attribute value
+            String expectedExistingAttributeValue = "Mr Artem Grunin";
+            entity.SetAttributeValue(existingAttributeLogicalName, expectedExistingAttributeValue);
+
+            /// Act: Set nonexistent attribute value
+            entity.SetAttributeValue(nonexistentAttributeLogicalName, nonexistentAttributeValue);
+
+            /// Assert: Should add ome more attributes
+            Assert.AreEqual<int>(2, entity.Attributes.Count);
+
+            /// Assert: Should update existing attribute value
+            Assert.AreEqual(expectedExistingAttributeValue, entity[existingAttributeLogicalName]);
+
+            /// Assert: Should add nonexistent attribute value
+            Assert.AreEqual(nonexistentAttributeValue, entity[nonexistentAttributeLogicalName]);
         }
     }
 }

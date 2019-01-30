@@ -258,3 +258,9 @@ Gets the entity based on the EntityReference as the specified type.
 ```C#
 public T ToEntity<T>() where T : Entity;
 ```
+
+### SetAttributeValue
+Safely sets attribute value.
+```C#
+public bool SetAttributeValue(String name, Object value);
+```

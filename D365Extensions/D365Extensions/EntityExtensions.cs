@@ -1,11 +1,7 @@
-﻿using System;
+﻿using D365Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D365Extensions;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -41,7 +37,7 @@ namespace Microsoft.Xrm.Sdk
 
             if (aliasedValue != null)
             {
-                return (T) aliasedValue.Value;
+                return (T)aliasedValue.Value;
             }
             else
             {
@@ -97,6 +93,25 @@ namespace Microsoft.Xrm.Sdk
                         target.Attributes.Add(attribute);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Safely sets attribute value
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns>true if new attribute added</returns>
+        public static bool SetAttributeValue(this Entity entity, String name, Object value)
+        {
+            if (entity.Contains(name))
+            {
+                entity[name] = value;
+                return false;
+            }
+            else
+            {
+                entity.Attributes.Add(name, value);
+                return true;
             }
         }
     }
