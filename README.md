@@ -64,6 +64,12 @@ Add attributes form source Entity if they don't exist in target Entity. Very con
 ```C#
 public void MergeAttributes(Entity source);
 ```
+### SetAttributeValue
+Safely sets attribute value.
+```C#
+public bool SetAttributeValue(String name, Object value);
+```
+
 ## IOrganizationService Extensions
 Set of extension methods for IOrganizationService base class. Basically these are simple overrides of existing methods which take EntityReference or Entity instead of separate `Id` and `LogicalName` parameters.
 
@@ -257,10 +263,4 @@ public Entity ToEntity();
 Gets the entity based on the EntityReference as the specified type.
 ```C#
 public T ToEntity<T>() where T : Entity;
-```
-
-### SetAttributeValue
-Safely sets attribute value.
-```C#
-public bool SetAttributeValue(String name, Object value);
 ```
