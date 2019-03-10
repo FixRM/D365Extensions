@@ -12,7 +12,7 @@ This assembly is assumed to be used for plugin development. As D365 for CE curre
 
 ILRepack use the same technique as ILMerge but it is build on newer versions of Mono instruments so it is more fast and efficient. Please refer to link above for documentation.
 
-After edit you .cproj file should be looking like the folowing:
+After edit you .cproj file should be looking like the following:
 ```XML
   <Target Name="AfterBuild">
     <ItemGroup>
@@ -33,7 +33,7 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 # Extensions
 
 ## [Entity Extensions](../../wiki/Entity-Extensions)
-Set of extension methods for Microsoft.Xrm.Sdk.Entity base class. Simplifies dealing with Aliased and Formeted values as well as working with Attributes collection.
+Set of extension methods for Microsoft.Xrm.Sdk.Entity base class. Simplifies dealing with Aliased and Formated values as well as working with Attributes collection.
 
 ## [IOrganizationService Extensions](../../wiki/IOrganizationService-Extensions)
 Set of extension methods for IOrganizationService base class. Basically these are simple overrides of existing methods which take EntityReference or Entity instead of separate `Id` and `LogicalName` parameters.
