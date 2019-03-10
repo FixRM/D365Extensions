@@ -30,6 +30,11 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 
 >**!!! Never merge SDK assemblies in your code. It will cause runtime errors !!!**
 
+# What's new
+
+## Version 1.0.29
+Add support for alternative keys for Retrieve and Delete!
+
 # Extensions
 
 ## [Entity Extensions](../../wiki/Entity-Extensions)
@@ -49,3 +54,8 @@ Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just
 
 ## [EntityReference Extensions](../../EntityReference-Extensions)
 Set of extension methods for Microsoft.Xrm.Sdk.EntityReference base class. At the moment just two simple but sometimes useful type conversion methods.
+
+# Contributing
+Please fill free to create issue if you find a bug or have an idea. PR's are welcomed as well! :) Help wanted in the following areas:
++ Unit tests. Most of extensions are just wrappers/overrides of SDK classes but as list of extension grows method call chain grows as well. It seems like it's a time to unit check all methods
++ Code documentation. As it turns out XML code documentation and wiki documentation are very different. Help with updating code doc is appreciated 
