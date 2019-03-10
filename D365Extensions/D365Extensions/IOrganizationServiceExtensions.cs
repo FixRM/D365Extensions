@@ -39,7 +39,17 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(reference, nameof(reference));
 
-            service.Delete(reference.LogicalName, reference.Id);
+            /// Delete by id if possible as is supposed to be faster 
+            if (reference.Id != Guid.Empty)
+            {
+                service.Delete(reference.LogicalName, reference.Id);
+            }
+            /// Use alternative key
+            else
+            {
+                service.Delete(reference.LogicalName, reference.KeyAttributes);
+            }
+
         }
 
         /// <summary>
@@ -50,7 +60,37 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(entity, nameof(entity));
 
-            service.Delete(entity.LogicalName, entity.Id);
+            service.Delete(entity.ToEntityReference());
+        }
+
+        /// <summary>
+        /// Delete method override. Deletes by Alternative key
+        /// </summary>
+        /// <param name="reference">Entity to delete</param>
+        public static void Delete(this IOrganizationService service, string logicalName, KeyAttributeCollection keyAttributeCollection)
+        {
+            CheckParam.CheckForNull(logicalName, nameof(logicalName));
+            CheckParam.CheckForNull(keyAttributeCollection, nameof(keyAttributeCollection));
+
+            service.Execute(new DeleteRequest()
+            {
+                Target = new EntityReference(logicalName, keyAttributeCollection)
+            });
+        }
+
+        /// <summary>
+        /// Delete method override. Deletes by Alternative key
+        /// </summary>
+        /// <param name="reference">Entity to delete</param>
+        public static void Delete(this IOrganizationService service, string logicalName, string keyName, object keyValue)
+        {
+            CheckParam.CheckForNull(keyName, nameof(keyName));
+            CheckParam.CheckForNull(keyValue, nameof(keyValue));
+
+            KeyAttributeCollection keys = new KeyAttributeCollection();
+            keys.Add(keyName, keyValue);
+
+            service.Delete(logicalName, keys);
         }
 
         /// <summary>
@@ -172,7 +212,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
-        public static T  Retrieve<T>(this IOrganizationService service, string logicalName, string keyName, string keyValue, ColumnSet columnSet) where T : Entity
+        public static T Retrieve<T>(this IOrganizationService service, string logicalName, string keyName, string keyValue, ColumnSet columnSet) where T : Entity
         {
             Entity entity = service.Retrieve(logicalName, keyName, keyValue, columnSet);
 
