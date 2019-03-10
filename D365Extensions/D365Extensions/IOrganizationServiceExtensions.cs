@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D365Extensions;
-using Microsoft.Xrm.Sdk;
+﻿using D365Extensions;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -84,7 +81,16 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(reference, nameof(reference));
 
-            return service.Retrieve(reference.LogicalName, reference.Id, columnSet);
+            /// Retrieve by id if possible as is supposed to be faster
+            if (reference.Id != Guid.Empty)
+            {
+                return service.Retrieve(reference.LogicalName, reference.Id, columnSet);
+            }
+            /// Use alternative key
+            else
+            {
+                return service.Retrieve(reference.LogicalName, reference.KeyAttributes, columnSet);
+            }
         }
 
         /// <summary>
@@ -102,9 +108,8 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="reference">Entity to retrieve</param>
         public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, ColumnSet columnSet) where T : Entity
         {
-            CheckParam.CheckForNull(reference, nameof(reference));
+            Entity entity = service.Retrieve(reference, columnSet);
 
-            Entity entity = service.Retrieve(reference.LogicalName, reference.Id, columnSet);
             return entity?.ToEntity<T>();
         }
 
@@ -115,6 +120,73 @@ namespace Microsoft.Xrm.Sdk
         public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, params String[] columns) where T : Entity
         {
             return service.Retrieve<T>(reference, new ColumnSet(columns));
-        }        
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrives by Alternative key
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        public static Entity Retrieve(this IOrganizationService service, string logicalName, KeyAttributeCollection keyAttributeCollection, ColumnSet columnSet)
+        {
+            CheckParam.CheckForNull(logicalName, nameof(logicalName));
+            CheckParam.CheckForNull(keyAttributeCollection, nameof(keyAttributeCollection));
+
+            RetrieveResponse response = service.Execute(new RetrieveRequest()
+            {
+                Target = new EntityReference(logicalName, keyAttributeCollection),
+                ColumnSet = columnSet
+            }) as RetrieveResponse;
+
+            return response.Entity;
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrives by Alternative key
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        public static Entity Retrieve(this IOrganizationService service, string logicalName, string keyName, object keyValue, ColumnSet columnSet)
+        {
+            CheckParam.CheckForNull(keyName, nameof(keyName));
+            CheckParam.CheckForNull(keyValue, nameof(keyValue));
+
+            KeyAttributeCollection keys = new KeyAttributeCollection();
+            keys.Add(keyName, keyValue);
+
+            return service.Retrieve(logicalName, keys, columnSet);
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrives by Alternative key 
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        public static Entity Retrieve(this IOrganizationService service, string logicalName, string keyName, object keyValue, string[] columns)
+        {
+            return service.Retrieve(logicalName, keyName, keyValue, new ColumnSet(columns));
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrives by Alternative key and returns strongly typed entity object
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        public static T  Retrieve<T>(this IOrganizationService service, string logicalName, string keyName, string keyValue, ColumnSet columnSet) where T : Entity
+        {
+            Entity entity = service.Retrieve(logicalName, keyName, keyValue, columnSet);
+
+            return entity?.ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrives by Alternative key and returns strongly typed entity object
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        public static T Retrieve<T>(this IOrganizationService service, string logicalName, string keyName, string keyValue, params String[] columns) where T : Entity
+        {
+            return service.Retrieve<T>(logicalName, keyName, keyValue, new ColumnSet(columns));
+        }
     }
 }
