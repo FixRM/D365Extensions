@@ -202,7 +202,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
-        public static Entity Retrieve(this IOrganizationService service, string logicalName, string keyName, object keyValue, string[] columns)
+        public static Entity Retrieve(this IOrganizationService service, string logicalName, string keyName, object keyValue, params string[] columns)
         {
             return service.Retrieve(logicalName, keyName, keyValue, new ColumnSet(columns));
         }
