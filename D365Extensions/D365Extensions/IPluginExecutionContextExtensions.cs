@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using D365Extensions;
-using Microsoft.Xrm.Sdk;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -88,23 +84,23 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Gets input paramer
+        /// Gets input parameter
         /// </summary>
         /// <param name="name">Parameter name</param>
         /// <returns></returns>
-        public static T GetInputParameter<T>(this IPluginExecutionContext context, String name) where T : class
+        public static T GetInputParameter<T>(this IPluginExecutionContext context, String name)
         {
-             return context.InputParameters[name] as T;
+            return (T)context.InputParameters[name];
         }
 
         /// <summary>
-        /// Gets output paramer
+        /// Gets output parameter
         /// </summary>
         /// <param name="name">Parameter name</param>
         /// <returns></returns>
-        public static T GetOutputParameter<T>(this IPluginExecutionContext context, String name) where T : class
+        public static T GetOutputParameter<T>(this IPluginExecutionContext context, String name)
         {
-            return context.OutputParameters[name] as T;
+            return (T)context.OutputParameters[name];
         }
 
         /// <summary>
@@ -202,9 +198,9 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="context"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetSharedVariable<T>(this IPluginExecutionContext context, String name) where T : class
+        public static T GetSharedVariable<T>(this IPluginExecutionContext context, String name)
         {
-            return context.SharedVariables[name] as T;
+            return (T)context.SharedVariables[name];
         }
 
         /// <summary>

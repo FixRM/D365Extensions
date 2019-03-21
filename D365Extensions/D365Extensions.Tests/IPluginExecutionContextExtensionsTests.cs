@@ -177,5 +177,20 @@ namespace D365Extensions.Tests
             Assert.AreEqual(1, value2.Count);
             Assert.IsTrue(value2.Contains(contact1));
         }
+
+        [TestMethod()]
+        public void GetInputParameterTest()
+        {
+            int? structType = 42;
+            string referenceType = "ultimate question of life the universe and everything";
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.InputParameters = new ParameterCollection();
+            context.InputParameters.Add("struct", structType);
+            context.InputParameters.Add("class", referenceType);
+
+            Assert.AreEqual<int?>(structType, context.GetInputParameter<int?>("struct"));
+            Assert.AreEqual<string>(referenceType, context.GetInputParameter<string>("class"));
+        }
     }
 }
