@@ -33,11 +33,11 @@ namespace D365Extensions.Tests
                 Assert.AreEqual<String>(e.ParamName, "attributeLogicalName");
             }
 
-            /// Test for exisiting attribute
+            /// Test for existing attribute
             formatedValue = entity.GetFormatedValue(attributeLogicalName);
             Assert.AreEqual<String>(attributeValue, formatedValue);
 
-            /// Test for not exisiting attribute
+            /// Test for not existing attribute
             formatedValue = entity.GetFormatedValue("doesntexist");
             Assert.IsNull(formatedValue);
         }
@@ -98,7 +98,7 @@ namespace D365Extensions.Tests
                 Assert.AreEqual<String>(e.ParamName, "alias");
             }
 
-            /// Test for exisiting attribute
+            /// Test for existing attribute
             actualValue = entity.GetAliasedValue<String>(attributeLogicalName1, alias);
             Assert.IsFalse(String.IsNullOrEmpty(actualValue));
             Assert.AreEqual<String>(value1, actualValue);
@@ -107,7 +107,7 @@ namespace D365Extensions.Tests
             Assert.IsTrue(actualValue2.HasValue);
             Assert.AreEqual<DateTime?>(value2, actualValue2);
 
-            /// Test for not exisiting attribute
+            /// Test for not existing attribute
             actualValue = entity.GetAliasedValue<String>("doesntexist", alias);
             Assert.IsNull(actualValue);
         }
@@ -240,7 +240,7 @@ namespace D365Extensions.Tests
             Assert.IsNotNull(actualEntity);
             Assert.IsInstanceOfType(actualEntity, typeof(TestEntity));
 
-            /// attribite values of erly bound entity are ok
+            /// attribute values of early bound entity are ok
             Assert.AreEqual<String>(actualEntity.LogicalName, linkedEntityLogicalName1);
             Assert.AreEqual<int>(2, actualEntity.Attributes.Count);
 
@@ -307,7 +307,7 @@ namespace D365Extensions.Tests
             /// Act: Set nonexistent attribute value
             entity.SetAttributeValue(nonexistentAttributeLogicalName, nonexistentAttributeValue);
 
-            /// Assert: Should add ome more attributes
+            /// Assert: Should add one more attributes
             Assert.AreEqual<int>(2, entity.Attributes.Count);
 
             /// Assert: Should update existing attribute value

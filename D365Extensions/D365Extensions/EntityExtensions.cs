@@ -20,12 +20,12 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Simplifies getting values from linked entities attributes wraped in AliasedValue class
+        /// Simplifies getting values from linked entities attributes wrapped in AliasedValue class
         /// This kind of attributes can be queried by FetchExpression or QueryExpression using Linked Entities 
         /// </summary>
         /// <typeparam name="T">Attribute value type</typeparam>
         /// <param name="attributeLogicalName">Attribute logical name</param>
-        /// <param name="alias">>Entity alias used in LinkedEntity defenition</param>
+        /// <param name="alias">>Entity alias used in LinkedEntity definition</param>
         /// <returns>Attribute value</returns>
         public static T GetAliasedValue<T>(this Entity entity, String attributeLogicalName, String alias)
         {
@@ -46,10 +46,10 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Simplifies getting multiple linked entitiy attrubutes by allocating them to separate Entity
+        /// Simplifies getting multiple linked entity attributes by allocating them to separate Entity
         /// </summary>
         /// <param name="entityLogicalName">Logical name of linked Entity</param>
-        /// <param name="alias">Entity alias used in LinkedEntity defenition</param>
+        /// <param name="alias">Entity alias used in LinkedEntity definition</param>
         /// <returns>Entity with specified logical name that contains all attribute values with specified alias</returns>
         public static Entity GetAliasedEntity(this Entity entity, String entityLogicalName, String alias = null)
         {
@@ -71,7 +71,7 @@ namespace Microsoft.Xrm.Sdk
         /// Generic version of GetAliasedEntity
         /// </summary>
         /// <param name="entityLogicalName">Logical name of linked Entity</param>
-        /// <param name="alias">Entity alias used in LinkedEntity defenition</param>
+        /// <param name="alias">Entity alias used in LinkedEntity definition</param>
         /// <returns></returns>
         public static T GetAliasedEntity<T>(this Entity entity, String entityLogicalName, String alias = null) where T : Entity
         {

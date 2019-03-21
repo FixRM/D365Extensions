@@ -163,7 +163,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Retrieve method override. Retrives by Alternative key
+        /// Retrieve method override. Retrieves by Alternative key
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
@@ -182,7 +182,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Retrieve method override. Retrives by Alternative key
+        /// Retrieve method override. Retrieves by Alternative key
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
@@ -198,7 +198,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Retrieve method override. Retrives by Alternative key 
+        /// Retrieve method override. Retrieves by Alternative key 
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
@@ -208,7 +208,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Retrieve method override. Retrives by Alternative key and returns strongly typed entity object
+        /// Retrieve method override. Retrieves by Alternative key and returns strongly typed entity object
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
@@ -220,7 +220,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Retrieve method override. Retrives by Alternative key and returns strongly typed entity object
+        /// Retrieve method override. Retrieves by Alternative key and returns strongly typed entity object
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
