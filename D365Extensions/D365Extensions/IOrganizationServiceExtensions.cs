@@ -179,7 +179,7 @@ namespace Microsoft.Xrm.Sdk
         {
             Entity entity = service.Retrieve(reference, columnSet);
 
-            return entity?.ToEntity<T>();
+            return entity.ToEntity<T>();
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace Microsoft.Xrm.Sdk
         {
             Entity entity = service.Retrieve(logicalName, keyName, keyValue, columnSet);
 
-            return entity?.ToEntity<T>();
+            return entity.ToEntity<T>();
         }
 
         /// <summary>
