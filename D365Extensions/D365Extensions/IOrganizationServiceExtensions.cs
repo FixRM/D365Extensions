@@ -26,9 +26,23 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Associate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
-            CheckParam.CheckForNull(primaryEntity, nameof(primaryEntity));
+            service.Associate(primaryEntity, relationship, new EntityReferenceCollection(relatedEntities));
+        }
 
-            service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
+        /// <summary>
+        /// Associate method override. Takes EntityReference as primary entity input parameter
+        /// </summary>        
+        public static void Associate(this IOrganizationService service, EntityReference primaryEntity, String relationshipName, EntityReferenceCollection relatedEntities)
+        {
+            service.Associate(primaryEntity.LogicalName, primaryEntity.Id, new Relationship(relationshipName), relatedEntities);
+        }
+
+        /// <summary>
+        /// Associate method override. Takes EntityReference as primary entity input parameter and list of EntityReferences as related entities parameter
+        /// </summary>
+        public static void Associate(this IOrganizationService service, EntityReference primaryEntity, String relationshipName, IList<EntityReference> relatedEntities)
+        {
+            service.Associate(primaryEntity, relationshipName, new EntityReferenceCollection(relatedEntities));
         }
 
         /// <summary>
@@ -108,9 +122,24 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
-            CheckParam.CheckForNull(primaryEntity, nameof(primaryEntity));
 
-            service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, relationship, new EntityReferenceCollection(relatedEntities));
+            service.Disassociate(primaryEntity, relationship, new EntityReferenceCollection(relatedEntities));
+        }
+
+        /// <summary>
+        /// Associate method override. Takes EntityReference as primary entity input parameter
+        /// </summary>        
+        public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, String relationshipName, EntityReferenceCollection relatedEntities)
+        {
+            service.Disassociate(primaryEntity.LogicalName, primaryEntity.Id, new Relationship(relationshipName), relatedEntities);
+        }
+
+        /// <summary>
+        /// Associate method override. Takes EntityReference as primary entity input parameter and list of EntityReferences as related entities parameter
+        /// </summary>
+        public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, String relationshipName, IList<EntityReference> relatedEntities)
+        {
+            service.Disassociate(primaryEntity, relationshipName, new EntityReferenceCollection(relatedEntities));
         }
 
         /// <summary>
