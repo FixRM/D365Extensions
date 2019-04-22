@@ -32,6 +32,9 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 
 # What's new
 
+## Version 1.0.35
+Now assembly have a strong name and should work with VS Live Unit Testing.
+
 ## Version 1.0.29
 Add support for alternative keys for Retrieve and Delete!
 
