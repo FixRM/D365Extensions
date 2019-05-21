@@ -46,16 +46,16 @@ Set of extension methods for Microsoft.Xrm.Sdk.Entity base class. Simplifies dea
 ## [IOrganizationService Extensions](../../wiki/IOrganizationService-Extensions)
 Set of extension methods for IOrganizationService base class. Basically these are simple overrides of existing methods which take EntityReference or Entity instead of separate `Id` and `LogicalName` parameters.
 
-## [IPluginExecutionContext Extensions](../../IPluginExecutionContext-Extensions)
+## [IPluginExecutionContext Extensions](../../wiki/IPluginExecutionContext-Extensions)
 Set of extension methods for Microsoft.Xrm.Sdk.IPluginExecutionContext base class. Most of this helpers are shortcuts for existing properties but provides additional checks or type casts. Unlike Entity class extensions most of the following extensions are not exception safe! It is done so because you most likely want to get an error if plugin is registered for a wrong message or you have a typo in parameter name.
 
-## [CodeActivityContext Extensions](../../CodeActivityContext-Extensions)
+## [CodeActivityContext Extensions](../../wiki/CodeActivityContext-Extensions)
 Set of extension methods for System.Activities.CodeActivityContext base class. Short cut methods for getting D365 related services from workflow execution context.
 
-## [IServiceProvider Extensions](../../IServiceProvider-Extensions)
+## [IServiceProvider Extensions](../../wiki/IServiceProvider-Extensions)
 Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just shortcut methods to save you few lines of code during plugin development.
 
-## [EntityReference Extensions](../../EntityReference-Extensions)
+## [EntityReference Extensions](../../wiki/EntityReference-Extensions)
 Set of extension methods for Microsoft.Xrm.Sdk.EntityReference base class. At the moment just two simple but sometimes useful type conversion methods.
 
 # Contributing
