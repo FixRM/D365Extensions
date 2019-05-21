@@ -32,6 +32,9 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 
 # What's new
 
+## Version 1.0.37
+Add override of ToEntityReference to support alternative keys.
+
 ## Version 1.0.35
 Now assembly have a strong name and should work with VS Live Unit Testing.
 
