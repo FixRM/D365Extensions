@@ -300,6 +300,8 @@ namespace D365Extensions.Tests
             Entity entity = new Entity();
             entity.Attributes.Add(existingAttributeLogicalName, existingAttributeValue);
 
+            EntityReference reference = entity.ToEntityReference();
+
             /// Act: Set existing attribute value
             String expectedExistingAttributeValue = "Mr Artem Grunin";
             entity.SetAttributeValue(existingAttributeLogicalName, expectedExistingAttributeValue);
@@ -315,6 +317,27 @@ namespace D365Extensions.Tests
 
             /// Assert: Should add nonexistent attribute value
             Assert.AreEqual(nonexistentAttributeValue, entity[nonexistentAttributeLogicalName]);
+        }
+
+        [TestMethod()]
+        public void ToEntityReferenceTest()
+        {
+            /// Setup
+            Entity entity = new Entity("account", "key", "value");
+
+            /// Act: OOB method
+            EntityReference reference = entity.ToEntityReference();
+
+            /// Act: Extension method
+            EntityReference keyReference = entity.ToEntityReference(true);
+
+            /// Assert: OOB Method
+            Assert.AreEqual(0, reference.KeyAttributes.Count);
+
+            /// Assert: Extension Method
+            Assert.AreEqual(1, keyReference.KeyAttributes.Count);
+
+            Assert.AreEqual("value", keyReference.KeyAttributes["key"]);
         }
     }
 }

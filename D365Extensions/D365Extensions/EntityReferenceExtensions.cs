@@ -21,6 +21,8 @@ namespace Microsoft.Xrm.Sdk
             {
                 Id = entityReference.Id,
                 LogicalName = entityReference.LogicalName,
+                KeyAttributes = entityReference.KeyAttributes,
+                RowVersion = entityReference.RowVersion
             };
         }
 

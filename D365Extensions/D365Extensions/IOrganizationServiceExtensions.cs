@@ -74,7 +74,7 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(entity, nameof(entity));
 
-            service.Delete(entity.ToEntityReference());
+            service.Delete(entity.ToEntityReference(true));
         }
 
         /// <summary>

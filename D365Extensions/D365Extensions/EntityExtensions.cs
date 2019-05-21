@@ -114,5 +114,23 @@ namespace Microsoft.Xrm.Sdk
                 return true;
             }
         }
+
+        /// <summary>
+        /// As it turns out, OOB ToEntityReference is not copying KeyAttributes collection
+        /// New parameter has to be added to be valid override of ToEntityReference
+        /// </summary>
+        /// <param name="withKeys">Copy KeyAttributes collection</param>
+        /// <returns></returns>
+        public static EntityReference ToEntityReference(this Entity entity, bool withKeys)
+        {
+            EntityReference reference = entity.ToEntityReference();
+
+            if (withKeys == true)
+            {
+                reference.KeyAttributes = entity.KeyAttributes;
+            }
+            
+            return reference;
+        }
     }
 }
