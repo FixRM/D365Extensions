@@ -32,6 +32,11 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 
 # What's new
 
+## Version 1.0.38
+Add support for working with large datasets for all query types including FetchExpression! This feature is implemented as simple but resource effective RetrieveMultiple override. At the moment it's some kind of experimental, so please, give me feedback on that!
+
+Add generic override of Execute method. Probably the most stupid feature here :)
+
 ## Version 1.0.37
 Add override of ToEntityReference to support alternative keys.
 
@@ -60,6 +65,9 @@ Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just
 
 ## [EntityReference Extensions](../../wiki/EntityReference-Extensions)
 Set of extension methods for Microsoft.Xrm.Sdk.EntityReference base class. At the moment just two simple but sometimes useful type conversion methods.
+
+## [Query Extensions](../../wiki/Query-Extensions)
+Set of extension methods for Microsoft.Xrm.Sdk.QueryBase and derived classes. At the moment only paging improvements.
 
 # Contributing
 Please fill free to create issue if you find a bug or have an idea. PR's are welcomed as well! :) Help wanted in the following areas:
