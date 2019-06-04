@@ -12,8 +12,11 @@ This assembly is assumed to be used for plugin development. As D365 for CE curre
 
 ILRepack use the same technique as ILMerge but it is build on newer versions of Mono instruments so it is more fast and efficient. Please refer to link above for documentation.
 
-After edit you .cproj file should be looking like the following:
+To configure this task your should add `ILRepack.targets` file to you project. File contents should be looking  like the following:
 ```XML
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- ILRepack -->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="AfterBuild">
     <ItemGroup>
       <InputAssemblies Include="$(OutputPath)\$(AssemblyName).dll" />
@@ -25,12 +28,16 @@ After edit you .cproj file should be looking like the following:
               KeyFile="$(AssemblyOriginatorKeyFile)" 
               OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
+</Project>
 ```
 You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies.
 
 >**!!! Never merge SDK assemblies in your code. It will cause runtime errors !!!**
 
 # What's new
+
+## Version 1.0.40
+No changes. .csproj files where migrated to last format, + corresponding changes in CI pipeline
 
 ## Version 1.0.38
 Add support for working with large datasets for all query types including FetchExpression! This feature is implemented as simple but resource effective RetrieveMultiple override. At the moment it's some kind of experimental, so please, give me feedback on that!
