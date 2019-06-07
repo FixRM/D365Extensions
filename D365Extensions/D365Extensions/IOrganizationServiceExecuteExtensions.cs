@@ -1,4 +1,6 @@
 ﻿using D365Extensions;
+using Microsoft.Xrm.Sdk.Messages;
+using System;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -15,6 +17,19 @@ namespace Microsoft.Xrm.Sdk
             CheckParam.CheckForNull(request, nameof(request));
 
             return service.Execute(request) as T;
+        }
+
+        /// <summary>
+        /// A shortcut for Upsert message. There is much more
+        /// </summary>
+        public static EntityReference Upsert(this IOrganizationService service, Entity entity)
+        {
+            UpsertResponse response = service.Execute<UpsertResponse>(new UpsertRequest()
+            {
+                Target = entity
+            });
+
+            return response.Target;
         }
     }
 }
