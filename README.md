@@ -36,6 +36,11 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 
 # What's new
 
+## Version 1.0.41
+Add shortcut for Upsert message.
+
+Fix a bug in FetchQuery.NextPage
+
 ## Version 1.0.40
 No changes. .csproj files where migrated to last format, + corresponding changes in CI pipeline
 
