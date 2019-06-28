@@ -60,7 +60,7 @@ namespace D365Extensions.Tests
             int count = 50;
             int expectedItems = expectedPages * count;
 
-            string fetch = $@"<fetch count='{ count }' no-lock='true' page='0' >
+            string fetch = $@"<fetch count='{ count }' no-lock='true'>
                                <entity name='account' >
                                  <attribute name='name' />
                                </entity>

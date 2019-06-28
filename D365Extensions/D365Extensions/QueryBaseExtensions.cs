@@ -65,8 +65,13 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         internal static void NextPage(this FetchExpression query, XDocument xDocument, string pagingCookie)
         {
+            /// No paging mean PageInfo.Page = 0
+            /// for FetchXml it mean no "page" attribute or 0 value
+            string page = xDocument.Root.Attribute("page")?.Value;
+            int pageNumber = page != null ? int.Parse(page) : 0;
+
             xDocument.Root.SetAttributeValue("paging-cookie", pagingCookie);
-            xDocument.Root.SetAttributeValue("page", int.Parse(xDocument.Root.Attribute("page").Value) + 1);
+            xDocument.Root.SetAttributeValue("page", ++pageNumber);
 
             query.Query = xDocument.ToString();
         }
