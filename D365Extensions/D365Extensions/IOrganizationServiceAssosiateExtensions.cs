@@ -1,4 +1,5 @@
 ﻿using D365Extensions;
+using Microsoft.Xrm.Sdk.Messages;
 using System;
 using System.Collections.Generic;
 
@@ -16,7 +17,21 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(primaryEntity, nameof(primaryEntity));
 
-            service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
+            /// Associate by id if possible as is supposed to be faster 
+            if (primaryEntity.Id != Guid.Empty)
+            {
+                service.Associate(primaryEntity.LogicalName, primaryEntity.Id, relationship, relatedEntities);
+            }
+            /// Use alternative key
+            else
+            {
+                service.Execute(new AssociateRequest()
+                {
+                    Target = primaryEntity,
+                    Relationship = relationship,
+                    RelatedEntities = relatedEntities
+                });
+            }
         }
 
         /// <summary>
