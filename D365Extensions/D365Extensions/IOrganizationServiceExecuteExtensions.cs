@@ -20,7 +20,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// A shortcut for Upsert message. There is much more
+        /// A shortcut for Upsert message. There is much more messages to create shortcut for, but this one is only useful for daily CRUD operations
         /// </summary>
         public static EntityReference Upsert(this IOrganizationService service, Entity entity)
         {

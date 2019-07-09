@@ -27,7 +27,6 @@ namespace Microsoft.Xrm.Sdk
             {
                 service.Delete(reference.LogicalName, reference.KeyAttributes);
             }
-
         }
 
         /// <summary>
