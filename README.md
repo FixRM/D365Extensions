@@ -36,6 +36,9 @@ You should use `KeyFile` parameter as your plugin assembly should be signed. We 
 
 # What's new
 
+## Version 1.0.43
+Add support for alternative keys for Associate and Disassociate
+
 ## Version 1.0.42
 Add shortcut for Upsert message.
 
