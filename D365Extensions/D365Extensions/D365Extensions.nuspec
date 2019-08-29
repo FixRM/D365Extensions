@@ -13,5 +13,10 @@
     <description>$description$</description>
     <copyright>Copyright 2018</copyright>
     <tags>D365 CRM</tags>
+    <!--Has to add it here manually because of a known bug in NuGet: https://github.com/NuGet/Home/issues/5979-->
+    <dependencies>
+      <dependency version="8.2.0.2" id="Microsoft.CrmSdk.CoreAssemblies"/>
+      <dependency version="8.2.0.2" id="Microsoft.CrmSdk.Workflow"/>
+    </dependencies>
   </metadata>
 </package>
