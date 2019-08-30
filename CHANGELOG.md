@@ -1,3 +1,18 @@
+# What's new
+## [1.1.0](https://github.com/FixRM/D365Extensions/compare/v1.0.45...v1.1.0) (2019-08-30)
+
+
+### Bug Fixes
+
+* fix major version number ([7ce93a0](https://github.com/FixRM/D365Extensions/commit/7ce93a0))
+
+
+### Features
+
+* semver support started ([2c365c9](https://github.com/FixRM/D365Extensions/commit/2c365c9))
+
+
+
 ## Version 1.0.45
 Fix .nuspec issue
 
