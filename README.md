@@ -1,4 +1,4 @@
-[![NuGet version (D365Extensions)](https://img.shields.io/nuget/v/D365Extensions.svg?style=flat-square)](https://www.nuget.org/packages/D365Extensions/) [![Build status](https://dev.azure.com/fixrm/fixrm/_apis/build/status/D365Extensions%20Build)](https://dev.azure.com/fixrm/fixrm/_build/latest?definitionId=5)
+[![NuGet version (D365Extensions)](https://img.shields.io/nuget/v/D365Extensions.svg?style=flat-square)](https://www.nuget.org/packages/D365Extensions/) [![Build status](https://dev.azure.com/fixrm/fixrm/_apis/build/status/D365Extensions%20Build)](https://dev.azure.com/fixrm/fixrm/_build/latest?definitionId=5) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 # D365Extensions
 A collection of Extension methods for Microsoft Dynamics CRM/D365 SDK base classes
 
