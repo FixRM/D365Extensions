@@ -12,7 +12,7 @@
   },
   "scripts": {
     "new-version": "standard-version",
-    "get-version": "node .scripts\\get-version.js"
+    "get-version": "node scripts\\get-version.js"
   },
   "standard-version": {
     "skip": {

@@ -2,7 +2,7 @@
 
 try {
     //print package version
-    const pack = require("./package.json");
+    const pack = require("../package.json");
     console.log(`package version ${pack.version}`);
 
     //set output variable
