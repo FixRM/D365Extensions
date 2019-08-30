@@ -1,13 +1,3 @@
-# What's new
-## [10.1.0](https://github.com/FixRM/D365Extensions/compare/v10.0.45...v10.1.0) (2019-08-30)
-
-
-### Features
-
-* semver support started ([2c365c9](https://github.com/FixRM/D365Extensions/commit/2c365c9))
-
-
-
 ## Version 1.0.45
 Fix .nuspec issue
 
