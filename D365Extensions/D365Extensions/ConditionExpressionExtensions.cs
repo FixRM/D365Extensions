@@ -10,21 +10,20 @@ using System.Threading.Tasks;
 namespace Microsoft.Xrm.Sdk.Query
 {
     /// <summary>
-    /// Strongly typed version of ConditionExpression
+    /// Strongly typed version of the ConditionExpression class
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ConditionExpression<T> where T : Entity
     {
         /// <summary>
-        /// Initializes a new instance of the Microsoft.Xrm.Sdk.Query.ConditionExpression
+        /// Initializes a new instance of ConditionExpression<T> class.
         /// </summary>
         public ConditionExpression()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the Microsoft.Xrm.Sdk.Query.ConditionExpression
-        /// class.
+        /// Initializes a new instance of the ConditionExpression<T> class.
         /// </summary>
         /// <param name="entityName">The logical name of the entity in the condition expression.</param>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
@@ -41,6 +40,8 @@ namespace Microsoft.Xrm.Sdk.Query
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the ConditionExpression<T> class.
         /// </summary>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
         /// <param name="conditionOperator">The condition operator.</param>
@@ -49,8 +50,8 @@ namespace Microsoft.Xrm.Sdk.Query
         }
 
         /// <summary>
-        /// Initializes a new instance of the Microsoft.Xrm.Sdk.Query.ConditionExpression
-        //  class setting the attribute name, condition operator and an array of value objects.
+        /// Initializes a new instance of the ConditionExpression<T> class setting the attribute
+        /// name, condition operator and an array of value objects.
         /// </summary>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
         /// <param name="conditionOperator">The condition operator.</param>
@@ -61,8 +62,8 @@ namespace Microsoft.Xrm.Sdk.Query
         }
 
         /// <summary>
-        /// Initializes a new instance of the Microsoft.Xrm.Sdk.Query.ConditionExpression
-        /// class setting the attribute name, condition operator and value object.
+        /// Initializes a new instance of the ConditionExpression<T> class setting the attribute
+        /// name, condition operator and value object.
         /// </summary>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
         /// <param name="conditionOperator">The condition operator.</param>
@@ -73,8 +74,7 @@ namespace Microsoft.Xrm.Sdk.Query
         }
 
         /// <summary>
-        /// Initializes a new instance of the Microsoft.Xrm.Sdk.Query.ConditionExpression
-        /// class.
+        /// Initializes a new instance of the ConditionExpression<T> class.
         /// </summary>
         /// <param name="entityName">The logical name of the entity in the condition expression.</param>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
@@ -85,8 +85,7 @@ namespace Microsoft.Xrm.Sdk.Query
         }
 
         /// <summary>
-        /// Initializes a new instance of the Microsoft.Xrm.Sdk.Query.ConditionExpression
-        /// class.
+        /// Initializes a new instance of the ConditionExpression<T> class.
         /// </summary>
         /// <param name="entityName">The logical name of the entity in the condition expression.</param>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
@@ -120,7 +119,6 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <summary>
         /// Converts ConditionExpression<T> to ConditionExpression
         /// </summary>
-        /// <param name="t"></param>
         public static implicit operator ConditionExpression(ConditionExpression<T> t)
         {
             return new ConditionExpression(t.EntityName,
