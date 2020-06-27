@@ -88,8 +88,10 @@ namespace Microsoft.Xrm.Sdk
             CheckParam.CheckForNull(keyName, nameof(keyName));
             CheckParam.CheckForNull(keyValue, nameof(keyValue));
 
-            KeyAttributeCollection keys = new KeyAttributeCollection();
-            keys.Add(keyName, keyValue);
+            KeyAttributeCollection keys = new KeyAttributeCollection
+            {
+                { keyName, keyValue }
+            };
 
             return service.Retrieve(logicalName, keys, columnSet);
         }
