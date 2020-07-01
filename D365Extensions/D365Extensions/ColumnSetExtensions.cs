@@ -1,64 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using D365Extensions;
+using System;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using D365Extensions;
 
 namespace Microsoft.Xrm.Sdk.Query
 {
-    /// <summary>
-    /// Strongly typed version of the ColumnSet class
-    /// </summary>
-    public class ColumnSet<T> where T : Entity
+    public static class ColumnSetExtensions
     {
         /// <summary>
-        /// Gets the collection of Strings containing the names of the attributes to be retrieved
-        /// from a query.
+        /// Adds the specified attribute to the column set.
         /// </summary>
-        public List<string> Columns { get; } = new List<string>();
-
-        /// <summary>
-        /// Initializes a new instance of the ColumnSet<T> class.
-        /// </summary>
-        public ColumnSet()
+        /// <typeparam name="T">Type of the entity to add column from</typeparam>
+        /// <param name="column">The property expression containing the name of the attribute to add</param>
+        public static void AddColumn<T>(this ColumnSet columnSet, Expression<Func<T, object>> column) where T: Entity
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ColumnSet<T> class setting the Columns property.
-        /// </summary>
-        /// <param name="expressions">Specifies an array of property expressions containing the names of the attributes.
-        /// </param>
-        public ColumnSet(params Expression<Func<T, object>>[] expressions)
-        {
-            Columns = ProperyExpression.GetNames(expressions);
-        }
-
-        /// <summary>
-        /// Adds the specified attribute to the column set
-        /// </summary>
-        /// <param name="expression">Specifies a property expressions containing the name of the attribute.</param>
-        public void AddColumn(Expression<Func<T, object>> expression)
-        {
-            Columns.Add(ProperyExpression.GetName(expression));
+            columnSet.AddColumn(ProperyExpression.GetName(column));
         }
 
         /// <summary>
         /// Adds the specified attributes to the column set.
         /// </summary>
-        /// <param name="expressions">Specifies an array of property expressions containing the names of the attributes.</param>
-        public void AddColumns(params Expression<Func<T, object>>[] expressions)
+        /// <typeparam name="T">Type of the entity to add column from</typeparam>
+        /// <param name="column">The property expressions containing the name of the attribute to add</param>
+        public static void AddColumns<T>(this ColumnSet columnSet, params Expression<Func<T, object>>[] columns) where T : Entity
         {
-            Columns.AddRange(ProperyExpression.GetNames(expressions));
-        }
-
-        /// <summary>
-        /// Converts ColumnSet<T> to ColumnSet
-        /// </summary>
-        public static implicit operator ColumnSet(ColumnSet<T> t)
-        {
-            return new ColumnSet(t.Columns.ToArray());
+            columnSet.AddColumns(ProperyExpression.GetNames(columns)?.ToArray());
         }
     }
 }
