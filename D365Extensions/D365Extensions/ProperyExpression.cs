@@ -20,9 +20,12 @@ namespace D365Extensions
 
         public static string GetName<T>(Expression<Func<T, object>> expression)
         {
-            CheckParam.CheckForNull(expression, nameof(expression));
+            if (expression != null)
+            {
+                return GetName(expression.Body);
+            }
 
-            return GetName(expression.Body);
+            return null;
         }
 
         static string GetName(Expression expression)
