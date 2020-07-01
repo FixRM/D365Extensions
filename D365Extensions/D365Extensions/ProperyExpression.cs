@@ -20,16 +20,16 @@ namespace D365Extensions
 
         public static string GetName<T>(Expression<Func<T, object>> expression)
         {
-            if (expression != null)
-            {
-                return GetName(expression.Body);
-            }
-
-            return null;
+            return GetName(expression?.Body);
         }
 
         static string GetName(Expression expression)
         {
+            if (expression == null)
+            {
+                return null;
+            }
+
             // Property, field of method returning value type
             if (expression is UnaryExpression unaryExpression)
             {
