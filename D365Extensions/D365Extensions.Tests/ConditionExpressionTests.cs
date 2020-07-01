@@ -72,5 +72,15 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedOperator, condition.Operator);
             Assert.AreEqual(0, condition.Values.Count);
         }
+
+        [TestMethod()]
+        public void Constructor_Default_Test()
+        {
+            // Setup
+            var expectedAttributeName = nameof(TestEntity.ValueTypeProperty).ToLower();
+
+            // Act & Assert
+            ConditionExpression condition = new ConditionExpression<TestEntity>();
+        }
     }
 }

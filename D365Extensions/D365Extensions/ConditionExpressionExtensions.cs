@@ -114,7 +114,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <summary>
         /// Gets or sets the values for the attribute.
         /// </summary>
-        public List<object> Values { get; }
+        public List<object> Values { get; } = new List<object>();
 
         /// <summary>
         /// Converts ConditionExpression<T> to ConditionExpression

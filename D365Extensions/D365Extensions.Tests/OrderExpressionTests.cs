@@ -25,5 +25,16 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedAttributeName, order.AttributeName);
             Assert.AreEqual(expectedOrderType, order.OrderType);
         }
+
+        [TestMethod()]
+        public void OrderExpression_Default_Test()
+        {
+            // Setup
+            var expectedAttributeName = nameof(TestEntity.ValueTypeProperty).ToLower();
+            var expectedOrderType = OrderType.Ascending;
+
+            // Act & Assert
+            OrderExpression order = new OrderExpression<TestEntity>();
+        }
     }
 }

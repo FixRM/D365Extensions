@@ -12,7 +12,7 @@ namespace Microsoft.Xrm.Sdk.Query.Tests
     public class LinkEntityTests
     {
         [TestMethod()]
-        public void LinkEntity1Test()
+        public void LinkEntityTest()
         {
             // Setup
             string expectedFromEntityName = EntityFrom.EnityLogicalName;
@@ -58,7 +58,7 @@ namespace Microsoft.Xrm.Sdk.Query.Tests
         }
 
         [TestMethod()]
-        public void LinkEntity2Test()
+        public void LinkEntity_Default_Test()
         {
             // Setup
             JoinOperator expectedOperator = JoinOperator.Inner;
