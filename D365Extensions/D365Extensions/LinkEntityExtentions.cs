@@ -29,6 +29,8 @@ namespace Microsoft.Xrm.Sdk.Query
             Expression<Func<TFrom, object>> linkFromAttributeName,
             Expression<Func<TTo, object>> linkToAttributeName,
             JoinOperator joinOperator)
+            where TFrom : Entity
+            where TTo : Entity
         {
             return link.AddLink(
                 linkToEntityName,
@@ -52,6 +54,8 @@ namespace Microsoft.Xrm.Sdk.Query
             string linkToEntityName,
             Expression<Func<TFrom, object>> linkFromAttributeName,
             Expression<Func<TTo, object>> linkToAttributeName)
+            where TFrom : Entity
+            where TTo : Entity
         {
             return link.AddLink(
                 linkToEntityName,

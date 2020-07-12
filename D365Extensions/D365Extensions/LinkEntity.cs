@@ -9,7 +9,7 @@ namespace Microsoft.Xrm.Sdk.Query
     /// Strongly typed version of the LinkEntity<TFrom, TTo> class.
     /// </summary>
     public class LinkEntity<TFrom, TTo>
-        where TFrom : Entity, new()
+        where TFrom : Entity
         where TTo : Entity
     {
         /// <summary>
@@ -34,8 +34,6 @@ namespace Microsoft.Xrm.Sdk.Query
           Expression<Func<TTo, object>> linkToAttributeName,
           JoinOperator joinOperator)
         {
-            this.LinkFromEntityName = new TFrom().LogicalName;
-
             this.LinkFromEntityName = linkFromEntityName;
             this.LinkToEntityName = linkToEntityName;
             this.LinkFromAttributeName = linkFromAttributeName;
