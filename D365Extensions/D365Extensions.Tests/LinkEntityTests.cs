@@ -12,6 +12,7 @@ namespace D365Extensions.Tests
     public class LinkEntityTests
     {
         [TestMethod()]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public void LinkEntityTest()
         {
             // Setup
@@ -81,8 +82,10 @@ namespace D365Extensions.Tests
             JoinOperator expectedOperator = JoinOperator.LeftOuter;
 
             // Act
-            LinkEntity<EntityFrom, EntityTo> linkGen = new LinkEntity<EntityFrom, EntityTo>();
-            linkGen.LinkFromEntityName = expectedFromEntityName;
+            LinkEntity<EntityFrom, EntityTo> linkGen = new LinkEntity<EntityFrom, EntityTo>
+            {
+                LinkFromEntityName = expectedFromEntityName
+            };
 
             LinkEntity newLink = linkGen.AddLink(EntityTo.EnityLogicalName, f => f.FromId, t => t.ToId, expectedOperator);
 
@@ -105,8 +108,10 @@ namespace D365Extensions.Tests
             JoinOperator expectedOperator = JoinOperator.Inner;
 
             // Act
-            LinkEntity<EntityFrom, EntityTo> linkGen = new LinkEntity<EntityFrom, EntityTo>();
-            linkGen.LinkFromEntityName = expectedFromEntityName;
+            LinkEntity<EntityFrom, EntityTo> linkGen = new LinkEntity<EntityFrom, EntityTo>
+            {
+                LinkFromEntityName = expectedFromEntityName
+            };
 
             LinkEntity newLink = linkGen.AddLink(EntityTo.EnityLogicalName, f => f.FromId, t => t.ToId);
 
