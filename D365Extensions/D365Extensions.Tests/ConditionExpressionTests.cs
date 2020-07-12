@@ -76,11 +76,11 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void Constructor_Default_Test()
         {
-            // Setup
-            var expectedAttributeName = nameof(TestEntity.ValueTypeProperty).ToLower();
-
-            // Act & Assert
+            // Act
             ConditionExpression condition = new ConditionExpression<TestEntity>();
+
+            // Assert not throw
+            Assert.IsNotNull(condition);
         }
     }
 }

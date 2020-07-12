@@ -52,4 +52,32 @@ namespace D365Extensions.Tests
             }
         }
     }
+
+    /// <summary>
+    /// Simple Entity for LinkEntity tests
+    /// </summary>
+    public class EntityFrom : Entity
+    {
+        public static string EnityLogicalName = "EntityFrom";
+
+        public EntityFrom() : base(EnityLogicalName)
+        {
+        }
+
+        public Guid FromId { get; set; }
+    }
+
+    /// <summary>
+    /// Simple Entity for LinkEntity tests
+    /// </summary>
+    public class EntityTo : Entity
+    {
+        public static string EnityLogicalName = "EntityTo";
+
+        public EntityTo() : base(EnityLogicalName)
+        {
+        }
+
+        public Guid ToId { get; set; }
+    }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Xrm.Sdk.Query.Tests
+namespace D365Extensions.Tests
 {
     [TestClass()]
     public class LinkEntityExtensionsTests
@@ -67,27 +67,5 @@ namespace Microsoft.Xrm.Sdk.Query.Tests
             Assert.AreEqual(expectedToAttributName, newLink.LinkToAttributeName);
             Assert.AreEqual(expectedFromAttributName, newLink.LinkFromAttributeName);
         }
-    }
-
-    public class EntityFrom : Entity
-    {
-        public static string EnityLogicalName = "EntityFrom";
-
-        public EntityFrom() :base(EnityLogicalName) 
-        {
-        }
-
-        public Guid FromId { get; set; }
-    }
-
-    public class EntityTo : Entity
-    {
-        public static string EnityLogicalName = "EntityTo";
-
-        public EntityTo() : base(EnityLogicalName)
-        {
-        }
-
-        public Guid ToId { get; set; }
     }
 }

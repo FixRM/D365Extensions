@@ -300,8 +300,6 @@ namespace D365Extensions.Tests
             Entity entity = new Entity();
             entity.Attributes.Add(existingAttributeLogicalName, existingAttributeValue);
 
-            EntityReference reference = entity.ToEntityReference();
-
             /// Act: Set existing attribute value
             String expectedExistingAttributeValue = "Mr Artem Grunin";
             entity.SetAttributeValue(existingAttributeLogicalName, expectedExistingAttributeValue);
