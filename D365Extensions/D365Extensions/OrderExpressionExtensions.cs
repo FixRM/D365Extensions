@@ -31,7 +31,7 @@ namespace Microsoft.Xrm.Sdk.Query
         public OrderExpression(Expression<Func<T, object>> attributeName, OrderType orderType)
         {
             AttributeName = attributeName;
-            OrderType = OrderType;
+            OrderType = orderType;
         }
 
         /// <summary>

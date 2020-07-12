@@ -16,7 +16,7 @@ namespace D365Extensions.Tests
         {
             // Setup
             var expectedAttributeName = nameof(TestEntity.ValueTypeProperty).ToLower();
-            var expectedOrderType = OrderType.Ascending;
+            var expectedOrderType = OrderType.Descending;
 
             // Act
             OrderExpression order = new OrderExpression<TestEntity>(t => t.ValueTypeProperty, expectedOrderType);
@@ -29,12 +29,11 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void OrderExpression_Default_Test()
         {
-            // Setup
-            var expectedAttributeName = nameof(TestEntity.ValueTypeProperty).ToLower();
-            var expectedOrderType = OrderType.Ascending;
-
-            // Act & Assert
+            // Act
             OrderExpression order = new OrderExpression<TestEntity>();
+
+            // Assert not throw
+            Assert.IsNotNull(order);
         }
     }
 }
