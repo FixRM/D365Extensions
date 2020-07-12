@@ -26,29 +26,29 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <summary>
         /// Initializes a new instance of the ColumnSet<T> class setting the Columns property.
         /// </summary>
-        /// <param name="expressions">Specifies an array of property expressions containing the names of the attributes.
+        /// <param name="columns">Specifies an array of property expressions containing the names of the attributes.
         /// </param>
-        public ColumnSet(params Expression<Func<T, object>>[] expressions)
+        public ColumnSet(params Expression<Func<T, object>>[] columns)
         {
-            Columns = ProperyExpression.GetNames(expressions);
+            Columns = ProperyExpression.GetNames(columns);
         }
 
         /// <summary>
         /// Adds the specified attribute to the column set
         /// </summary>
-        /// <param name="expression">Specifies a property expressions containing the name of the attribute.</param>
-        public void AddColumn(Expression<Func<T, object>> expression)
+        /// <param name="column">Specifies a property expressions containing the name of the attribute.</param>
+        public void AddColumn(Expression<Func<T, object>> column)
         {
-            Columns.Add(ProperyExpression.GetName(expression));
+            Columns.Add(ProperyExpression.GetName(column));
         }
 
         /// <summary>
         /// Adds the specified attributes to the column set.
         /// </summary>
-        /// <param name="expressions">Specifies an array of property expressions containing the names of the attributes.</param>
-        public void AddColumns(params Expression<Func<T, object>>[] expressions)
+        /// <param name="columns">Specifies an array of property expressions containing the names of the attributes.</param>
+        public void AddColumns(params Expression<Func<T, object>>[] columns)
         {
-            Columns.AddRange(ProperyExpression.GetNames(expressions));
+            Columns.AddRange(ProperyExpression.GetNames(columns));
         }
 
         /// <summary>
