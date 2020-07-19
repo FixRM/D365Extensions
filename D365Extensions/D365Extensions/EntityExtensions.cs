@@ -41,7 +41,7 @@ namespace Microsoft.Xrm.Sdk
             }
             else
             {
-                return default(T);
+                return default;
             }
         }
 
@@ -73,9 +73,20 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="entityLogicalName">Logical name of linked Entity</param>
         /// <param name="alias">Entity alias used in LinkedEntity definition</param>
         /// <returns></returns>
+        [Obsolete("Use public T GetAliasedEntity<T>(String alias = null) where T : Entity; method instead")]
         public static T GetAliasedEntity<T>(this Entity entity, String entityLogicalName, String alias = null) where T : Entity
         {
             return GetAliasedEntity(entity, entityLogicalName, alias).ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Generic version of GetAliasedEntity
+        /// </summary>
+        /// <param name="alias">Entity alias used in LinkedEntity definition</param>
+        /// <returns></returns>
+        public static T GetAliasedEntity<T>(this Entity entity, String alias = null) where T : Entity
+        {
+            return GetAliasedEntity(entity, typeof(T).Name.ToLower(), alias).ToEntity<T>();
         }
 
         /// <summary>

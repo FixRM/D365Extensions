@@ -234,7 +234,9 @@ namespace D365Extensions.Tests
             TestEntity actualEntity;
 
             /// Test
+#pragma warning disable CS0618 // Type or member is obsolete
             actualEntity = entity.GetAliasedEntity<TestEntity>(linkedEntityLogicalName1, alias1);
+#pragma warning restore CS0618 // Type or member is obsolete
 
             /// Instance is correct type
             Assert.IsNotNull(actualEntity);
@@ -252,6 +254,60 @@ namespace D365Extensions.Tests
             Assert.IsNotNull(actualAttributeValue2);
             Assert.AreEqual<DateTime?>(value2, actualAttributeValue2);
 
+        }
+
+        [TestMethod()]
+        public void GetAliasedEntityGenericTest2()
+        {
+            /// Setup test data
+            String mainEntityLogicalName = "account";
+            String linkedEntityLogicalName1 = "testentity";
+
+            String attributeLogicalName1 = "name";
+            String value1 = "Grunin Artem";
+            AliasedValue aliasedValue1 = new AliasedValue(linkedEntityLogicalName1, attributeLogicalName1, value1);
+
+            String attributeLogicalName2 = "birthdate";
+            DateTime? value2 = new DateTime(1985, 8, 8);
+            AliasedValue aliasedValue2 = new AliasedValue(linkedEntityLogicalName1, attributeLogicalName2, value2);
+
+            /// Create Entity
+            String alias1 = "ac";
+            String aliasedName1 = $"{alias1}.{attributeLogicalName1}";
+            String aliasedName2 = $"{alias1}.{attributeLogicalName2}";
+
+            /// Create main entity
+            Entity entity = new Entity(mainEntityLogicalName);
+
+            /// Add main entity attributes
+            entity.Attributes.Add("name", "FixRM");
+            entity.Attributes.Add("accountnumber", "1");
+            entity.Attributes.Add("statecode", new OptionSetValue(0));
+
+            /// Add linked entity attributes
+            entity.Attributes.Add(aliasedName1, aliasedValue1);
+            entity.Attributes.Add(aliasedName2, aliasedValue2);
+
+            TestEntity actualEntity;
+
+            /// Test
+            actualEntity = entity.GetAliasedEntity<TestEntity>(alias1);
+
+            /// Instance is correct type
+            Assert.IsNotNull(actualEntity);
+            Assert.IsInstanceOfType(actualEntity, typeof(TestEntity));
+
+            /// attribute values of early bound entity are ok
+            Assert.AreEqual<String>(actualEntity.LogicalName, linkedEntityLogicalName1);
+            Assert.AreEqual<int>(2, actualEntity.Attributes.Count);
+
+            String actualAttributeValue1 = actualEntity.GetAttributeValue<String>(attributeLogicalName1);
+            Assert.IsNotNull(actualAttributeValue1);
+            Assert.AreEqual<String>(value1, actualAttributeValue1);
+
+            DateTime? actualAttributeValue2 = actualEntity.GetAttributeValue<DateTime?>(attributeLogicalName2);
+            Assert.IsNotNull(actualAttributeValue2);
+            Assert.AreEqual<DateTime?>(value2, actualAttributeValue2);
         }
 
         [TestMethod()]
