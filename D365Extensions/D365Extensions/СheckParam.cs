@@ -14,5 +14,10 @@ namespace D365Extensions
                 throw new ArgumentNullException(name);
             }
         }
+
+        public static ArgumentException InvalidExpression(string name)
+        {
+            return new ArgumentException("Invalid expression", name);
+        }
     }
 }
