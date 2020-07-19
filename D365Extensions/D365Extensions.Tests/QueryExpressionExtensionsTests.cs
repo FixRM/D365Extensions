@@ -42,7 +42,7 @@ namespace D365Extensions.Tests
             string expectedToAttributName = nameof(EntityTo.ToId).ToLower();
 
             // Act
-            LinkEntity actualLink = query.AddLink<EntityFrom, EntityTo>(EntityTo.EnityLogicalName, f => f.FromId, t => t.ToId);
+            LinkEntity actualLink = query.AddLink<EntityFrom, EntityTo>(f => f.FromId, t => t.ToId);
 
             // Assert
             Assert.AreEqual(1, query.LinkEntities.Count);
@@ -64,7 +64,7 @@ namespace D365Extensions.Tests
             JoinOperator expectedOperator = JoinOperator.LeftOuter;
 
             // Act
-            LinkEntity actualLink = query.AddLink<EntityFrom, EntityTo>(EntityTo.EnityLogicalName, f => f.FromId, t => t.ToId, expectedOperator);
+            LinkEntity actualLink = query.AddLink<EntityFrom, EntityTo>(f => f.FromId, t => t.ToId, expectedOperator);
 
             // Assert
             Assert.AreEqual(1, query.LinkEntities.Count);
