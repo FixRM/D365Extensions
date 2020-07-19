@@ -11,10 +11,10 @@ namespace D365Extensions.Tests
     /// <summary>
     /// Simple Entity inheritor for Test purpose
     /// </summary>
-    [EntityLogicalName("fixrm_testentity")]
+    [EntityLogicalName("testentity")]
     public class TestEntity : Entity
     {
-        public const string EntityLogicalName = "fixrm_testentity";
+        public const string EntityLogicalName = "testentity";
 
         public TestEntity() : base(EntityLogicalName)
         {
@@ -58,7 +58,7 @@ namespace D365Extensions.Tests
     /// </summary>
     public class EntityFrom : Entity
     {
-        public static string EnityLogicalName = "EntityFrom";
+        public static string EnityLogicalName = "entityfrom";
 
         public EntityFrom() : base(EnityLogicalName)
         {
@@ -72,7 +72,7 @@ namespace D365Extensions.Tests
     /// </summary>
     public class EntityTo : Entity
     {
-        public static string EnityLogicalName = "EntityTo";
+        public static string EnityLogicalName = "entityto";
 
         public EntityTo() : base(EnityLogicalName)
         {

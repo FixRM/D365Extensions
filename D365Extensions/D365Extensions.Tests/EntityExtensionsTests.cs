@@ -204,7 +204,7 @@ namespace D365Extensions.Tests
         {
             /// Setup test data
             String mainEntityLogicalName = "account";
-            String linkedEntityLogicalName1 = "fixrm_testentity";
+            String linkedEntityLogicalName1 = "testentity";
 
             String attributeLogicalName1 = "name";
             String value1 = "Grunin Artem";

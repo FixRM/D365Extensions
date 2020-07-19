@@ -25,13 +25,12 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <summary>
         /// Initializes a new instance of the ConditionExpression<T> class.
         /// </summary>
-        /// <param name="entityName">The logical name of the entity in the condition expression.</param>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
         /// <param name="conditionOperator">The condition operator.</param>
         /// <param name="values">The array of attribute values.</param>
-        public ConditionExpression(string entityName, Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, params object[] values)
+        public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, params object[] values)
         {
-            EntityName = entityName;
+            EntityName = typeof(T).Name.ToLower();
             AttributeName = attributeName;
             Operator = conditionOperator;
             if (values != null)
@@ -45,21 +44,10 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
         /// <param name="conditionOperator">The condition operator.</param>
-        public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator) : this(null, attributeName, conditionOperator, new object[0])
+        public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator) : this(attributeName, conditionOperator, new object[0])
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the ConditionExpression<T> class setting the attribute
-        /// name, condition operator and an array of value objects.
-        /// </summary>
-        /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
-        /// <param name="conditionOperator">The condition operator.</param>
-        /// <param name="values">The array of attribute values.</param>
-        public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, params object[] values) : this(null, attributeName, conditionOperator, values)
-        {
-
-        }
 
         /// <summary>
         /// Initializes a new instance of the ConditionExpression<T> class setting the attribute
@@ -68,30 +56,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
         /// <param name="conditionOperator">The condition operator.</param>
         /// <param name="value">The attribute value</param>
-        public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, object value) : this(null, attributeName, conditionOperator, new object[] { value })
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ConditionExpression<T> class.
-        /// </summary>
-        /// <param name="entityName">The logical name of the entity in the condition expression.</param>
-        /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
-        /// <param name="conditionOperator">The condition operator.</param>
-        public ConditionExpression(string entityName, Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator) : this(entityName, attributeName, conditionOperator, new object[0])
-        {
-
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the ConditionExpression<T> class.
-        /// </summary>
-        /// <param name="entityName">The logical name of the entity in the condition expression.</param>
-        /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
-        /// <param name="conditionOperator">The condition operator.</param>
-        /// <param name="value">The attribute value.</param>
-        public ConditionExpression(string entityName, Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, object value) : this(entityName, attributeName, conditionOperator, new object[] { value })
+        public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, object value) : this(attributeName, conditionOperator, new object[] { value })
         {
 
         }

@@ -22,7 +22,6 @@ namespace D365Extensions.Tests
 
             // Act
             ConditionExpression condition = new ConditionExpression<TestEntity>(
-                expectedEntityName,
                 t => t.ValueTypeProperty,
                 expectedOperator,
                 expectedValue);
@@ -67,7 +66,6 @@ namespace D365Extensions.Tests
                 expectedOperator);
 
             // Assert
-            Assert.IsNull(condition.EntityName);
             Assert.AreEqual(expectedAttributeName, condition.AttributeName);
             Assert.AreEqual(expectedOperator, condition.Operator);
             Assert.AreEqual(0, condition.Values.Count);

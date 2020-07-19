@@ -15,27 +15,23 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <summary>
         /// Initializes a new instance of the LinkEntity class.
         /// </summary>
-        public LinkEntity() : this(null, null, null, null, JoinOperator.Inner)
+        public LinkEntity() : this(null, null, JoinOperator.Inner)
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the LinkEntity class setting the required properties.
         /// </summary>
-        /// <param name="linkFromEntityName">The logical name of the entity to link from.</param>
-        /// <param name="linkToEntityName">The logical name of the entity to link to.</param>
         /// <param name="linkFromAttributeName">The name of the attribute to link from.</param>
         /// <param name="linkToAttributeName">The name of the attribute to link to.</param>
         /// <param name="joinOperator">The join operator.</param>
         public LinkEntity(
-          string linkFromEntityName,
-          string linkToEntityName,
           Expression<Func<TFrom, object>> linkFromAttributeName,
           Expression<Func<TTo, object>> linkToAttributeName,
           JoinOperator joinOperator)
         {
-            this.LinkFromEntityName = linkFromEntityName;
-            this.LinkToEntityName = linkToEntityName;
+            this.LinkFromEntityName = typeof(TFrom).Name.ToLower();
+            this.LinkToEntityName = typeof(TTo).Name.ToLower();
             this.LinkFromAttributeName = linkFromAttributeName;
             this.LinkToAttributeName = linkToAttributeName;
             this.JoinOperator = joinOperator;
@@ -49,20 +45,16 @@ namespace Microsoft.Xrm.Sdk.Query
         /// Adds a link, setting the link to entity name, the link from attribute name and
         /// the link to attribute name.
         /// </summary>
-        /// <param name="linkToEntityName">The name of the entity to link to.</param>
         /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
         /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
         /// <param name="joinOperator">The join operator.</param>
         /// <returns>The link entity that was created.</returns>
         public LinkEntity AddLink(
-            string linkToEntityName,
             Expression<Func<TFrom, object>> linkFromAttributeName,
             Expression<Func<TTo, object>> linkToAttributeName,
             JoinOperator joinOperator)
         {
             LinkEntity<TFrom, TTo> linkEntity = new LinkEntity<TFrom, TTo>(
-                this.LinkFromEntityName,
-                linkToEntityName,
                 linkFromAttributeName,
                 linkToAttributeName,
                 joinOperator);
@@ -75,17 +67,14 @@ namespace Microsoft.Xrm.Sdk.Query
         /// Adds a link, setting the link to entity name, the link from attribute name and
         /// the link to attribute name.
         /// </summary>
-        /// <param name="linkToEntityName">The name of the entity to link to.</param>
         /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
         /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
         /// <returns>The link entity that was created.</returns>
         public LinkEntity AddLink(
-            string linkToEntityName,
             Expression<Func<TFrom, object>> linkFromAttributeName,
             Expression<Func<TTo, object>> linkToAttributeName)
         {
             return this.AddLink(
-                linkToEntityName,
                 linkFromAttributeName,
                 linkToAttributeName,
                 JoinOperator.Inner);

@@ -31,7 +31,6 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedAttribute, actualtCondition.AttributeName);
             Assert.AreEqual(expectedOperator, actualtCondition.Operator);
             Assert.AreEqual(expectedValue, actualtCondition.Values[0]);
-            Assert.IsNull(actualtCondition.EntityName);
         }
 
         [TestMethod()]
@@ -46,7 +45,7 @@ namespace D365Extensions.Tests
             var expectedValue = "not used";
 
             // Act
-            filter.AddCondition<TestEntity>(expectedEntityName, t => t.ReferenceTypeProperty, expectedOperator, expectedValue);
+            filter.AddCondition<TestEntity>(t => t.ReferenceTypeProperty, expectedOperator, expectedValue);
 
             // Assert
             Assert.AreEqual(1, filter.Conditions.Count);

@@ -29,8 +29,6 @@ namespace D365Extensions.Tests
 
             // Act
             LinkEntity<EntityFrom, EntityTo> linkGen = new LinkEntity<EntityFrom, EntityTo>(
-                EntityFrom.EnityLogicalName,
-                EntityTo.EnityLogicalName,
                 f => f.FromId,
                 t => t.ToId,
                 expectedOperator);
@@ -87,7 +85,7 @@ namespace D365Extensions.Tests
                 LinkFromEntityName = expectedFromEntityName
             };
 
-            LinkEntity newLink = linkGen.AddLink(EntityTo.EnityLogicalName, f => f.FromId, t => t.ToId, expectedOperator);
+            LinkEntity newLink = linkGen.AddLink(f => f.FromId, t => t.ToId, expectedOperator);
 
             // Assert
             Assert.AreEqual(expectedFromEntityName, newLink.LinkFromEntityName);
@@ -113,7 +111,7 @@ namespace D365Extensions.Tests
                 LinkFromEntityName = expectedFromEntityName
             };
 
-            LinkEntity newLink = linkGen.AddLink(EntityTo.EnityLogicalName, f => f.FromId, t => t.ToId);
+            LinkEntity newLink = linkGen.AddLink(f => f.FromId, t => t.ToId);
 
             // Assert
             Assert.AreEqual(expectedFromEntityName, newLink.LinkFromEntityName);
