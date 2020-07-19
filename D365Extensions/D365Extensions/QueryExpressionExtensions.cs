@@ -28,18 +28,16 @@ namespace Microsoft.Xrm.Sdk.Query
         /// to, the attribute name to link from and the attribute name to link to.</summary>
         /// <typeparam name="TFrom">Type of the entity to link from</typeparam>
         /// <typeparam name="TTo">Type of the entity to link to</typeparam>
-        /// <param name="linkToEntityName">The name of the entity to link to.</param>
         /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
         /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
         public static LinkEntity AddLink<TFrom, TTo>(
             this QueryExpression query,
-            string linkToEntityName,
             Expression<Func<TFrom, object>> linkFromAttributeName,
             Expression<Func<TTo, object>> linkToAttributeName)
             where TFrom : Entity
             where TTo : Entity
         {
-            return query.AddLink(linkToEntityName,
+            return query.AddLink(typeof(TTo).Name.ToLower(),
                 ProperyExpression.GetName(linkFromAttributeName),
                 ProperyExpression.GetName(linkToAttributeName));
         }
@@ -49,19 +47,17 @@ namespace Microsoft.Xrm.Sdk.Query
         /// to, the attribute name to link from and the attribute name to link to.</summary>
         /// <typeparam name="TFrom">Type of the entity to link from</typeparam>
         /// <typeparam name="TTo">Type of the entity to link to</typeparam>
-        /// <param name="linkToEntityName">The name of the entity to link to.</param>
         /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
         /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
         /// <param name="joinOperator">The join operator.</param>
         public static LinkEntity AddLink<TFrom, TTo>(
             this QueryExpression query,
-            string linkToEntityName,
             Expression<Func<TFrom, object>> linkFromAttributeName,
             Expression<Func<TTo, object>> linkToAttributeName, JoinOperator joinOperator)
             where TFrom : Entity
             where TTo : Entity
         {
-            return query.AddLink(linkToEntityName,
+            return query.AddLink(typeof(TTo).Name.ToLower(),
                 ProperyExpression.GetName(linkFromAttributeName),
                 ProperyExpression.GetName(linkToAttributeName),
                 joinOperator);
