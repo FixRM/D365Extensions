@@ -1,4 +1,33 @@
 # What's new
+## [1.2.0](https://github.com/FixRM/D365Extensions/compare/v1.1.0...v1.2.0) (2020-07-19)
+
+
+### Bug Fixes
+
+* add parameter types ([b54094f](https://github.com/FixRM/D365Extensions/commit/b54094f))
+* check if default constructor works for all ,Query extensions ([c386c3a](https://github.com/FixRM/D365Extensions/commit/c386c3a))
+* expressions can be null ([c79bde3](https://github.com/FixRM/D365Extensions/commit/c79bde3))
+* get rid of EntityName in GetAliasedEntity method ([811d75d](https://github.com/FixRM/D365Extensions/commit/811d75d))
+* get rid of unnecessary EntityName parameter ([8027dcd](https://github.com/FixRM/D365Extensions/commit/8027dcd))
+* get rid of unnecessary parameter ([2e3c151](https://github.com/FixRM/D365Extensions/commit/2e3c151))
+* oder type is not assigned as expected ([b9042b4](https://github.com/FixRM/D365Extensions/commit/b9042b4))
+
+
+### Features
+
+* add ColumnSet<T> extension ([dc87311](https://github.com/FixRM/D365Extensions/commit/dc87311))
+* add ColumnSetExtensions class ([d6ffcb1](https://github.com/FixRM/D365Extensions/commit/d6ffcb1))
+* add ConditionExpression<T> ([89fc043](https://github.com/FixRM/D365Extensions/commit/89fc043))
+* add FilterExpression extensions ([190018e](https://github.com/FixRM/D365Extensions/commit/190018e))
+* add IOrganizationService.Update extensions ([fd52053](https://github.com/FixRM/D365Extensions/commit/fd52053))
+* add LinkEntity<TFrom, TTo> class ([5a92741](https://github.com/FixRM/D365Extensions/commit/5a92741))
+* add LinkEntityExtensions class ([0590f90](https://github.com/FixRM/D365Extensions/commit/0590f90))
+* add OrderExpression<T> extension ([599805e](https://github.com/FixRM/D365Extensions/commit/599805e))
+* add QueryByAttributeExtensions ([7899dfa](https://github.com/FixRM/D365Extensions/commit/7899dfa))
+* add QueryExpression extensions ([967c2d6](https://github.com/FixRM/D365Extensions/commit/967c2d6))
+
+
+
 ## [1.1.0](https://github.com/FixRM/D365Extensions/compare/v1.0.45...v1.1.0) (2019-08-30)
 
 
