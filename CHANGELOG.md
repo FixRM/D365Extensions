@@ -1,4 +1,13 @@
 # What's new
+### [1.2.1](https://github.com/FixRM/D365Extensions/compare/v1.2.0...v1.2.1) (2020-08-19)
+
+
+### Bug Fixes
+
+* methods GetPreTarget<T> and GetPostTarget<T> cause exception ([1d86f3d](https://github.com/FixRM/D365Extensions/commit/1d86f3d))
+
+
+
 ## [1.2.0](https://github.com/FixRM/D365Extensions/compare/v1.1.0...v1.2.0) (2020-07-19)
 
 
