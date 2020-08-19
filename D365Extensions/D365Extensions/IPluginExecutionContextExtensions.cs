@@ -168,8 +168,18 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPreTarget<T>(this IPluginExecutionContext context, String name) where T : Entity
         {
-            T target = GetTarget<T>(context);
-            T image = GetPreImage<T>(context, name);
+            return GetPreTarget(context, name).ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Get "Target" entity parameter merged with specified pre image 
+        /// </summary>
+        /// <param name="name">Image name</param>
+        /// <returns></returns>
+        public static Entity GetPreTarget(this IPluginExecutionContext context, String name)
+        {
+            Entity target = GetTarget(context);
+            Entity image = GetPreImage(context, name);
 
             target?.MergeAttributes(image);
 
@@ -183,8 +193,18 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPostTarget<T>(this IPluginExecutionContext context, String name) where T : Entity
         {
-            T target = GetTarget<T>(context);
-            T image = GetPostImage<T>(context, name);
+            return GetPostTarget(context, name).ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Get "Target" entity parameter merged with specified post image 
+        /// </summary>
+        /// <param name="name">Image name</param>
+        /// <returns></returns>
+        public static Entity GetPostTarget(this IPluginExecutionContext context, String name)
+        {
+            Entity target = GetTarget(context);
+            Entity image = GetPostImage(context, name);
 
             target?.MergeAttributes(image);
 
