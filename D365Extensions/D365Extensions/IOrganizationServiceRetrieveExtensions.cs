@@ -123,9 +123,35 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
+        public static T Retrieve<T>(this IOrganizationService service, string keyName, string keyValue, ColumnSet columnSet) where T : Entity
+        {
+            Entity entity = new Entity();
+            entity.ToEntity<T>();
+            entity = service.Retrieve(entity.LogicalName, keyName, keyValue, columnSet);
+
+            return entity.ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrieves by Alternative key and returns strongly typed entity object
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
         public static T Retrieve<T>(this IOrganizationService service, string logicalName, string keyName, string keyValue, params String[] columns) where T : Entity
         {
             return service.Retrieve<T>(logicalName, keyName, keyValue, new ColumnSet(columns));
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrieves by Alternative key and returns strongly typed entity object
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        public static T Retrieve<T>(this IOrganizationService service, string keyName, string keyValue, params String[] columns) where T : Entity
+        {
+            Entity entity = new Entity();
+            entity.ToEntity<T>();
+            return service.Retrieve<T>(entity.LogicalName, keyName, keyValue, new ColumnSet(columns));
         }
     }
 }
