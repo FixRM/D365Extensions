@@ -17,15 +17,16 @@ To configure this task your should add `ILRepack.targets` file to you project. F
 <?xml version="1.0" encoding="utf-8" ?>
 <!-- ILRepack -->
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Target Name="AfterBuild">
+  <Target Name="AfterBuild" Condition="'$(BuildingForLiveUnitTesting)' != 'true'">
     <ItemGroup>
       <InputAssemblies Include="$(OutputPath)\$(AssemblyName).dll" />
       <InputAssemblies Include="$(OutputPath)\D365Extensions.dll" />
     </ItemGroup>
-    <ILRepack Parallel="true" 
+    <ILRepack Parallel="true"
+              DebugInfo="true"
               InputAssemblies="@(InputAssemblies)"
-              LibraryPath="$(OutputPath)" 
-              KeyFile="$(AssemblyOriginatorKeyFile)" 
+              LibraryPath="$(OutputPath)"
+              KeyFile="$(AssemblyOriginatorKeyFile)"
               OutputFile="$(OutputPath)\$(AssemblyName).dll" />
   </Target>
 </Project>
