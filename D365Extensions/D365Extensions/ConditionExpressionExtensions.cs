@@ -30,7 +30,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="values">The array of attribute values.</param>
         public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, params object[] values)
         {
-            EntityName = typeof(T).Name.ToLower();
+            EntityName = typeof(T).Name.ToLowerInvariant();
             AttributeName = attributeName;
             Operator = conditionOperator;
             if (values != null)

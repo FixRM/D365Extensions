@@ -25,10 +25,7 @@ namespace D365Extensions
 
         static string GetName(Expression expression)
         {
-            if (expression == null)
-            {
-                return null;
-            }
+            if (expression == null) return null;
 
             // Property, field of method returning value type
             if (expression is UnaryExpression unaryExpression)
@@ -39,7 +36,7 @@ namespace D365Extensions
             // Reference type property or field
             if (expression is MemberExpression memberExpession)
             {
-                return memberExpession.Member.Name.ToLower();
+                return memberExpession.Member.Name.ToLowerInvariant();
             }
 
             throw CheckParam.InvalidExpression(nameof(expression));
