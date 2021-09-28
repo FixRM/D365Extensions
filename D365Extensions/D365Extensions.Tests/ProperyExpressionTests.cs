@@ -109,5 +109,19 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedReference, actual[8]);
             Assert.AreEqual(expectedDecimal, actual[9]);
         }
+
+        [TestMethod()]
+        public void Use_Reflection_Test()
+        {
+            // Setup
+            D365Extensions.ProperyExpression.UseReflection = true;
+            string expected = "string_prop";
+
+            // Act
+            string actual = ProperyExpression.GetName<CustomEntity>(e => e.StringProp);
+
+            // Assert
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
