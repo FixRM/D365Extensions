@@ -64,6 +64,7 @@ namespace D365Extensions.Tests
         {
         }
 
+        [AttributeLogicalName("fromid")]
         public Guid FromId { get; set; }
     }
 
@@ -78,6 +79,7 @@ namespace D365Extensions.Tests
         {
         }
 
+        [AttributeLogicalName("toid")]
         public Guid ToId { get; set; }
     }
 

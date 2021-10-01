@@ -1,6 +1,7 @@
 ﻿using D365Extensions;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,12 +9,24 @@ using System.Reflection;
 
 namespace D365Extensions
 {
+    // This is experimental implementation
+    // Members are not set to be [TreadStatic] as it can cause unexpected behaviour
+    // for applications with complex thread logic, for example USD client
+    //
+    // On the other hand, assembly level attributes will not work as well as
+    // Assembly.GetExecutingAssembly() will not work in sandoxed plugins
+    // Please, let me know if you know better way to set this
+    public static class D365ExtensionsSettings
+    {
+        public static bool UseReflection = true;
+    }
+
     /// <summary>
     /// Helper class for reading property names from lambda expressions
     /// </summary>
     public static class ProperyExpression
     {
-        public static bool UseReflection { get; set; } = false;
+        static ConcurrentDictionary<MemberInfo, string> memberChache = new ConcurrentDictionary<MemberInfo, string>();
 
         public static List<string> GetNames<T>(params Expression<Func<T, object>>[] expressions)
         {
@@ -42,18 +55,22 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpession.Member;
 
-                if (UseReflection)
+                memberChache.TryGetValue(member, out string logicalName);
+                if (logicalName == null)
                 {
-                    var logicalName = member.GetCustomAttributes<AttributeLogicalNameAttribute>(false)
-                        .FirstOrDefault();
-                    if (logicalName != null)
+                    if (D365ExtensionsSettings.UseReflection)
                     {
-                        return logicalName.LogicalName;
+                        logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>().LogicalName;
                     }
-                    else throw new ArgumentException($"Property {member.Name} has no AttributeLogicalName attribute");
+                    else
+                    {
+                        logicalName = member.Name.ToLowerInvariant();
+                    }
+
+                    memberChache.TryAdd(member, logicalName);
                 }
 
-                return member.Name.ToLowerInvariant();
+                return logicalName;
             }
 
             throw CheckParam.InvalidExpression(nameof(expression));
