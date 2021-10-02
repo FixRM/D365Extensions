@@ -6,6 +6,22 @@ using System;
 namespace D365Extensions.Benchmark
 {
     [MemoryDiagnoser]
+    public class ENBenchmark
+    {
+        [Benchmark]
+        public string GetName() => EntityLogicalName.GetName<CustomEntity>();
+
+        [Benchmark]
+        public string GetNameC() => EntityLogicalName.GetNameC<CustomEntity>();
+
+        [Benchmark]
+        public string GetNameR() => EntityLogicalName.GetNameR<CustomEntity>();
+
+        [Benchmark]
+        public string GetNameRC() => EntityLogicalName.GetNameRC<CustomEntity>();
+    }
+
+        [MemoryDiagnoser]
     public class PEBenchmark
     {
         [Benchmark]
@@ -46,7 +62,8 @@ namespace D365Extensions.Benchmark
     {
         static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<PEBenchmark>();
+            var summary = BenchmarkRunner.Run<ENBenchmark>();
+            //var summary = BenchmarkRunner.Run<PEBenchmark>();
             //var summary = BenchmarkRunner.Run<ToLowerBenchmark>();
 
             Console.ReadKey();

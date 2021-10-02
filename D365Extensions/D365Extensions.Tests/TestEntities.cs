@@ -56,6 +56,7 @@ namespace D365Extensions.Tests
     /// <summary>
     /// Simple Entity for LinkEntity tests
     /// </summary>
+    [EntityLogicalName("entityfrom")]
     public class EntityFrom : Entity
     {
         public static string EnityLogicalName = "entityfrom";
@@ -71,6 +72,7 @@ namespace D365Extensions.Tests
     /// <summary>
     /// Simple Entity for LinkEntity tests
     /// </summary>
+    [EntityLogicalName("entityto")]
     public class EntityTo : Entity
     {
         public static string EnityLogicalName = "entityto";

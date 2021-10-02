@@ -30,8 +30,8 @@ namespace Microsoft.Xrm.Sdk.Query
           Expression<Func<TTo, object>> linkToAttributeName,
           JoinOperator joinOperator)
         {
-            this.LinkFromEntityName = typeof(TFrom).Name.ToLowerInvariant();
-            this.LinkToEntityName = typeof(TTo).Name.ToLowerInvariant();
+            this.LinkFromEntityName = EntityLogicalName.GetName<TFrom>();
+            this.LinkToEntityName = EntityLogicalName.GetName<TTo>();
             this.LinkFromAttributeName = linkFromAttributeName;
             this.LinkToAttributeName = linkToAttributeName;
             this.JoinOperator = joinOperator;

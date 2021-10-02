@@ -255,6 +255,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityLogicalName.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProperyExpression.cs" />

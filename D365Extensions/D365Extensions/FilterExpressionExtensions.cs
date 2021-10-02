@@ -22,7 +22,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="values">The array of values to add.</param>
         public static void AddCondition<T>(this FilterExpression filterExpression, Expression<Func<T, object>> attributeName,  ConditionOperator conditionOperator,  params object[] values) where T : Entity
         {
-            filterExpression.AddCondition(typeof(T).Name.ToLowerInvariant(), ProperyExpression.GetName(attributeName), conditionOperator, values);
+            filterExpression.AddCondition(EntityLogicalName.GetName<T>(), ProperyExpression.GetName(attributeName), conditionOperator, values);
         }
     }
 }
