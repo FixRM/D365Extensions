@@ -109,5 +109,21 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedReference, actual[8]);
             Assert.AreEqual(expectedDecimal, actual[9]);
         }
+
+        [TestMethod()]
+        public void Same_Prop_Name_test()
+        {
+            // Setup
+            string expectedPropName = "string_prop";
+            string expectedProp2Name = "string_prop2";
+
+            // Act
+            string actualPropName = ProperyExpression.GetName<CustomEntity>(c => c.StringProp);
+            string actualProp2Name = ProperyExpression.GetName<CustomEntity2>(c => c.StringProp);
+
+            // Assert
+            Assert.AreEqual(expectedPropName, actualPropName);
+            Assert.AreEqual(expectedProp2Name, actualProp2Name);
+        }
     }
 }

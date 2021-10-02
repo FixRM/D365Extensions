@@ -101,4 +101,24 @@ namespace D365Extensions.Tests
             set => SetAttributeValue("string_prop", value); 
         }
     }
+
+    /// <summary>
+    /// Entity for UseReflection tests
+    /// </summary>
+    [EntityLogicalName("custom_entity2")]
+    public class CustomEntity2 : Entity
+    {
+        public static string EnityLogicalName = "custom_entity2";
+
+        public CustomEntity2() : base(EnityLogicalName)
+        {
+        }
+
+        [AttributeLogicalName("string_prop2")]
+        public string StringProp
+        {
+            get => GetAttributeValue<string>("string_prop2");
+            set => SetAttributeValue("string_prop2", value);
+        }
+    }
 }
