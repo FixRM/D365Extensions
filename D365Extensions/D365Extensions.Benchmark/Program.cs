@@ -1,12 +1,7 @@
 ﻿using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 using D365Extensions.Tests;
-using D365Extensions.Tests.Entities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace D365Extensions.Benchmark
 {
