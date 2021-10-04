@@ -1,0 +1,84 @@
+# Variable 'Major' was defined in the Variables tab
+# Variable 'Minor' was defined in the Variables tab
+variables:
+- name: BuildParameters.solution
+  value: '**\*.sln'
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - D365Extensions
+resources:
+  repositories:
+  - repository: self
+    type: git
+    ref: master
+jobs:
+- job: Phase_1
+  displayName: Agent job 1
+  cancelTimeoutInMinutes: 1
+  pool:
+    name: Hosted VS2017
+  steps:
+  - checkout: self
+  - task: Npm@1
+    displayName: npm install
+    inputs:
+      verbose: false
+  - task: Npm@1
+    displayName: npm run get-version
+    inputs:
+      command: custom
+      verbose: false
+      customCommand: run get-version
+  - task: NuGetToolInstaller@0
+    displayName: Use NuGet 4.9.1
+    inputs:
+      versionSpec: 4.9.1
+  - task: NuGetCommand@2
+    displayName: NuGet restore
+    inputs:
+      solution: $(BuildParameters.solution)
+  - task: DownloadSecureFile@1
+    displayName: Download secure file
+    inputs:
+      secureFile: ae991075-eb04-43de-afb0-c180d1f0e314
+      retryCount: 5
+  - task: CopyFiles@2
+    displayName: 'Copy FixRM.snk to: D365Extensions/D365Extensions'
+    inputs:
+      SourceFolder: $(Agent.TempDirectory)
+      Contents: FixRM.snk
+      TargetFolder: D365Extensions/D365Extensions
+  - task: VSBuild@1
+    displayName: Build solution **\*.sln
+    inputs:
+      solution: $(BuildParameters.solution)
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+  - task: VSTest@2
+    displayName: VsTest - testAssemblies
+    inputs:
+      testAssemblyVer2: >-
+        **\$(BuildConfiguration)\*\*test*.dll
+
+        !**\obj\**
+      codeCoverageEnabled: true
+      platform: $(BuildPlatform)
+      configuration: $(BuildConfiguration)
+      diagnosticsEnabled: True
+  - task: NuGetCommand@2
+    displayName: NuGet pack
+    inputs:
+      command: pack
+      searchPatternPack: '**/*.csproj;!**\*.Tests.csproj'
+      versioningScheme: byEnvVar
+      versionEnvVar: SemVersion
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    inputs:
+      PathtoPublish: $(build.artifactstagingdirectory)
+      TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
+
