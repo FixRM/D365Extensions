@@ -73,7 +73,7 @@ steps:
   displayName: NuGet pack
   inputs:
     command: pack
-    searchPatternPack: '**/*.csproj;!**\*.Tests.csproj'
+    searchPatternPack: '**/*.csproj;!**\*.Tests.csproj;!**\*.Benchmark.csproj'
     versioningScheme: byEnvVar
     versionEnvVar: SemVersion
 
