@@ -86,7 +86,7 @@ namespace D365Extensions.Tests
     }
 
     /// <summary>
-    /// Entity for UseReflection tests
+    /// Entity for PropertyExpression tests
     /// </summary>
     [EntityLogicalName("custom_entity")]
     public class CustomEntity : Entity
@@ -105,7 +105,7 @@ namespace D365Extensions.Tests
     }
 
     /// <summary>
-    /// Entity for UseReflection tests
+    /// Entity for PropertyExpression tests
     /// </summary>
     [EntityLogicalName("custom_entity2")]
     public class CustomEntity2 : Entity
@@ -121,6 +121,24 @@ namespace D365Extensions.Tests
         {
             get => GetAttributeValue<string>("string_prop2");
             set => SetAttributeValue("string_prop2", value);
+        }
+    }
+
+    /// <summary>
+    /// Entity for PropertyExpression tests
+    /// </summary>
+    public class NotDecoratedEntity : Entity
+    {
+        public static string EnityLogicalName = "notdecoratedentity";
+
+        public NotDecoratedEntity() : base(EnityLogicalName)
+        {
+        }
+
+        public string TheProp
+        {
+            get => GetAttributeValue<string>("theprop");
+            set => SetAttributeValue("theprop", value);
         }
     }
 }

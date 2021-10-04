@@ -21,14 +21,9 @@ namespace D365Extensions
             typeChache.TryGetValue(type, out string logicalName);
             if (logicalName == null)
             {
-                if (D365ExtensionsSettings.UseReflection)
-                {
-                    logicalName = type.GetCustomAttribute<EntityLogicalNameAttribute>().LogicalName;
-                }
-                else
-                {
-                    logicalName = type.Name.ToLowerInvariant();
-                }
+                logicalName = type.GetCustomAttribute<EntityLogicalNameAttribute>()?.LogicalName
+                    // fallback if attribute not provided
+                    ?? type.Name.ToLowerInvariant();
 
                 typeChache.TryAdd(type, logicalName);
             }

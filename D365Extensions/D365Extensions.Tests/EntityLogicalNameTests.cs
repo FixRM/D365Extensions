@@ -10,7 +10,7 @@ using D365Extensions.Tests.Entities;
 namespace D365Extensions.Tests
 {
     [TestClass()]
-    public class EntityNameTests
+    public class EntityLogicalNameTests
     {
         [TestMethod()]
         public void GetNameTest()
@@ -26,6 +26,19 @@ namespace D365Extensions.Tests
             // Assert
             Assert.AreEqual(expectedName, actualName);
             Assert.AreEqual(expectedName2, actualName2);
+        }
+
+        [TestMethod()]
+        public void Not_Decorated_Entity_Test()
+        {
+            // Setup
+            string expectedEntityName = nameof(NotDecoratedEntity).ToLowerInvariant();
+
+            // Act
+            string actuaEntityName = EntityLogicalName.GetName<NotDecoratedEntity>();
+
+            // Assert
+            Assert.AreEqual(expectedEntityName, actuaEntityName);
         }
     }
 }

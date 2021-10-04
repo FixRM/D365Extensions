@@ -111,7 +111,7 @@ namespace D365Extensions.Tests
         }
 
         [TestMethod()]
-        public void Same_Prop_Name_test()
+        public void Same_Prop_Name_Test()
         {
             // Setup
             string expectedPropName = "string_prop";
@@ -124,6 +124,19 @@ namespace D365Extensions.Tests
             // Assert
             Assert.AreEqual(expectedPropName, actualPropName);
             Assert.AreEqual(expectedProp2Name, actualProp2Name);
+        }
+
+        [TestMethod()]
+        public void Not_Decorated_Entity_Test()
+        {
+            // Setup
+            string expectedPropName = nameof(NotDecoratedEntity.TheProp).ToLowerInvariant();
+ 
+            // Act
+            string actualPropName = ProperyExpression.GetName<NotDecoratedEntity>(e => e.TheProp);
+
+            // Assert
+            Assert.AreEqual(expectedPropName, actualPropName);
         }
     }
 }
