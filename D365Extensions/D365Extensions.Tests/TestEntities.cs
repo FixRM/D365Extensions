@@ -56,6 +56,7 @@ namespace D365Extensions.Tests
     /// <summary>
     /// Simple Entity for LinkEntity tests
     /// </summary>
+    [EntityLogicalName("entityfrom")]
     public class EntityFrom : Entity
     {
         public static string EnityLogicalName = "entityfrom";
@@ -64,12 +65,14 @@ namespace D365Extensions.Tests
         {
         }
 
+        [AttributeLogicalName("fromid")]
         public Guid FromId { get; set; }
     }
 
     /// <summary>
     /// Simple Entity for LinkEntity tests
     /// </summary>
+    [EntityLogicalName("entityto")]
     public class EntityTo : Entity
     {
         public static string EnityLogicalName = "entityto";
@@ -78,6 +81,64 @@ namespace D365Extensions.Tests
         {
         }
 
+        [AttributeLogicalName("toid")]
         public Guid ToId { get; set; }
+    }
+
+    /// <summary>
+    /// Entity for PropertyExpression tests
+    /// </summary>
+    [EntityLogicalName("custom_entity")]
+    public class CustomEntity : Entity
+    {
+        public static string EnityLogicalName = "custom_entity";
+
+        public CustomEntity() : base(EnityLogicalName)
+        {
+        }
+
+        [AttributeLogicalName("string_prop")]
+        public string StringProp {
+            get => GetAttributeValue<string>("string_prop");
+            set => SetAttributeValue("string_prop", value); 
+        }
+    }
+
+    /// <summary>
+    /// Entity for PropertyExpression tests
+    /// </summary>
+    [EntityLogicalName("custom_entity2")]
+    public class CustomEntity2 : Entity
+    {
+        public static string EnityLogicalName = "custom_entity2";
+
+        public CustomEntity2() : base(EnityLogicalName)
+        {
+        }
+
+        [AttributeLogicalName("string_prop2")]
+        public string StringProp
+        {
+            get => GetAttributeValue<string>("string_prop2");
+            set => SetAttributeValue("string_prop2", value);
+        }
+    }
+
+    /// <summary>
+    /// Entity for PropertyExpression tests
+    /// </summary>
+    public class NotDecoratedEntity : Entity
+    {
+        public static string EnityLogicalName = "notdecoratedentity";
+
+        public NotDecoratedEntity() : base(EnityLogicalName)
+        {
+        }
+
+        public string TheProp
+        {
+            get => GetAttributeValue<string>("theprop");
+            set => SetAttributeValue("theprop", value);
+        }
     }
 }

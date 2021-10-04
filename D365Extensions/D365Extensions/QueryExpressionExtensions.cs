@@ -37,7 +37,7 @@ namespace Microsoft.Xrm.Sdk.Query
             where TFrom : Entity
             where TTo : Entity
         {
-            return query.AddLink(typeof(TTo).Name.ToLower(),
+            return query.AddLink(EntityLogicalName.GetName<TTo>(),
                 ProperyExpression.GetName(linkFromAttributeName),
                 ProperyExpression.GetName(linkToAttributeName));
         }
@@ -57,7 +57,7 @@ namespace Microsoft.Xrm.Sdk.Query
             where TFrom : Entity
             where TTo : Entity
         {
-            return query.AddLink(typeof(TTo).Name.ToLower(),
+            return query.AddLink(EntityLogicalName.GetName<TTo>(),
                 ProperyExpression.GetName(linkFromAttributeName),
                 ProperyExpression.GetName(linkToAttributeName),
                 joinOperator);

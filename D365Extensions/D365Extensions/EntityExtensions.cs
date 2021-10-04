@@ -86,7 +86,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetAliasedEntity<T>(this Entity entity, String alias = null) where T : Entity
         {
-            return GetAliasedEntity(entity, typeof(T).Name.ToLower(), alias).ToEntity<T>();
+            return GetAliasedEntity(entity, EntityLogicalName.GetName<T>(), alias).ToEntity<T>();
         }
 
         /// <summary>
