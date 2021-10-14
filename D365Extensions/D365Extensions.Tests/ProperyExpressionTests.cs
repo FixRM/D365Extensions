@@ -1,9 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using D365Extensions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using D365Extensions.Tests.Entities;
 
@@ -12,7 +9,7 @@ namespace D365Extensions.Tests
     [TestClass()]
     public class ProperyExpressionTests
     {
-        [TestMethod()]
+         [TestMethod()]
         public void Get_Reference_Type_Property_Name_Test()
         {
             // Setup
@@ -131,12 +128,18 @@ namespace D365Extensions.Tests
         {
             // Setup
             string expectedPropName = nameof(NotDecoratedEntity.TheProp).ToLowerInvariant();
- 
+
             // Act
             string actualPropName = ProperyExpression.GetName<NotDecoratedEntity>(e => e.TheProp);
 
             // Assert
             Assert.AreEqual(expectedPropName, actualPropName);
+        }
+
+        [TestMethod()]
+        public void Parallel_Execution_Test()
+        {
+            Parallel.For(0, 1000, i => { Get_Name_For_Oob_Generated(); });
         }
     }
 }

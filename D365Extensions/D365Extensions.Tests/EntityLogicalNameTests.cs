@@ -40,5 +40,11 @@ namespace D365Extensions.Tests
             // Assert
             Assert.AreEqual(expectedEntityName, actuaEntityName);
         }
+
+        [TestMethod()]
+        public void Parallel_Execution_Test()
+        {
+            Parallel.For(0, 1000, i => { GetNameTest(); });
+        }
     }
 }
