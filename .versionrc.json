@@ -1,0 +1,20 @@
+{
+  "header": "# What's new",
+  "skip": {
+    "bump": false,
+    "changelog": false,
+    "commit": false,
+    "tag": false
+  },
+  "bumpFiles": [
+    {
+      "temporary_workaround": "https://github.com/conventional-changelog/standard-version/issues/533",
+      "filename": "package.json",
+      "type": "json"
+    },
+    {
+      "filename": "azure-pipelines.yml",
+      "updater": "./scripts/azure-pipeline-updater.js"
+    }
+  ]
+}
