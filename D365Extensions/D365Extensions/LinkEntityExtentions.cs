@@ -34,8 +34,8 @@ namespace Microsoft.Xrm.Sdk.Query
         {
             return link.AddLink(
                 linkToEntityName,
-                ProperyExpression.GetName<TFrom>(linkFromAttributeName),
-                ProperyExpression.GetName<TTo>(linkToAttributeName),
+                LogicalName.GetName<TFrom>(linkFromAttributeName),
+                LogicalName.GetName<TTo>(linkToAttributeName),
                 joinOperator);
         }
 
@@ -59,8 +59,8 @@ namespace Microsoft.Xrm.Sdk.Query
         {
             return link.AddLink(
                 linkToEntityName,
-                ProperyExpression.GetName<TFrom>(linkFromAttributeName),
-                ProperyExpression.GetName<TTo>(linkToAttributeName));
+                LogicalName.GetName<TFrom>(linkFromAttributeName),
+                LogicalName.GetName<TTo>(linkToAttributeName));
         }
     }
 }

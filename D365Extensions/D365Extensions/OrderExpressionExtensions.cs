@@ -49,7 +49,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static implicit operator OrderExpression(OrderExpression<T> t)
         {
-            return new OrderExpression(ProperyExpression.GetName(t.AttributeName), t.OrderType);
+            return new OrderExpression(LogicalName.GetName(t.AttributeName), t.OrderType);
         }
     }
 }

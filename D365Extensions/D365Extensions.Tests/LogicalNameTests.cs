@@ -7,7 +7,7 @@ using D365Extensions.Tests.Entities;
 namespace D365Extensions.Tests
 {
     [TestClass()]
-    public class ProperyExpressionTests
+    public class LogicalNameTests
     {
          [TestMethod()]
         public void Get_Reference_Type_Property_Name_Test()
@@ -16,7 +16,7 @@ namespace D365Extensions.Tests
             string expected = nameof(TestEntity.ReferenceTypeProperty).ToLower();
 
             // Act
-            string actual = ProperyExpression.GetName<TestEntity>(t => t.ReferenceTypeProperty);
+            string actual = LogicalName.GetName<TestEntity>(t => t.ReferenceTypeProperty);
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -29,7 +29,7 @@ namespace D365Extensions.Tests
             string expected = nameof(TestEntity.ValueTypeProperty).ToLower();
 
             // Act
-            string actual = ProperyExpression.GetName<TestEntity>(t => t.ValueTypeProperty);
+            string actual = LogicalName.GetName<TestEntity>(t => t.ValueTypeProperty);
 
             // Assert
             Assert.AreEqual(expected, actual);
@@ -43,7 +43,7 @@ namespace D365Extensions.Tests
             string expected2 = nameof(TestEntity.ValueTypeProperty).ToLower();
 
             // Act
-            List<string> actual = ProperyExpression.GetNames<TestEntity>(
+            List<string> actual = LogicalName.GetNames<TestEntity>(
                 t => t.ReferenceTypeProperty,
                 t => t.ValueTypeProperty);
 
@@ -60,7 +60,7 @@ namespace D365Extensions.Tests
             ArgumentException e = Assert.ThrowsException<ArgumentException>(() =>
             {
                 // Act
-                ProperyExpression.GetName<TestEntity>(t => t.ToEntityReference());
+                LogicalName.GetName<TestEntity>(t => t.ToEntityReference());
             });
 
             Assert.IsTrue(e.Message.Contains(CheckParam.InvalidExpression(null).Message));
@@ -82,7 +82,7 @@ namespace D365Extensions.Tests
             string expectedDecimal = nameof(Account.ExchangeRate).ToLowerInvariant();
 
             // Act
-            List<string> actual = ProperyExpression.GetNames<Account>(
+            List<string> actual = LogicalName.GetNames<Account>(
                 a => a.AccountNumber,
                 a => a.Address1_Longitude,
                 a => a.AccountRatingCode,
@@ -115,8 +115,8 @@ namespace D365Extensions.Tests
             string expectedProp2Name = "string_prop2";
 
             // Act
-            string actualPropName = ProperyExpression.GetName<CustomEntity>(c => c.StringProp);
-            string actualProp2Name = ProperyExpression.GetName<CustomEntity2>(c => c.StringProp);
+            string actualPropName = LogicalName.GetName<CustomEntity>(c => c.StringProp);
+            string actualProp2Name = LogicalName.GetName<CustomEntity2>(c => c.StringProp);
 
             // Assert
             Assert.AreEqual(expectedPropName, actualPropName);
@@ -130,7 +130,7 @@ namespace D365Extensions.Tests
             string expectedPropName = nameof(NotDecoratedEntity.TheProp).ToLowerInvariant();
 
             // Act
-            string actualPropName = ProperyExpression.GetName<NotDecoratedEntity>(e => e.TheProp);
+            string actualPropName = LogicalName.GetName<NotDecoratedEntity>(e => e.TheProp);
 
             // Assert
             Assert.AreEqual(expectedPropName, actualPropName);
@@ -140,6 +140,42 @@ namespace D365Extensions.Tests
         public void Parallel_Execution_Test()
         {
             Parallel.For(0, 1000, i => { Get_Name_For_Oob_Generated(); });
+        }
+
+
+        [TestMethod()]
+        public void Oob_Entity_Test()
+        {
+            // Setup
+            string expectedName = Account.EntityLogicalName;
+            string expectedName2 = CustomEntity.EnityLogicalName;
+
+            // Act
+            string actualName = LogicalName.GetName<Account>();
+            string actualName2 = LogicalName.GetName<CustomEntity>();
+
+            // Assert
+            Assert.AreEqual(expectedName, actualName);
+            Assert.AreEqual(expectedName2, actualName2);
+        }
+
+        [TestMethod()]
+        public void Not_Decorated_Entity_Name_Test()
+        {
+            // Setup
+            string expectedEntityName = nameof(NotDecoratedEntity).ToLowerInvariant();
+
+            // Act
+            string actuaEntityName = LogicalName.GetName<NotDecoratedEntity>();
+
+            // Assert
+            Assert.AreEqual(expectedEntityName, actuaEntityName);
+        }
+
+        [TestMethod()]
+        public void Parallel_Execution_EntityName_Test()
+        {
+            Parallel.For(0, 1000, i => { Oob_Entity_Test(); });
         }
     }
 }

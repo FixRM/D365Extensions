@@ -21,7 +21,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="value">The attribute value.</param>
         public static void AddAttribute<T>(this QueryByAttribute query, Expression<Func<T, object>> attributeName, object value) where T : Entity
         {
-            query.AddAttributeValue(ProperyExpression.GetName(attributeName), value);
+            query.AddAttributeValue(LogicalName.GetName(attributeName), value);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="orderType">The order for that attribute.</param>
         public static void AddOrder<T>(this QueryByAttribute query, Expression<Func<T, object>> attributeName, OrderType orderType) where T : Entity
         {
-            query.AddOrder(ProperyExpression.GetName(attributeName), orderType);
+            query.AddOrder(LogicalName.GetName(attributeName), orderType);
         }
     }
 }

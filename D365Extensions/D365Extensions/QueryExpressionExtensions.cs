@@ -20,7 +20,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="orderType">The order for that attribute.</param>
         public static void AddOrder<T>(this QueryExpression query, Expression<Func<T, object>> attributeName, OrderType orderType) where T : Entity
         {
-            query.AddOrder(ProperyExpression.GetName(attributeName), orderType);
+            query.AddOrder(LogicalName.GetName(attributeName), orderType);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace Microsoft.Xrm.Sdk.Query
             where TFrom : Entity
             where TTo : Entity
         {
-            return query.AddLink(EntityLogicalName.GetName<TTo>(),
-                ProperyExpression.GetName(linkFromAttributeName),
-                ProperyExpression.GetName(linkToAttributeName));
+            return query.AddLink(LogicalName.GetName<TTo>(),
+                LogicalName.GetName(linkFromAttributeName),
+                LogicalName.GetName(linkToAttributeName));
         }
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace Microsoft.Xrm.Sdk.Query
             where TFrom : Entity
             where TTo : Entity
         {
-            return query.AddLink(EntityLogicalName.GetName<TTo>(),
-                ProperyExpression.GetName(linkFromAttributeName),
-                ProperyExpression.GetName(linkToAttributeName),
+            return query.AddLink(LogicalName.GetName<TTo>(),
+                LogicalName.GetName(linkFromAttributeName),
+                LogicalName.GetName(linkToAttributeName),
                 joinOperator);
         }
     }

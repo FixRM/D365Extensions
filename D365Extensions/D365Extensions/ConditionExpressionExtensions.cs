@@ -30,7 +30,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="values">The array of attribute values.</param>
         public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, params object[] values)
         {
-            EntityName = EntityLogicalName.GetName<T>();
+            EntityName = LogicalName.GetName<T>();
             AttributeName = attributeName;
             Operator = conditionOperator;
             if (values != null)
@@ -87,7 +87,7 @@ namespace Microsoft.Xrm.Sdk.Query
         public static implicit operator ConditionExpression(ConditionExpression<T> t)
         {
             return new ConditionExpression(t.EntityName,
-                ProperyExpression.GetName(t.AttributeName),
+                LogicalName.GetName(t.AttributeName),
                 t.Operator,
                 t.Values.ToArray());
         }

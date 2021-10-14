@@ -30,8 +30,8 @@ namespace Microsoft.Xrm.Sdk.Query
           Expression<Func<TTo, object>> linkToAttributeName,
           JoinOperator joinOperator)
         {
-            this.LinkFromEntityName = EntityLogicalName.GetName<TFrom>();
-            this.LinkToEntityName = EntityLogicalName.GetName<TTo>();
+            this.LinkFromEntityName = LogicalName.GetName<TFrom>();
+            this.LinkToEntityName = LogicalName.GetName<TTo>();
             this.LinkFromAttributeName = linkFromAttributeName;
             this.LinkToAttributeName = linkToAttributeName;
             this.JoinOperator = joinOperator;
@@ -141,10 +141,10 @@ namespace Microsoft.Xrm.Sdk.Query
                 EntityAlias = t.EntityAlias,
                 JoinOperator = t.JoinOperator,
                 LinkCriteria = t.LinkCriteria,
-                LinkFromAttributeName = ProperyExpression.GetName<TFrom>(t.LinkFromAttributeName),
+                LinkFromAttributeName = LogicalName.GetName<TFrom>(t.LinkFromAttributeName),
                 LinkFromEntityName = t.LinkFromEntityName,
                 LinkToEntityName = t.LinkToEntityName,
-                LinkToAttributeName = ProperyExpression.GetName<TTo>(t.LinkToAttributeName),
+                LinkToAttributeName = LogicalName.GetName<TTo>(t.LinkToAttributeName),
             };
             linkEntity.LinkEntities.AddRange(t.LinkEntities);
             linkEntity.Orders.AddRange(t.Orders);

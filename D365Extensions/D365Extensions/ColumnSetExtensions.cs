@@ -15,7 +15,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="column">The property expression containing the name of the attribute to add</param>
         public static void AddColumn<T>(this ColumnSet columnSet, Expression<Func<T, object>> column) where T: Entity
         {
-            columnSet.AddColumn(ProperyExpression.GetName(column));
+            columnSet.AddColumn(LogicalName.GetName(column));
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="column">The property expressions containing the name of the attribute to add</param>
         public static void AddColumns<T>(this ColumnSet columnSet, params Expression<Func<T, object>>[] columns) where T : Entity
         {
-            columnSet.AddColumns(ProperyExpression.GetNames(columns)?.ToArray());
+            columnSet.AddColumns(LogicalName.GetNames(columns)?.ToArray());
         }
     }
 }

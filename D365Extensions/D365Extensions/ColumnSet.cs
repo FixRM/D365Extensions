@@ -30,7 +30,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </param>
         public ColumnSet(params Expression<Func<T, object>>[] columns)
         {
-            Columns = ProperyExpression.GetNames(columns);
+            Columns = LogicalName.GetNames(columns);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="column">Specifies a property expressions containing the name of the attribute.</param>
         public void AddColumn(Expression<Func<T, object>> column)
         {
-            Columns.Add(ProperyExpression.GetName(column));
+            Columns.Add(LogicalName.GetName(column));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="columns">Specifies an array of property expressions containing the names of the attributes.</param>
         public void AddColumns(params Expression<Func<T, object>>[] columns)
         {
-            Columns.AddRange(ProperyExpression.GetNames(columns));
+            Columns.AddRange(LogicalName.GetNames(columns));
         }
 
         /// <summary>

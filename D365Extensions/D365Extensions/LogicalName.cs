@@ -1,5 +1,6 @@
 ﻿using D365Extensions;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace D365Extensions
     /// <summary>
     /// Helper class for reading property names from lambda expressions
     /// </summary>
-    public static class ProperyExpression
+    public static class LogicalName
     {
         static ConcurrentDictionary<MemberInfo, string> memberChache = new ConcurrentDictionary<MemberInfo, string>();
 
@@ -57,6 +58,25 @@ namespace D365Extensions
             }
 
             throw CheckParam.InvalidExpression(nameof(expression));
+        }
+
+        static ConcurrentDictionary<Type, string> typeChache = new ConcurrentDictionary<Type, string>();
+
+        public static string GetName<T>() where T : Entity
+        {
+            var type = typeof(T);
+
+            typeChache.TryGetValue(type, out string logicalName);
+            if (logicalName == null)
+            {
+                logicalName = type.GetCustomAttribute<EntityLogicalNameAttribute>()?.LogicalName
+                    // fallback if attribute not provided
+                    ?? type.Name.ToLowerInvariant();
+
+                typeChache.TryAdd(type, logicalName);
+            }
+
+            return logicalName;
         }
     }
 }
