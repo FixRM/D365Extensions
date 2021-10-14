@@ -1,27 +1,24 @@
-trigger:
-- master
-
-pool:
-  name: Hosted VS2017
-
+# D365Extensions build pipeline
 variables:
+  semver: 1.2.1
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
+# Build Number
+name: $(semver)$(Rev:.r)
+
+# Should trigger master, PR's or tags
+trigger:
+  branches:
+    include:
+    - master
+    - refs/tags/*
+
+pool:
+  name: Hosted VS2017
+
 steps:
-- task: Npm@1
-  displayName: npm install
-  inputs:
-    verbose: false
-
-- task: Npm@1
-  displayName: npm run get-version
-  inputs:
-    command: custom
-    verbose: false
-    customCommand: run get-version
-
 - task: NuGetToolInstaller@0
   displayName: Use NuGet 4.9.1
   inputs:
@@ -70,7 +67,7 @@ steps:
     command: pack
     searchPatternPack: '**/*.csproj;!**\*.Tests.csproj;!**\*.Benchmark.csproj'
     versioningScheme: byEnvVar
-    versionEnvVar: SemVersion
+    versionEnvVar: semver
     condition: ne(variables['Build.Reason'], 'PullRequest')
 
 - task: PublishBuildArtifacts@1

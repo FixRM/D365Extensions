@@ -11,8 +11,7 @@
     "standard-version": "9.3.1"
   },
   "scripts": {
-    "new-version": "standard-version",
-    "get-version": "node scripts\\get-version.js"
+    "release": "standard-version"
   },
   "husky": {
     "hooks": {
