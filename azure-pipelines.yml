@@ -10,6 +10,7 @@ name: $(semver)$(Rev:.r)
 
 # Should trigger master, PR's or tags
 trigger:
+  batch: true
   branches:
     include:
     - master
