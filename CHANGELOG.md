@@ -1,4 +1,20 @@
 # What's new
+## [1.3.0](https://github.com/FixRM/D365Extensions/compare/v1.2.1...v1.3.0) (2021-10-15)
+
+
+### Features
+
+* add fallback method to get member name ([e23ddfe](https://github.com/FixRM/D365Extensions/commit/e23ddfe2fd3217f1a3464e10d0e75e6d2ccf17aa))
+* add simple bencmark to measure reflection speed ([a4b68d7](https://github.com/FixRM/D365Extensions/commit/a4b68d7a1b1c70d5d4b80b96252a4a022c7ee260))
+* basic implementation ([dd6773e](https://github.com/FixRM/D365Extensions/commit/dd6773e5b981948935bef5064260baa74be449d6))
+* get Entity LogicalName via reflection ([8e4984f](https://github.com/FixRM/D365Extensions/commit/8e4984f269abda2dc81846a40b7ca70f3cb2271b))
+* now using reflection by default ([d55dbe9](https://github.com/FixRM/D365Extensions/commit/d55dbe9ccf34747a356baca817716c1dd9ee37a2))
+
+
+### Bug Fixes
+
+* build fixed ([31cc121](https://github.com/FixRM/D365Extensions/commit/31cc1212d1b6ceba73eba996e2f07c5126965c9a))
+
 ### [1.2.1](https://github.com/FixRM/D365Extensions/compare/v1.2.0...v1.2.1) (2020-08-19)
 
 
