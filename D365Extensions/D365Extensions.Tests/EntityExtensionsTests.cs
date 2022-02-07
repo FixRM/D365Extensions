@@ -57,10 +57,15 @@ namespace D365Extensions.Tests
             DateTime? value2 = new DateTime(1985, 8, 8);
             AliasedValue aliasedValue2 = new AliasedValue(linkedEntityLogicalName, attributeLogicalName2, value2);
 
+            String attributeLogicalName3 = "totalamount";
+            Double? value3 = 12345.67;
+            AliasedValue aliasedValue3 = new AliasedValue("opportunity", attributeLogicalName3, value3);
+
             /// Create Entity
             String alias = "ac";
             String aliasedName1 = $"{alias}.{attributeLogicalName1}";
             String aliasedName2 = $"{alias}.{attributeLogicalName2}";
+            String aliasedName3 = "total_amount_sum";
 
             /// Create main entity
             Entity entity = new Entity(mainEntityLogicalName);
@@ -73,6 +78,7 @@ namespace D365Extensions.Tests
             /// Add linked entity attributes
             entity.Attributes.Add(aliasedName1, aliasedValue1);
             entity.Attributes.Add(aliasedName2, aliasedValue2);
+            entity.Attributes.Add(aliasedName3, aliasedValue3);
 
             /// Test
             String actualValue;
@@ -80,17 +86,8 @@ namespace D365Extensions.Tests
             /// Test for required parameters
             try
             {
-                actualValue = entity.GetAliasedValue<String>(null, alias);
-            }
-            catch (ArgumentNullException e)
-            {
-                /// Ok
-                Assert.AreEqual<String>(e.ParamName, "attributeLogicalName");
-            }
-
-            try
-            {
                 actualValue = entity.GetAliasedValue<String>(attributeLogicalName1, null);
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {
@@ -110,6 +107,10 @@ namespace D365Extensions.Tests
             /// Test for not existing attribute
             actualValue = entity.GetAliasedValue<String>("doesntexist", alias);
             Assert.IsNull(actualValue);
+
+            /// Test for aggregate fetch aliased values
+            Double? actualAgregeteValue = entity.GetAliasedValue<Double?>(null, aliasedName3);
+            Assert.AreEqual<Double?>(value3, actualAgregeteValue);
         }
 
         [TestMethod()]
@@ -158,6 +159,7 @@ namespace D365Extensions.Tests
             try
             {
                 actualEntity = entity.GetAliasedEntity(null, alias1);
+                Assert.Fail();
             }
             catch (ArgumentNullException e)
             {

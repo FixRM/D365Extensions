@@ -24,15 +24,14 @@ namespace Microsoft.Xrm.Sdk
         /// This kind of attributes can be queried by FetchExpression or QueryExpression using Linked Entities 
         /// </summary>
         /// <typeparam name="T">Attribute value type</typeparam>
-        /// <param name="attributeLogicalName">Attribute logical name</param>
+        /// <param name="attributeLogicalName">Optional. Attribute logical name</param>
         /// <param name="alias">>Entity alias used in LinkedEntity definition</param>
         /// <returns>Attribute value</returns>
         public static T GetAliasedValue<T>(this Entity entity, String attributeLogicalName, String alias)
         {
-            CheckParam.CheckForNull(attributeLogicalName, nameof(attributeLogicalName));
             CheckParam.CheckForNull(alias, nameof(alias));
 
-            String aliasedAttributeName = alias + "." + attributeLogicalName;
+            String aliasedAttributeName = attributeLogicalName != null?  alias + "." + attributeLogicalName : alias;
             AliasedValue aliasedValue = entity.GetAttributeValue<AliasedValue>(aliasedAttributeName);
 
             if (aliasedValue != null)
@@ -53,6 +52,8 @@ namespace Microsoft.Xrm.Sdk
         /// <returns>Entity with specified logical name that contains all attribute values with specified alias</returns>
         public static Entity GetAliasedEntity(this Entity entity, String entityLogicalName, String alias = null)
         {
+            CheckParam.CheckForNull(entityLogicalName, nameof(entityLogicalName));
+
             /// Use LogicalName as alias if it is not specified
             String aliasPrefix = alias ?? entityLogicalName + ".";
 
