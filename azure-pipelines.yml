@@ -17,7 +17,7 @@ trigger:
 #    - refs/tags/*
 
 pool:
-  name: 'windows-latest'
+  vmImage: 'windows-latest'
 
 steps:
 - task: NuGetToolInstaller@0
