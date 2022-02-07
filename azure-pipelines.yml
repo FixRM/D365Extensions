@@ -17,13 +17,13 @@ trigger:
 #    - refs/tags/*
 
 pool:
-  name: Hosted VS2017
+  name: 'windows-latest'
 
 steps:
 - task: NuGetToolInstaller@0
-  displayName: Use NuGet 4.9.1
-#  inputs:
-#    versionSpec: 4.9.1
+  displayName: Use NuGet 5.10.0+
+  inputs:
+    versionSpec: '>=5.10.0'
 
 - task: NuGetCommand@2
   displayName: NuGet restore
