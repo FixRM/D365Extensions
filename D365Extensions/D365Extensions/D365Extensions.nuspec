@@ -18,7 +18,7 @@
 			<dependency version="8.2.0.2" id="Microsoft.CrmSdk.CoreAssemblies"/>
 			<dependency version="8.2.0.2" id="Microsoft.CrmSdk.Workflow"/>
 		</dependencies>
-		<readme>..\README.md</readme>
+		<readme>docs\README.md</readme>
 	</metadata>
 	<files>
 		<file src="..\..\README.md" target="docs\"/>
