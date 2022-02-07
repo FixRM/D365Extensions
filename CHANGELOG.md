@@ -1,4 +1,12 @@
 # What's new
+## [1.4.0](https://github.com/FixRM/D365Extensions/compare/v1.3.0...v1.4.0) (2022-02-07)
+
+
+### Features
+
+* add DataCollection extension methods ([34ed760](https://github.com/FixRM/D365Extensions/commit/34ed7609ad99ae03af413bec6980a40f43feb2f1))
+* attributeLogicalName is now optional for GetAliasedValue method ([a39c983](https://github.com/FixRM/D365Extensions/commit/a39c9833eb86fbab400b822d57e48e3f2be7ec3c))
+
 ## [1.3.0](https://github.com/FixRM/D365Extensions/compare/v1.2.1...v1.3.0) (2021-10-15)
 
 
