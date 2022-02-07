@@ -14,7 +14,7 @@ trigger:
   branches:
     include:
     - master
-    - refs/tags/*
+#    - refs/tags/*
 
 pool:
   name: Hosted VS2017
@@ -22,8 +22,8 @@ pool:
 steps:
 - task: NuGetToolInstaller@0
   displayName: Use NuGet 4.9.1
-  inputs:
-    versionSpec: 4.9.1
+#  inputs:
+#    versionSpec: 4.9.1
 
 - task: NuGetCommand@2
   displayName: NuGet restore
