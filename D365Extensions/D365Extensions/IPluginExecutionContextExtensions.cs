@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xrm.Sdk;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -85,9 +86,12 @@ namespace Microsoft.Xrm.Sdk
 
         /// <summary>
         /// Gets input parameter
+        /// 
+        /// This method is not safe. Use context.InputParameters.GetValue<T>() for optional parameters
         /// </summary>
         /// <param name="name">Parameter name</param>
         /// <returns></returns>
+        /// <exception cref="
         public static T GetInputParameter<T>(this IPluginExecutionContext context, String name)
         {
             return (T)context.InputParameters[name];
@@ -95,6 +99,8 @@ namespace Microsoft.Xrm.Sdk
 
         /// <summary>
         /// Gets output parameter
+        /// 
+        /// /// This method is not safe. Use context.OutputParameters.GetValue<T>() for optional parameters
         /// </summary>
         /// <param name="name">Parameter name</param>
         /// <returns></returns>
