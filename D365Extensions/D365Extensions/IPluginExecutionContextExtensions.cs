@@ -18,7 +18,7 @@ namespace Microsoft.Xrm.Sdk
         {
             return new EntityReference()
             {
-                Id = context.PrimaryEntityId,
+                Id = context.OrganizationId,
                 Name = context.OrganizationName,
                 LogicalName = "organization"
             };
@@ -219,6 +219,8 @@ namespace Microsoft.Xrm.Sdk
 
         /// <summary>
         /// Gets shared Variable
+        /// 
+        /// This method is not safe. Use context.SharedVariables.GetValue<string>() for optional parameters
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="context"></param>
