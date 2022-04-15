@@ -192,5 +192,120 @@ namespace D365Extensions.Tests
             Assert.AreEqual<int?>(structType, context.GetInputParameter<int?>("struct"));
             Assert.AreEqual<string>(referenceType, context.GetInputParameter<string>("class"));
         }
+
+        [TestMethod()]
+        public void GetOrganizationTest()
+        {
+            // Setup
+            var expectedOrgId = Guid.NewGuid();
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.OrganizationId = expectedOrgId;
+
+            // Act
+            var actualOrgId = context.GetOrganization();
+
+            // Assert
+            Assert.AreEqual(expectedOrgId, actualOrgId.Id);
+            Assert.AreEqual("organization", actualOrgId.LogicalName);
+        }
+
+        [TestMethod()]
+        public void GetPrimaryEntityTest()
+        {
+            // Setup
+            var expectedEntityRef = new EntityReference()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "account"
+            };
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.PrimaryEntityId = expectedEntityRef.Id;
+            context.PrimaryEntityName = expectedEntityRef.LogicalName;
+
+            // Act
+            var actualEntityRef = context.GetPrimaryEntity();
+
+            // Assert
+            Assert.AreEqual(expectedEntityRef.Id, actualEntityRef.Id);
+            Assert.AreEqual(expectedEntityRef.LogicalName, actualEntityRef.LogicalName);
+        }
+
+        [TestMethod()]
+        public void GetPrimaryEntity_No_Primary_Id_Test()
+        {
+            // Setup
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+
+            // Act
+            var actualEntityRef = context.GetPrimaryEntity();
+
+            // Assert
+            Assert.IsNull(actualEntityRef);            
+        }
+
+        [TestMethod()]
+        public void GetUserTest()
+        {
+            // Setup
+            var expectedUserRef = new EntityReference()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "systemuser"
+            };
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.UserId = expectedUserRef.Id;
+
+            // Act
+            var actualUserRef = context.GetUser();
+
+            // Assert
+            Assert.AreEqual(expectedUserRef.Id, actualUserRef.Id);
+            Assert.AreEqual(expectedUserRef.LogicalName, actualUserRef.LogicalName);
+        }
+
+        [TestMethod()]
+        public void GetInitiatingUserTest()
+        {
+            // Setup
+            var expectedUserRef = new EntityReference()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "systemuser"
+            };
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.InitiatingUserId = expectedUserRef.Id;
+
+            // Act
+            var actualUserRef = context.GetInitiatingUser();
+
+            // Assert
+            Assert.AreEqual(expectedUserRef.Id, actualUserRef.Id);
+            Assert.AreEqual(expectedUserRef.LogicalName, actualUserRef.LogicalName);
+        }
+
+        [TestMethod()]
+        public void GetBusinessUnitTest()
+        {
+            // Setup
+            var expectedUnitRef = new EntityReference()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "businessunit"
+            };
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.BusinessUnitId= expectedUnitRef.Id;
+
+            // Act
+            var actualUnitRef = context.GetBusinessUnit();
+
+            // Assert
+            Assert.AreEqual(expectedUnitRef.Id, actualUnitRef.Id);
+            Assert.AreEqual(expectedUnitRef.LogicalName, actualUnitRef.LogicalName);
+        }
     }
 }
