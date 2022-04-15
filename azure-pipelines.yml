@@ -1,6 +1,6 @@
 # D365Extensions build pipeline
 variables:
-  semver: 1.4.0
+  semver: 1.4.1
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'

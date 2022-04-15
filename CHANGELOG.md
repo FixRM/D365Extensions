@@ -1,4 +1,11 @@
 # What's new
+### [1.4.1](https://github.com/FixRM/D365Extensions/compare/v1.4.0...v1.4.1) (2022-04-15)
+
+
+### Bug Fixes
+
+* GetOrganization now return correct value ([797b501](https://github.com/FixRM/D365Extensions/commit/797b501340e96f77a22f43e68c9b6187b4d7bc70))
+
 ## [1.4.0](https://github.com/FixRM/D365Extensions/compare/v1.3.0...v1.4.0) (2022-02-07)
 
 
