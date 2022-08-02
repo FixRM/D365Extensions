@@ -7,7 +7,7 @@ A collection of Extension methods for Microsoft Dynamics CRM/D365 SDK base class
 All extension methods are declared in the same namespace as related SDK types. No additional `using` statements required.
 
 # Usage
-This assembly is assumed to be used for plugin development. As D365 for CE currently doesn't support assembly dependencies you have to merge it in your primary plugin assembly. We recommend using this tool:
+This library is assumed to be used for plugin development. As D365 for CE currently doesn't support assembly dependencies, you have to merge it with your primary plugin assembly. We recommend using this tool:
 
 [ILRepack.Lib.MSBuild.Task](https://github.com/ravibpatel/ILRepack.Lib.MSBuild.Task)
 
@@ -32,7 +32,7 @@ To configure this task your should add `ILRepack.targets` file to you project. F
   </Target>
 </Project>
 ```
-You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies. You shouldn't overrite your assembly with merged one as has some side effects. For instance, it may complicate developing of unit tests if test project and plugin library has common dependencies. In this case you can get runtime errors saying that some types are ambigous.
+You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies. You shouldn't overrite your assembly with merged one as has some side effects. For instance, it may complicate developing of unit tests if test project and plugin library has common dependencies. In this case you can get runtime errors saying that some types are ambiguous.
 
 >**!!! Never merge SDK assemblies in your code. It will cause runtime errors !!!**
 
