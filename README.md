@@ -28,11 +28,11 @@ To configure this task your should add `ILRepack.targets` file to you project. F
               InputAssemblies="@(InputAssemblies)"
               LibraryPath="$(OutputPath)"
               KeyFile="$(AssemblyOriginatorKeyFile)"
-              OutputFile="$(OutputPath)\$(AssemblyName).dll" />
+              OutputFile="$(OutputPath)\$(AssemblyName).Merged.dll" />
   </Target>
 </Project>
 ```
-You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies.
+You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies. You shouldn't overrite your assembly with merged one as has some side effects. For instance, it may complicate developing of unit tests if test project and plugin library has common dependencies. In this case you can get runtime errors saying that some types are ambigous.
 
 >**!!! Never merge SDK assemblies in your code. It will cause runtime errors !!!**
 
@@ -52,7 +52,7 @@ Set of extension methods for IOrganizationService base class. Basically these ar
 Set of extension methods for Microsoft.Xrm.Sdk.IPluginExecutionContext base class. Most of this helpers are shortcuts for existing properties but provides additional checks or type casts. Unlike Entity class extensions most of the following extensions are not exception safe! It is done so because you most likely want to get an error if plugin is registered for a wrong message or you have a typo in parameter name.
 
 ## [CodeActivityContext Extensions](../../wiki/CodeActivityContext-Extensions)
-Set of extension methods for System.Activities.CodeActivityContext base class. Short cut methods for getting D365 related services from workflow execution context.
+Set of extension methods for System.Activities.CodeActivityContext base class. Shortcut methods for getting D365 related services from workflow execution context.
 
 ## [IServiceProvider Extensions](../../wiki/IServiceProvider-Extensions)
 Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just shortcut methods to save you few lines of code during plugin development.
@@ -61,7 +61,7 @@ Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just
 Set of extension methods for Microsoft.Xrm.Sdk.EntityReference base class. At the moment just two simple but sometimes useful type conversion methods.
 
 ## [Query Extensions](../../wiki/Query-Extensions)
-Set of extension methods for Microsoft.Xrm.Sdk.QueryBase and derived classes. At the moment only paging improvements.
+Set of extension methods to support some expression-style/LINQ techniques while using QueryExpression/QueryByAttribute classes.
 
 # Contributing
 Please fill free to create issue if you find a bug or have an idea. PR's are welcomed as well! :) Help wanted in the following areas:
