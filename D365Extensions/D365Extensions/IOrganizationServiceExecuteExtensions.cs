@@ -24,6 +24,8 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static EntityReference Upsert(this IOrganizationService service, Entity entity)
         {
+            CheckParam.CheckForNull(entity, nameof(entity));
+
             UpsertResponse response = service.Execute<UpsertResponse>(new UpsertRequest()
             {
                 Target = entity
