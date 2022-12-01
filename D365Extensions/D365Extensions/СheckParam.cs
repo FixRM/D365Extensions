@@ -15,6 +15,11 @@ namespace D365Extensions
             }
         }
 
+        public static void OutOfRange(String name)
+        {
+            throw new ArgumentOutOfRangeException(name);
+        }
+
         public static ArgumentException InvalidExpression(string name)
         {
             return new ArgumentException("Invalid expression", name);
