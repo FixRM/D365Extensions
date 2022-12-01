@@ -1,4 +1,11 @@
 # What's new
+### [1.5.1](https://github.com/FixRM/D365Extensions/compare/v1.5.0...v1.5.1) (2022-12-01)
+
+
+### Bug Fixes
+
+* remove useless callback ([3be6d53](https://github.com/FixRM/D365Extensions/commit/3be6d530f5a165bd1d05436556d9dcbcecad66f8))
+
 ## [1.5.0](https://github.com/FixRM/D365Extensions/compare/v1.4.1...v1.5.0) (2022-12-01)
 
 
