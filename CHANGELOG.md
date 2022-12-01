@@ -1,4 +1,12 @@
 # What's new
+## [1.5.0](https://github.com/FixRM/D365Extensions/compare/v1.4.1...v1.5.0) (2022-12-01)
+
+
+### Features
+
+* add Execute(IEnumerable<OrganizationRequest> requests) method ([284197b](https://github.com/FixRM/D365Extensions/commit/284197b9eec23f1689091fb3393f94c426eea5cd))
+* add helper method for breaking collection of OrganizationRequest elements to OrganizationRequestCollections of given size ([0cb7d58](https://github.com/FixRM/D365Extensions/commit/0cb7d583c1909db81ed95f22cb5c71916960a360))
+
 ### [1.4.1](https://github.com/FixRM/D365Extensions/compare/v1.4.0...v1.4.1) (2022-04-15)
 
 
