@@ -1,6 +1,7 @@
 ﻿using D365Extensions;
 using Microsoft.Xrm.Sdk.Messages;
 using System;
+using System.Collections.Generic;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -32,6 +33,39 @@ namespace Microsoft.Xrm.Sdk
             });
 
             return response.Target;
+        }
+
+        /// <summary>
+        /// Execute batch of requests using ExecuteMultipleRequest while taking care of butch size
+        /// 
+        /// NEVER use this extension as well as ExecuteMultipleRequest itself in Plugin code
+        /// https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin
+        /// </summary>
+        /// <param name="requests">The collection of message requests to execute</param>
+        /// <param name="settings">The settings that define whether execution should continue if an
+        //  error occurs and if responses for each message request processed are to be returned</param>
+        /// <param name="batchSize">The number of requests to be sent in each ExecuteMultipleRequest</param>
+        /// <param name="callback">Optional callback function that will be executed after each
+        /// ExecuteMultipleRequest call</param>
+        public static IEnumerable<ExecuteMultipleResponse> Execute(this IOrganizationService service,
+            IEnumerable<OrganizationRequest> requests,
+            int batchSize = 1000,
+            ExecuteMultipleSettings settings = null,
+            Action<ExecuteMultipleResponse> callback = null)
+        {
+            //TODO: throw if IOrganizationService is not OOB web service wrapper?
+
+            foreach (var collection in requests.Chunk(batchSize))
+            {
+                var response = service.Execute(new ExecuteMultipleRequest()
+                {
+                    Requests = collection,
+                    Settings = settings
+                }) as ExecuteMultipleResponse;
+
+                callback?.Invoke(response);
+                yield return response;
+            }
         }
     }
 }
