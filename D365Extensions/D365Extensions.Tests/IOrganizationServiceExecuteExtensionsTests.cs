@@ -55,12 +55,8 @@ namespace D365Extensions.Tests
                 return expectedResponse;
             });
 
-            ExecuteMultipleResponse actualResponse = null;
-
-            Action<ExecuteMultipleResponse> callback = (resp) => { actualResponse = resp; };
-
             //Act
-            var result = service.Execute(collection, size, settings, callback).ToList();
+            var result = service.Execute(collection, size, settings).ToList();
 
             //Assert
             Assert.AreEqual(2, result.Count);
@@ -72,8 +68,6 @@ namespace D365Extensions.Tests
 
             CollectionAssert.AreEqual(expectedChunk1, actualRequests[0].Requests.ToList());
             CollectionAssert.AreEqual(expectedChunk2, actualRequests[1].Requests.ToList());
-
-            Assert.AreEqual(expectedResponse, actualResponse);
         }
     }
 }

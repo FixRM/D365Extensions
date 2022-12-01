@@ -45,13 +45,11 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="settings">The settings that define whether execution should continue if an
         //  error occurs and if responses for each message request processed are to be returned</param>
         /// <param name="batchSize">The number of requests to be sent in each ExecuteMultipleRequest</param>
-        /// <param name="callback">Optional callback function that will be executed after each
         /// ExecuteMultipleRequest call</param>
         public static IEnumerable<ExecuteMultipleResponse> Execute(this IOrganizationService service,
             IEnumerable<OrganizationRequest> requests,
             int batchSize = 1000,
-            ExecuteMultipleSettings settings = null,
-            Action<ExecuteMultipleResponse> callback = null)
+            ExecuteMultipleSettings settings = null)
         {
             //TODO: throw if IOrganizationService is not OOB web service wrapper?
 
@@ -63,7 +61,6 @@ namespace Microsoft.Xrm.Sdk
                     Settings = settings
                 }) as ExecuteMultipleResponse;
 
-                callback?.Invoke(response);
                 yield return response;
             }
         }
