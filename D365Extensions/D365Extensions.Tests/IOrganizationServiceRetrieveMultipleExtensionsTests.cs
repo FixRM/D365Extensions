@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace D365Extensions.Tests
 {
     [TestClass()]
-    public class IOrganizationServiceExtensionsTests
+    public class IOrganizationServiceRetrieveMultipleExtensionsTests
     {
         [TestMethod()]
         public void RetrieveMultipleTest()
