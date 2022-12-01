@@ -25,8 +25,6 @@
     <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="8.1.0.2" />
     <PackageReference Include="Microsoft.IdentityModel" Version="6.1.7600.16394" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="2.22.302111727" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
