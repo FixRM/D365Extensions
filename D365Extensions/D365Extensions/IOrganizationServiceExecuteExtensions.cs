@@ -81,7 +81,7 @@ namespace Microsoft.Xrm.Sdk
         // Experimental
         public static OrganizationRequest GetRequest(this ExecuteMultipleResponse response, ExecuteMultipleResponseItem item)
         {
-            return response.GetRequests()[item.RequestIndex];
+            return response.GetRequests()?[item.RequestIndex];
         }
     }
 }

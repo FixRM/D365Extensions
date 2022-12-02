@@ -13,7 +13,7 @@ namespace D365Extensions.Tests
 {
     [TestClass()]
     public class IOrganizationServiceExecuteExtensionsTests
-    {        
+    {
         [TestMethod()]
         public void ExecuteTest()
         {
@@ -86,6 +86,26 @@ namespace D365Extensions.Tests
             //Responses are updated with corresponding request lists
             CollectionAssert.AreEqual(expectedChunk1, actualResponse1.GetRequests().ToList());
             CollectionAssert.AreEqual(expectedChunk2, actualResponse2.GetRequests().ToList());
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleResponseItemUninstrumentedTest()
+        {
+            //Setup
+            var oobItem = new ExecuteMultipleResponseItem
+            {
+                RequestIndex = 5
+            };
+
+            var oobResponse = new ExecuteMultipleResponse();
+
+            //Act
+            var requests = oobResponse.GetRequests();
+            var request = oobResponse.GetRequest(oobItem);
+
+            //Assert
+            Assert.IsNull(requests);
+            Assert.IsNull(request);
         }
     }
 }
