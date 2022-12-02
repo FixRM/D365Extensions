@@ -44,15 +44,23 @@ namespace D365Extensions.Tests
                 ReturnResponses = true,
             };
 
-            ExecuteMultipleResponse expectedResponse = new ExecuteMultipleResponse();
+            var expectedResponses = new List<ExecuteMultipleResponse>()
+            {
+                new ExecuteMultipleResponse(),
+                new ExecuteMultipleResponse(),
+                new ExecuteMultipleResponse(),
+            };
+
+            var fakeResponceEnumerator = expectedResponses.GetEnumerator();
 
             List<ExecuteMultipleRequest> actualRequests = new List<ExecuteMultipleRequest>();
 
             context.AddExecutionMock<ExecuteMultipleRequest>((request) =>
             {
                 actualRequests.Add(request as ExecuteMultipleRequest);
-                
-                return expectedResponse;
+
+                fakeResponceEnumerator.MoveNext();
+                return fakeResponceEnumerator.Current;
             });
 
             //Act
@@ -60,14 +68,24 @@ namespace D365Extensions.Tests
 
             //Assert
             Assert.AreEqual(2, result.Count);
-            Assert.AreEqual(expectedResponse, result[0]);
-            Assert.AreEqual(expectedResponse, result[1]);
+            var actualResponse1 = result[0];
+            var actualResponse2 = result[1];
 
+            //We return expected responses
+            Assert.AreEqual(expectedResponses[0], actualResponse1);
+            Assert.AreEqual(expectedResponses[1], actualResponse2);
+
+            //Requests are made with correct settings
             Assert.AreEqual(settings, actualRequests[0].Settings);
             Assert.AreEqual(settings, actualRequests[1].Settings);
 
+            //Requests are made with expected bathes
             CollectionAssert.AreEqual(expectedChunk1, actualRequests[0].Requests.ToList());
             CollectionAssert.AreEqual(expectedChunk2, actualRequests[1].Requests.ToList());
+
+            //Responses are updated with corresponding request lists
+            CollectionAssert.AreEqual(expectedChunk1, actualResponse1.GetRequests().ToList());
+            CollectionAssert.AreEqual(expectedChunk2, actualResponse2.GetRequests().ToList());
         }
     }
 }
