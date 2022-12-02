@@ -1,4 +1,11 @@
 # What's new
+### [1.5.2](https://github.com/FixRM/D365Extensions/compare/v1.5.1...v1.5.2) (2022-12-02)
+
+
+### Features
+
+* **experimental:** return request collection with results ([31d8d7f](https://github.com/FixRM/D365Extensions/commit/31d8d7f5ca8730e5829d8fd59c1e3cdbe04912c8))
+
 ### [1.5.1](https://github.com/FixRM/D365Extensions/compare/v1.5.0...v1.5.1) (2022-12-01)
 
 
