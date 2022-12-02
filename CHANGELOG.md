@@ -1,4 +1,11 @@
 # What's new
+### [1.5.3](https://github.com/FixRM/D365Extensions/compare/v1.5.2...v1.5.3) (2022-12-02)
+
+
+### Bug Fixes
+
+* fix null reference for OOB ExecuteMultipleResponse objects ([b0f1114](https://github.com/FixRM/D365Extensions/commit/b0f1114b2a4219909c0fab018d4032c06cf4e36e))
+
 ### [1.5.2](https://github.com/FixRM/D365Extensions/compare/v1.5.1...v1.5.2) (2022-12-02)
 
 
