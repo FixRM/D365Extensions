@@ -17,11 +17,16 @@ namespace D365Extensions
     {
         static ConcurrentDictionary<MemberInfo, string> memberChache = new ConcurrentDictionary<MemberInfo, string>();
 
-        internal static List<string> GetNames<T>(params Expression<Func<T, object>>[] expressions)
+        internal static string[] GetNames<T>(params Expression<Func<T, object>>[] expressions)
         {
-            return expressions
-                .Select(e => GetName(e))
-                .ToList();
+            var names = new string[expressions.Length];
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                names[i] = GetName(expressions[i]);
+            }
+
+            return names;
         }
 
         internal static string GetName<T>(Expression<Func<T, object>> expression)

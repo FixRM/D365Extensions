@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using D365Extensions.Tests.Entities;
+using System.Linq;
 
 namespace D365Extensions.Tests
 {
@@ -45,7 +46,7 @@ namespace D365Extensions.Tests
             // Act
             List<string> actual = LogicalName.GetNames<TestEntity>(
                 t => t.ReferenceTypeProperty,
-                t => t.ValueTypeProperty);
+                t => t.ValueTypeProperty).ToList();
 
             // Assert
             Assert.AreEqual(2, actual.Count);
@@ -92,7 +93,7 @@ namespace D365Extensions.Tests
                 a => a.CreatedOn,
                 a => a.AccountId,
                 a => a.PrimaryContactId,
-                a => a.ExchangeRate);
+                a => a.ExchangeRate).ToList();
 
             // Assert
             Assert.AreEqual(expectedString, actual[0]);
