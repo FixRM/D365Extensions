@@ -1,8 +1,6 @@
 ﻿using D365Extensions;
 using System;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Microsoft.Xrm.Sdk.Query
 {
@@ -25,7 +23,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="column">The property expressions containing the name of the attribute to add</param>
         public static void AddColumns<T>(this ColumnSet columnSet, params Expression<Func<T, object>>[] columns) where T : Entity
         {
-            columnSet.AddColumns(LogicalName.GetNames(columns)?.ToArray());
+            columnSet.AddColumns(LogicalName.GetNames(columns));
         }
     }
 }

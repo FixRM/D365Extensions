@@ -30,7 +30,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </param>
         public ColumnSet(params Expression<Func<T, object>>[] columns)
         {
-            Columns = LogicalName.GetNames(columns);
+            Columns.AddRange(LogicalName.GetNames(columns));
         }
 
         /// <summary>
