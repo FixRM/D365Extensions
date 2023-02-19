@@ -5,9 +5,9 @@ namespace D365Extensions
     /// <summary>
     /// Helper class for throwing argument exceptions 
     /// </summary>
-    public static class CheckParam
+    internal static class CheckParam
     {
-        public static void CheckForNull(Object parameter, String name)
+        internal static void CheckForNull(Object parameter, String name)
         {
             if (parameter == null)
             {
@@ -15,12 +15,12 @@ namespace D365Extensions
             }
         }
 
-        public static void OutOfRange(String name)
+        internal static void OutOfRange(String name)
         {
             throw new ArgumentOutOfRangeException(name);
         }
 
-        public static ArgumentException InvalidExpression(string name)
+        internal static ArgumentException InvalidExpression(string name)
         {
             return new ArgumentException("Invalid expression", name);
         }

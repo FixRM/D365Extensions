@@ -13,18 +13,18 @@ namespace D365Extensions
     /// <summary>
     /// Helper class for reading property names from lambda expressions
     /// </summary>
-    public static class LogicalName
+    internal static class LogicalName
     {
         static ConcurrentDictionary<MemberInfo, string> memberChache = new ConcurrentDictionary<MemberInfo, string>();
 
-        public static List<string> GetNames<T>(params Expression<Func<T, object>>[] expressions)
+        internal static List<string> GetNames<T>(params Expression<Func<T, object>>[] expressions)
         {
             return expressions
                 .Select(e => GetName(e))
                 .ToList();
         }
 
-        public static string GetName<T>(Expression<Func<T, object>> expression)
+        internal static string GetName<T>(Expression<Func<T, object>> expression)
         {
             if (expression == null) return null;
 
@@ -62,7 +62,7 @@ namespace D365Extensions
 
         static ConcurrentDictionary<Type, string> typeChache = new ConcurrentDictionary<Type, string>();
 
-        public static string GetName<T>() where T : Entity
+        internal static string GetName<T>() where T : Entity
         {
             var type = typeof(T);
 
