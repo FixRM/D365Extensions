@@ -7,7 +7,7 @@ namespace D365Extensions
     /// </summary>
     internal static class CheckParam
     {
-        internal static void CheckForNull(Object parameter, String name)
+        internal static void CheckForNull(object parameter, string name)
         {
             if (parameter == null)
             {
@@ -15,9 +15,12 @@ namespace D365Extensions
             }
         }
 
-        internal static void OutOfRange(String name)
+        internal static void BiggerThanOne(int parameter, string name)
         {
-            throw new ArgumentOutOfRangeException(name);
+            if (parameter < 1)
+            {
+                throw new ArgumentOutOfRangeException(name);
+            }
         }
 
         internal static ArgumentException InvalidExpression(string name)

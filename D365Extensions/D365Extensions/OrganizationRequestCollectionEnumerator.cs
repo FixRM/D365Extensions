@@ -8,11 +8,7 @@ namespace Microsoft.Xrm.Sdk
         internal static IEnumerable<OrganizationRequestCollection> Chunk(this IEnumerable<OrganizationRequest> source, int size)
         {
             CheckParam.CheckForNull(source, nameof(source));
-
-            if (size < 1)
-            {
-                CheckParam.OutOfRange(nameof(size));
-            }
+            CheckParam.BiggerThanOne(size, nameof(size));
 
             return ChunkIterator(source, size);
         }
@@ -23,8 +19,10 @@ namespace Microsoft.Xrm.Sdk
             {
                 while (e.MoveNext())
                 {
-                    OrganizationRequestCollection requests = new OrganizationRequestCollection();
-                    requests.Add(e.Current);
+                    OrganizationRequestCollection requests = new OrganizationRequestCollection
+                    {
+                        e.Current
+                    };
 
                     for (int i = 1; i < size; i++)
                     {
