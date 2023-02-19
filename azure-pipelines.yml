@@ -43,6 +43,13 @@ steps:
     Contents: FixRM.snk
     TargetFolder: D365Extensions/D365Extensions
 
+- task: CopyFiles@2
+  displayName: 'Copy FixRM.snk to: D365Extensions/D365Extensions.Tests'
+  inputs:
+    SourceFolder: $(Agent.TempDirectory)
+    Contents: FixRM.snk
+    TargetFolder: D365Extensions/D365Extensions.Tests
+
 - task: VSBuild@1
   displayName: Build solution **\*.sln
   inputs:

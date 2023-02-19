@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Microsoft.Xrm.Sdk
 {
-    public static class OrganizationRequestCollectionEnumerator
+    internal static class OrganizationRequestCollectionEnumerator
     {
-        public static IEnumerable<OrganizationRequestCollection> Chunk(this IEnumerable<OrganizationRequest> source, int size)
+        internal static IEnumerable<OrganizationRequestCollection> Chunk(this IEnumerable<OrganizationRequest> source, int size)
         {
             CheckParam.CheckForNull(source, nameof(source));
 

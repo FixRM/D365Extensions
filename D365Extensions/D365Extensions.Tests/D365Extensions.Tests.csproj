@@ -1,49 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-    <IsCodedUITest>False</IsCodedUITest>
-    <TestProjectType>UnitTest</TestProjectType>
-    <AssemblyTitle>D365Extensions.Tests</AssemblyTitle>
-    <Product>D365Extensions.Tests</Product>
-    <Copyright>Copyright ©  2018</Copyright>
-  </PropertyGroup>
-  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
-  <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="4.*" />
-    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.*" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FakeItEasy" Version="3.2.0" />
-    <PackageReference Include="FakeXrmEasy.2016" Version="1.39.1" />
-    <PackageReference Include="FakeXrmEasy.EdgeProxy.v2016" Version="0.0.2" />
-    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.2.0.2" />
-    <PackageReference Include="Microsoft.CrmSdk.Deployment" Version="8.1.0.2" />
-    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.2.0.2" />
-    <PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="8.1.0.2" />
-    <PackageReference Include="Microsoft.IdentityModel" Version="6.1.7600.16394" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="2.22.302111727" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Activities" />
-    <Reference Include="System.Activities.Presentation" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="System.Workflow.Activities" />
-    <Reference Include="System.Workflow.ComponentModel" />
-    <Reference Include="System.Workflow.Runtime" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\D365Extensions\D365Extensions.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net452</TargetFramework>
+		<ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+		<VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+		<ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+		<IsCodedUITest>False</IsCodedUITest>
+		<TestProjectType>UnitTest</TestProjectType>
+		<AssemblyTitle>D365Extensions.Tests</AssemblyTitle>
+		<Product>D365Extensions.Tests</Product>
+		<Copyright>Copyright ©  2018</Copyright>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SignAssembly>true</SignAssembly>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	<Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+	<ItemGroup>
+		<PackageReference Include="System.DirectoryServices" Version="4.*" />
+		<PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.*" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FakeItEasy" Version="3.2.0" />
+		<PackageReference Include="FakeXrmEasy.2016" Version="1.39.1" />
+		<PackageReference Include="FakeXrmEasy.EdgeProxy.v2016" Version="0.0.2" />
+		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.2.0.2" />
+		<PackageReference Include="Microsoft.CrmSdk.Deployment" Version="8.1.0.2" />
+		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.2.0.2" />
+		<PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="8.1.0.2" />
+		<PackageReference Include="Microsoft.IdentityModel" Version="6.1.7600.16394" />
+		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="2.22.302111727" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+		<PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
+		<PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<Reference Include="PresentationFramework" />
+		<Reference Include="System.Activities" />
+		<Reference Include="System.Activities.Presentation" />
+		<Reference Include="System.IdentityModel" />
+		<Reference Include="System.Security" />
+		<Reference Include="System.ServiceModel" />
+		<Reference Include="System.ServiceModel.Web" />
+		<Reference Include="System.Web" />
+		<Reference Include="System.Web.Services" />
+		<Reference Include="System.Workflow.Activities" />
+		<Reference Include="System.Workflow.ComponentModel" />
+		<Reference Include="System.Workflow.Runtime" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\D365Extensions\D365Extensions.csproj" />
+	</ItemGroup>
 </Project>
