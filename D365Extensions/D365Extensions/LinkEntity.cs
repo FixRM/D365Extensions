@@ -8,7 +8,7 @@ namespace Microsoft.Xrm.Sdk.Query
     /// <summary>
     /// Strongly typed version of the LinkEntity<TFrom, TTo> class.
     /// </summary>
-    public class LinkEntity<TFrom, TTo>
+    public sealed class LinkEntity<TFrom, TTo>
         where TFrom : Entity
         where TTo : Entity
     {

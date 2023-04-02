@@ -8,7 +8,7 @@ namespace Microsoft.Xrm.Sdk.Query
     /// <summary>
     /// Strongly typed version of the ColumnSet class
     /// </summary>
-    public class ColumnSet<T> where T : Entity
+    public sealed class ColumnSet<T> where T : Entity
     {
         /// <summary>
         /// Gets the collection of lambdas containing the names of the attributes to be retrieved
