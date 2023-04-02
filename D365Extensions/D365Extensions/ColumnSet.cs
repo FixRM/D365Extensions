@@ -11,10 +11,10 @@ namespace Microsoft.Xrm.Sdk.Query
     public class ColumnSet<T> where T : Entity
     {
         /// <summary>
-        /// Gets the collection of Strings containing the names of the attributes to be retrieved
+        /// Gets the collection of lambdas containing the names of the attributes to be retrieved
         /// from a query.
         /// </summary>
-        public List<string> Columns { get; } = new List<string>();
+        public List<Expression<Func<T, object>>> Columns { get; } = new List<Expression<Func<T, object>>>();
 
         /// <summary>
         /// Initializes a new instance of the ColumnSet<T> class.
@@ -30,7 +30,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </param>
         public ColumnSet(params Expression<Func<T, object>>[] columns)
         {
-            Columns.AddRange(LogicalName.GetNames(columns));
+            Columns.AddRange(columns);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="column">Specifies a property expressions containing the name of the attribute.</param>
         public void AddColumn(Expression<Func<T, object>> column)
         {
-            Columns.Add(LogicalName.GetName(column));
+            Columns.Add(column);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <param name="columns">Specifies an array of property expressions containing the names of the attributes.</param>
         public void AddColumns(params Expression<Func<T, object>>[] columns)
         {
-            Columns.AddRange(LogicalName.GetNames(columns));
+            Columns.AddRange(columns);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static implicit operator ColumnSet(ColumnSet<T> t)
         {
-            return new ColumnSet(t.Columns.ToArray());
+            return new ColumnSet(LogicalName.GetNames(t.Columns.ToArray()));
         }
     }
 }
