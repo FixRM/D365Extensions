@@ -42,45 +42,6 @@ namespace Microsoft.Xrm.Sdk.Query
         }
 
         /// <summary>
-        /// Adds a link, setting the link to entity name, the link from attribute name and
-        /// the link to attribute name.
-        /// </summary>
-        /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
-        /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
-        /// <param name="joinOperator">The join operator.</param>
-        /// <returns>The link entity that was created.</returns>
-        public LinkEntity AddLink(
-            Expression<Func<TFrom, object>> linkFromAttributeName,
-            Expression<Func<TTo, object>> linkToAttributeName,
-            JoinOperator joinOperator)
-        {
-            LinkEntity<TFrom, TTo> linkEntity = new LinkEntity<TFrom, TTo>(
-                linkFromAttributeName,
-                linkToAttributeName,
-                joinOperator);
-            this.LinkEntities.Add(linkEntity);
-
-            return linkEntity;
-        }
-
-        /// <summary>
-        /// Adds a link, setting the link to entity name, the link from attribute name and
-        /// the link to attribute name.
-        /// </summary>
-        /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
-        /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
-        /// <returns>The link entity that was created.</returns>
-        public LinkEntity AddLink(
-            Expression<Func<TFrom, object>> linkFromAttributeName,
-            Expression<Func<TTo, object>> linkToAttributeName)
-        {
-            return this.AddLink(
-                linkFromAttributeName,
-                linkToAttributeName,
-                JoinOperator.Inner);
-        }
-
-        /// <summary>
         /// Gets or sets the logical name of the entity that you are linking from.
         /// </summary>
         public string LinkFromEntityName { get; set; }

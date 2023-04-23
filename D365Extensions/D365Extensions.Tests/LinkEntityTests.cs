@@ -12,7 +12,6 @@ namespace D365Extensions.Tests
     public class LinkEntityTests
     {
         [TestMethod()]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public void LinkEntityTest()
         {
             // Setup
@@ -67,58 +66,6 @@ namespace D365Extensions.Tests
 
             // Assert
             Assert.AreEqual(expectedOperator, linkEntity.JoinOperator);
-        }
-
-        [TestMethod()]
-        public void AddLink1Test()
-        {
-            // Setup
-            string expectedFromEntityName = EntityFrom.EnityLogicalName;
-            string expectedToEntityName = EntityTo.EnityLogicalName;
-            string expectedFromAttributName = nameof(EntityFrom.FromId).ToLower();
-            string expectedToAttributName = nameof(EntityTo.ToId).ToLower();
-            JoinOperator expectedOperator = JoinOperator.LeftOuter;
-
-            // Act
-            LinkEntity<EntityFrom, EntityTo> linkGen = new LinkEntity<EntityFrom, EntityTo>
-            {
-                LinkFromEntityName = expectedFromEntityName
-            };
-
-            LinkEntity newLink = linkGen.AddLink(f => f.FromId, t => t.ToId, expectedOperator);
-
-            // Assert
-            Assert.AreEqual(expectedFromEntityName, newLink.LinkFromEntityName);
-            Assert.AreEqual(expectedToEntityName, newLink.LinkToEntityName);
-            Assert.AreEqual(expectedFromAttributName, newLink.LinkFromAttributeName);
-            Assert.AreEqual(expectedToAttributName, newLink.LinkToAttributeName);
-            Assert.AreEqual(expectedOperator, newLink.JoinOperator);
-        }
-
-        [TestMethod()]
-        public void AddLink2Test()
-        {
-            // Setup
-            string expectedFromEntityName = EntityFrom.EnityLogicalName;
-            string expectedToEntityName = EntityTo.EnityLogicalName;
-            string expectedFromAttributName = nameof(EntityFrom.FromId).ToLower();
-            string expectedToAttributName = nameof(EntityTo.ToId).ToLower();
-            JoinOperator expectedOperator = JoinOperator.Inner;
-
-            // Act
-            LinkEntity<EntityFrom, EntityTo> linkGen = new LinkEntity<EntityFrom, EntityTo>
-            {
-                LinkFromEntityName = expectedFromEntityName
-            };
-
-            LinkEntity newLink = linkGen.AddLink(f => f.FromId, t => t.ToId);
-
-            // Assert
-            Assert.AreEqual(expectedFromEntityName, newLink.LinkFromEntityName);
-            Assert.AreEqual(expectedToEntityName, newLink.LinkToEntityName);
-            Assert.AreEqual(expectedFromAttributName, newLink.LinkFromAttributeName);
-            Assert.AreEqual(expectedToAttributName, newLink.LinkToAttributeName);
-            Assert.AreEqual(expectedOperator, newLink.JoinOperator);
         }
     }
 }
