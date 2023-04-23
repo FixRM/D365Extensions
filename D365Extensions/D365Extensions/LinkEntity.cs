@@ -30,8 +30,6 @@ namespace Microsoft.Xrm.Sdk.Query
           Expression<Func<TTo, object>> linkToAttributeName,
           JoinOperator joinOperator)
         {
-            this.LinkFromEntityName = LogicalName.GetName<TFrom>();
-            this.LinkToEntityName = LogicalName.GetName<TTo>();
             this.LinkFromAttributeName = linkFromAttributeName;
             this.LinkToAttributeName = linkToAttributeName;
             this.JoinOperator = joinOperator;
@@ -40,16 +38,6 @@ namespace Microsoft.Xrm.Sdk.Query
             this.Orders = new List<OrderExpression>();
             this.LinkEntities = new List<LinkEntity>();
         }
-
-        /// <summary>
-        /// Gets or sets the logical name of the entity that you are linking from.
-        /// </summary>
-        public string LinkFromEntityName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the logical name of the entity that you are linking to.
-        /// </summary>
-        public string LinkToEntityName { get; set; }
 
         /// <summary>
         /// Gets or sets the property expressions containing the name of the attribute of the entity that you are linking from.
@@ -102,10 +90,10 @@ namespace Microsoft.Xrm.Sdk.Query
                 EntityAlias = t.EntityAlias,
                 JoinOperator = t.JoinOperator,
                 LinkCriteria = t.LinkCriteria,
-                LinkFromAttributeName = LogicalName.GetName<TFrom>(t.LinkFromAttributeName),
-                LinkFromEntityName = t.LinkFromEntityName,
-                LinkToEntityName = t.LinkToEntityName,
-                LinkToAttributeName = LogicalName.GetName<TTo>(t.LinkToAttributeName),
+                LinkFromEntityName = LogicalName.GetName<TFrom>(),
+                LinkFromAttributeName = LogicalName.GetName(t.LinkFromAttributeName),
+                LinkToEntityName = LogicalName.GetName<TTo>(),
+                LinkToAttributeName = LogicalName.GetName(t.LinkToAttributeName),
             };
             linkEntity.LinkEntities.AddRange(t.LinkEntities);
             linkEntity.Orders.AddRange(t.Orders);
