@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Xml.Linq;
 
 namespace D365Extensions
 {
@@ -26,6 +28,24 @@ namespace D365Extensions
         internal static ArgumentException InvalidExpression(string name)
         {
             return new ArgumentException("Invalid expression", name);
+        }
+
+        internal const string InvalidPageNumberMessage = @"Query page number is bigger than one. It may mean that you are trying to get second iterator from IEnumerable<Entity> returned from RetrieveMultiple extension overload. For instance you may be using FirstOrDefault(Predicate<T>) or similar in a loop. It is not supported because this method is yielding results WITHOUT allocating each page in memory. Most likely it will lead to wrong results as second iterator will start from the same page there first one has stopped. Reseting page counter is either not an option as this will result in querying same data from the system multiple times. If you need iterate over this data multiple times you are responsible for allocation it in memory yourself.";
+        
+        internal static void CheckPageNumber(QueryBase query)
+        {
+            if (query.GetPageNumber() > 0)
+            {
+                throw new ArgumentException(InvalidPageNumberMessage);
+            }
+        }
+
+        internal static void CheckPageNumber(FetchExpression fetch, XDocument document)
+        {
+            if (fetch.GetPageNumber(document) > 0)
+            {
+                throw new ArgumentException(InvalidPageNumberMessage);
+            }
         }
     }
 }

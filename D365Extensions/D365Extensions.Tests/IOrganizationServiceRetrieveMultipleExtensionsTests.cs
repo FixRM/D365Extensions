@@ -106,5 +106,103 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedItems, actualItems);
             CollectionAssert.AreEqual(expectedData, actualData, new EntityIdComparer());
         }
+
+        [TestMethod()]
+        public void RetrieveMultipleShouldThrowInvalidPageNumberTest()
+        {
+            /// Setup
+            int expectedPages = 10;
+            int count = 50;
+            int expectedItems = expectedPages * count;
+
+            List<Entity> testData = new List<Entity>(expectedItems);
+
+            for (int i = 0; i < expectedItems; i++)
+            {
+                testData.Add(new Entity("account", Guid.NewGuid()));
+            }
+
+            XrmFakedContext context = new XrmFakedContext();
+            context.Initialize(testData);
+
+            IOrganizationService service = context.GetOrganizationService();
+
+            QueryExpression query = new QueryExpression("account");
+            query.PageInfo.Count = count;
+            query.PageInfo.PageNumber = 1;
+
+            /// Act
+            int actualPages = 0;
+            int actualItems = 0;
+
+            var error = Assert.ThrowsException<ArgumentException>(() =>
+            {
+                IEnumerable<Entity> result = service.RetrieveMultiple(query, (ec) =>
+                {
+                    actualPages++;
+                });
+
+                foreach (Entity entity in result)
+                {
+                    actualItems++;
+                }
+            });
+
+            /// Assert
+            Assert.AreEqual(CheckParam.InvalidPageNumberMessage, error.Message);
+            Assert.AreEqual(0, actualPages);
+            Assert.AreEqual(0, actualItems);
+        }
+
+        [TestMethod()]
+        public void RetrieveMultipleShouldThrowInvalidPageNumberFetchTest()
+        {
+            /// Setup
+            int expectedPages = 10;
+            int count = 50;
+            int expectedItems = expectedPages * count;
+
+            string fetch = $@"<fetch count='{count}' no-lock='true' page='1'>
+                               <entity name='account' >
+                                 <attribute name='name' />
+                               </entity>
+                              </fetch>";
+
+            List<Entity> testData = new List<Entity>(expectedItems);
+
+            for (int i = 0; i < expectedItems; i++)
+            {
+                testData.Add(new Entity("account", Guid.NewGuid()));
+            }
+
+            XrmFakedContext context = new XrmFakedContext();
+            context.Initialize(testData);
+
+            IOrganizationService service = context.GetOrganizationService();
+
+            FetchExpression query = new FetchExpression(fetch);
+
+            /// Act
+            int actualPages = 0;
+            int actualItems = 0;
+
+            var error = Assert.ThrowsException<ArgumentException>(() =>
+            {
+                IEnumerable<Entity> result = service.RetrieveMultiple(query, (ec) =>
+                {
+                    actualPages++;
+                });
+
+                foreach (Entity entity in result)
+                {
+                    actualItems++;
+                }
+            });
+
+            /// Assert
+            Assert.AreEqual(CheckParam.InvalidPageNumberMessage, error.Message);
+            Assert.AreEqual(0, actualPages);
+            Assert.AreEqual(0, actualItems);
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace Microsoft.Xrm.Sdk
         public static IEnumerable<Entity> RetrieveMultiple(this IOrganizationService service, QueryBase query, Action<EntityCollection> callback = null)
         {
             CheckParam.CheckForNull(query, nameof(query));
+            CheckParam.CheckPageNumber(query);
 
             EntityCollection collection = new EntityCollection
             {
@@ -28,7 +29,7 @@ namespace Microsoft.Xrm.Sdk
 
             while (collection.MoreRecords)
             {
-                /// Paging start working if Page > 1
+                /// Paging start working if Page > 0
                 query.NextPage(collection.PagingCookie);
 
                 collection = service.RetrieveMultiple(query);
@@ -51,17 +52,19 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(query, nameof(query));
 
+            /// For performance reasons it's better to load XML once
+            XDocument document = XDocument.Parse(query.Query);            
+            
+            CheckParam.CheckPageNumber(query, document);
+
             EntityCollection collection = new EntityCollection
             {
                 MoreRecords = true
             };
 
-            /// For performance reasons it's better to load XML once
-            XDocument document = XDocument.Parse(query.Query);
-
             while (collection.MoreRecords)
             {
-                /// Paging start working if Page > 1
+                /// Paging start working if Page > 0
                 query.NextPage(document, collection.PagingCookie);
 
                 collection = service.RetrieveMultiple(query);
