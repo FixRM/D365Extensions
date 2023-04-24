@@ -22,9 +22,7 @@
 		<PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.*" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="FakeItEasy" Version="3.2.0" />
-		<PackageReference Include="FakeXrmEasy.2016" Version="1.39.1" />
-		<PackageReference Include="FakeXrmEasy.EdgeProxy.v2016" Version="0.0.2" />
+		<PackageReference Include="FakeXrmEasy.2016" Version="1.58.1" />
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.2.0.2" />
 		<PackageReference Include="Microsoft.CrmSdk.Deployment" Version="8.1.0.2" />
 		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.2.0.2" />
