@@ -19,17 +19,17 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static void NextPage(this QueryBase query, string pagingCookie)
         {
-            if (query is QueryExpression qe)
+            switch (query)
             {
-                qe.NextPage(pagingCookie);
-            }
-            else if (query is QueryByAttribute qa)
-            {
-                qa.NextPage(pagingCookie);
-            }
-            else if (query is FetchExpression fe)
-            {
-                fe.NextPage(pagingCookie);
+                case QueryExpression qe:
+                    qe.NextPage(pagingCookie);
+                    break;
+                case QueryByAttribute qa:
+                    qa.NextPage(pagingCookie);
+                    break;
+                case FetchExpression fe:
+                    fe.NextPage(pagingCookie);
+                    break;
             }
         }
 
@@ -74,6 +74,57 @@ namespace Microsoft.Xrm.Sdk.Query
             xDocument.Root.SetAttributeValue("page", ++pageNumber);
 
             query.Query = xDocument.ToString();
+        }
+
+        /// <summary>
+        /// Universal method to get Query page number
+        /// </summary>
+        public static int GetPageNumber(this QueryBase query)
+        {
+            switch (query)
+            {
+                case QueryExpression qe: return qe.GetPageNumber();
+                case QueryByAttribute qa: return qa.GetPageNumber();
+                case FetchExpression fe: return fe.GetPageNumber();
+                default: throw new NotSupportedException();
+            }
+        }
+
+        /// <summary>
+        /// Gets QueryExpression page number
+        /// </summary>
+        public static int GetPageNumber(this QueryExpression query)
+        {
+            return query.PageInfo.PageNumber;
+        }
+
+        /// <summary>
+        /// Gets QueryByAttribute page number
+        /// </summary>
+        public static int GetPageNumber(this QueryByAttribute query)
+        {
+            return query.PageInfo.PageNumber;
+        }
+
+        /// <summary>
+        /// Gets FetchExpression page number
+        /// </summary>
+        public static int GetPageNumber(this FetchExpression query)
+        {
+            return GetPageNumber(query, null);
+        }
+
+        /// <summary>
+        /// Internal method for better FetchExpression paging performance
+        /// </summary>
+        internal static int GetPageNumber(this FetchExpression query, XDocument xDoc)
+        {
+            XDocument xDocument = xDoc ?? XDocument.Parse(query.Query);
+
+            /// No paging mean PageInfo.Page = 0
+            /// for FetchXml it mean no "page" attribute or 0 value
+            string page = xDocument.Root.Attribute("page")?.Value;
+            return page != null ? int.Parse(page) : 0;
         }
     }
 }
