@@ -1,4 +1,29 @@
 # What's new
+## [2.0.0](https://github.com/FixRM/D365Extensions/compare/v1.5.3...v2.0.0) (2023-05-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* RetrieveMultiple extension methods now will throw ArgumentException if query page number is bigger than zero
+* LinkEntity<TFrom, TTo> got rid of LinkFromEntityName and LinkToEntityName properties as they were useless from the beginning
+* LinkEntity<TFrom, TTo> got rid of both AddLink methods as they were useless from the beginning
+* ColumnSet<T>, LinkEntity<TFrom, TTo> and OrderExpression<T> are now sealed
+* Columns property is now List<Expression<Func<T, object>>>
+
+### Features
+
+* add default names for pre and post images ([92fd2e9](https://github.com/FixRM/D365Extensions/commit/92fd2e95dab90497c8fd01e38948ffb58a77c495))
+* add GetPageNumber helper method ([26390bb](https://github.com/FixRM/D365Extensions/commit/26390bb6e01bae929272881f028f51fda09e968b))
+* RetrieveMultiple now checks page number before iterating ([610b090](https://github.com/FixRM/D365Extensions/commit/610b090864272222f65d0a7e8b0b42fbf6d92104))
+
+
+### refact
+
+* align CollumnSet<T> with similar generic types ([531d73c](https://github.com/FixRM/D365Extensions/commit/531d73ce7fbd5bf8ceb7b3c097ebe28d12a38b5b))
+* mark classes as sealed ([fa03115](https://github.com/FixRM/D365Extensions/commit/fa031151696edf14a4c82d9229d3b9a20a55630d))
+* remove AddLink methods ([2dd0056](https://github.com/FixRM/D365Extensions/commit/2dd0056f72f4e87f8e0867204f350cc93713b42f))
+* remove LinkFromEntityName and LinkToEntityName properties ([d0720f2](https://github.com/FixRM/D365Extensions/commit/d0720f283f2d727a856d06df27f35d0f10e22b82))
+
 ### [1.5.3](https://github.com/FixRM/D365Extensions/compare/v1.5.2...v1.5.3) (2022-12-02)
 
 
