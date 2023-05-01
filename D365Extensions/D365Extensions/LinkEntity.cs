@@ -8,7 +8,7 @@ namespace Microsoft.Xrm.Sdk.Query
     /// <summary>
     /// Strongly typed version of the LinkEntity<TFrom, TTo> class.
     /// </summary>
-    public class LinkEntity<TFrom, TTo>
+    public sealed class LinkEntity<TFrom, TTo>
         where TFrom : Entity
         where TTo : Entity
     {
@@ -30,8 +30,6 @@ namespace Microsoft.Xrm.Sdk.Query
           Expression<Func<TTo, object>> linkToAttributeName,
           JoinOperator joinOperator)
         {
-            this.LinkFromEntityName = LogicalName.GetName<TFrom>();
-            this.LinkToEntityName = LogicalName.GetName<TTo>();
             this.LinkFromAttributeName = linkFromAttributeName;
             this.LinkToAttributeName = linkToAttributeName;
             this.JoinOperator = joinOperator;
@@ -40,55 +38,6 @@ namespace Microsoft.Xrm.Sdk.Query
             this.Orders = new List<OrderExpression>();
             this.LinkEntities = new List<LinkEntity>();
         }
-
-        /// <summary>
-        /// Adds a link, setting the link to entity name, the link from attribute name and
-        /// the link to attribute name.
-        /// </summary>
-        /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
-        /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
-        /// <param name="joinOperator">The join operator.</param>
-        /// <returns>The link entity that was created.</returns>
-        public LinkEntity AddLink(
-            Expression<Func<TFrom, object>> linkFromAttributeName,
-            Expression<Func<TTo, object>> linkToAttributeName,
-            JoinOperator joinOperator)
-        {
-            LinkEntity<TFrom, TTo> linkEntity = new LinkEntity<TFrom, TTo>(
-                linkFromAttributeName,
-                linkToAttributeName,
-                joinOperator);
-            this.LinkEntities.Add(linkEntity);
-
-            return linkEntity;
-        }
-
-        /// <summary>
-        /// Adds a link, setting the link to entity name, the link from attribute name and
-        /// the link to attribute name.
-        /// </summary>
-        /// <param name="linkFromAttributeName">The property expressions containing the name of the attribute to link from.</param>
-        /// <param name="linkToAttributeName">The property expressions containing the name of the attribute to link to.</param>
-        /// <returns>The link entity that was created.</returns>
-        public LinkEntity AddLink(
-            Expression<Func<TFrom, object>> linkFromAttributeName,
-            Expression<Func<TTo, object>> linkToAttributeName)
-        {
-            return this.AddLink(
-                linkFromAttributeName,
-                linkToAttributeName,
-                JoinOperator.Inner);
-        }
-
-        /// <summary>
-        /// Gets or sets the logical name of the entity that you are linking from.
-        /// </summary>
-        public string LinkFromEntityName { get; set; }
-
-        /// <summary>
-        /// Gets or sets the logical name of the entity that you are linking to.
-        /// </summary>
-        public string LinkToEntityName { get; set; }
 
         /// <summary>
         /// Gets or sets the property expressions containing the name of the attribute of the entity that you are linking from.
@@ -141,10 +90,10 @@ namespace Microsoft.Xrm.Sdk.Query
                 EntityAlias = t.EntityAlias,
                 JoinOperator = t.JoinOperator,
                 LinkCriteria = t.LinkCriteria,
-                LinkFromAttributeName = LogicalName.GetName<TFrom>(t.LinkFromAttributeName),
-                LinkFromEntityName = t.LinkFromEntityName,
-                LinkToEntityName = t.LinkToEntityName,
-                LinkToAttributeName = LogicalName.GetName<TTo>(t.LinkToAttributeName),
+                LinkFromEntityName = LogicalName.GetName<TFrom>(),
+                LinkFromAttributeName = LogicalName.GetName(t.LinkFromAttributeName),
+                LinkToEntityName = LogicalName.GetName<TTo>(),
+                LinkToAttributeName = LogicalName.GetName(t.LinkToAttributeName),
             };
             linkEntity.LinkEntities.AddRange(t.LinkEntities);
             linkEntity.Orders.AddRange(t.Orders);

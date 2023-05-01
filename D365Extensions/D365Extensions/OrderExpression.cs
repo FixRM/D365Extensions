@@ -13,7 +13,7 @@ namespace Microsoft.Xrm.Sdk.Query
     /// Strongly typed version of the OrderExpression class
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class OrderExpression<T> where T: Entity
+    public sealed class OrderExpression<T> where T: Entity
     {
         /// <summary>
         /// Initializes a new instance of the OrderExpression<T> class.

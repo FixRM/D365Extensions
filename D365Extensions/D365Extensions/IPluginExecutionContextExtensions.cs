@@ -10,6 +10,10 @@ namespace Microsoft.Xrm.Sdk
     /// </summary>
     public static class IPluginExecutionContextExtensions
     {
+        private const string Target = "Target";
+        private const string PreImage = "PreImage";
+        private const string PostImage = "PostImage";
+
         /// <summary>
         /// Return OrganizationId and OrganizationName fields as single EntityReference
         /// </summary>
@@ -114,7 +118,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="name">Image name</param>
         /// <returns></returns>
-        public static Entity GetPreImage(this IPluginExecutionContext context, String name)
+        public static Entity GetPreImage(this IPluginExecutionContext context, string name = PreImage)
         {
             return context.PreEntityImages[name];
         }
@@ -124,7 +128,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="name">Image name</param>
         /// <returns></returns>
-        public static T GetPreImage<T>(this IPluginExecutionContext context, String name) where T : Entity
+        public static T GetPreImage<T>(this IPluginExecutionContext context, string name = PreImage) where T : Entity
         {
             return context.PreEntityImages[name]?.ToEntity<T>();
         }
@@ -134,7 +138,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="name">Image name</param>
         /// <returns></returns>
-        public static Entity GetPostImage(this IPluginExecutionContext context, String name)
+        public static Entity GetPostImage(this IPluginExecutionContext context, string name = PostImage)
         {
             return context.PostEntityImages[name];
         }
@@ -144,7 +148,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="name">Image name</param>
         /// <returns></returns>
-        public static T GetPostImage<T>(this IPluginExecutionContext context, String name) where T : Entity
+        public static T GetPostImage<T>(this IPluginExecutionContext context, string name = PostImage) where T : Entity
         {
             return context.PostEntityImages[name]?.ToEntity<T>();
         }
@@ -155,7 +159,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static Entity GetTarget(this IPluginExecutionContext context)
         {
-            return GetInputParameter<Entity>(context, "Target");
+            return GetInputParameter<Entity>(context, Target);
         }
 
         /// <summary>
@@ -170,22 +174,22 @@ namespace Microsoft.Xrm.Sdk
         /// <summary>
         /// Get "Target" entity parameter merged with specified pre image 
         /// </summary>
-        /// <param name="name">Image name</param>
+        /// <param name="preImageName">Image name</param>
         /// <returns></returns>
-        public static T GetPreTarget<T>(this IPluginExecutionContext context, String name) where T : Entity
+        public static T GetPreTarget<T>(this IPluginExecutionContext context, string preImageName = PreImage) where T : Entity
         {
-            return GetPreTarget(context, name).ToEntity<T>();
+            return GetPreTarget(context, preImageName).ToEntity<T>();
         }
 
         /// <summary>
         /// Get "Target" entity parameter merged with specified pre image 
         /// </summary>
-        /// <param name="name">Image name</param>
+        /// <param name="preImageName">Image name</param>
         /// <returns></returns>
-        public static Entity GetPreTarget(this IPluginExecutionContext context, String name)
+        public static Entity GetPreTarget(this IPluginExecutionContext context, string preImageName = PreImage)
         {
             Entity target = GetTarget(context);
-            Entity image = GetPreImage(context, name);
+            Entity image = GetPreImage(context, preImageName);
 
             target?.MergeAttributes(image);
 
@@ -195,22 +199,22 @@ namespace Microsoft.Xrm.Sdk
         /// <summary>
         /// Get "Target" entity parameter merged with specified post image 
         /// </summary>
-        /// <param name="name">Image name</param>
+        /// <param name="postImageName">Image name</param>
         /// <returns></returns>
-        public static T GetPostTarget<T>(this IPluginExecutionContext context, String name) where T : Entity
+        public static T GetPostTarget<T>(this IPluginExecutionContext context, string postImageName = PostImage) where T : Entity
         {
-            return GetPostTarget(context, name).ToEntity<T>();
+            return GetPostTarget(context, postImageName).ToEntity<T>();
         }
 
         /// <summary>
         /// Get "Target" entity parameter merged with specified post image 
         /// </summary>
-        /// <param name="name">Image name</param>
+        /// <param name="postImageName">Image name</param>
         /// <returns></returns>
-        public static Entity GetPostTarget(this IPluginExecutionContext context, String name)
+        public static Entity GetPostTarget(this IPluginExecutionContext context, string postImageName = PostImage)
         {
             Entity target = GetTarget(context);
-            Entity image = GetPostImage(context, name);
+            Entity image = GetPostImage(context, postImageName);
 
             target?.MergeAttributes(image);
 
@@ -226,7 +230,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="context"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static T GetSharedVariable<T>(this IPluginExecutionContext context, String name)
+        public static T GetSharedVariable<T>(this IPluginExecutionContext context, string name)
         {
             return (T)context.SharedVariables[name];
         }
@@ -251,7 +255,7 @@ namespace Microsoft.Xrm.Sdk
             }
 
             /// Get InputParameters for Associate и Disassociate 
-            EntityReference target = pluginContext.InputParameters["Target"] as EntityReference;
+            EntityReference target = pluginContext.InputParameters[Target] as EntityReference;
             EntityReferenceCollection relatedEntities = pluginContext.InputParameters["RelatedEntities"] as EntityReferenceCollection;
 
             /// Get schema names for this participating entities
