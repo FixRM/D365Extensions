@@ -49,8 +49,7 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpession.Member;
 
-                memberChache.TryGetValue(member, out string logicalName);
-                if (logicalName == null)
+                if (!memberChache.TryGetValue(member, out string logicalName))
                 {
                     logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>()?.LogicalName
                         // fallback if attribute not provided
@@ -70,9 +69,8 @@ namespace D365Extensions
         internal static string GetName<T>() where T : Entity
         {
             var type = typeof(T);
-
-            typeChache.TryGetValue(type, out string logicalName);
-            if (logicalName == null)
+                        
+            if (!typeChache.TryGetValue(type, out string logicalName))
             {
                 logicalName = type.GetCustomAttribute<EntityLogicalNameAttribute>()?.LogicalName
                     // fallback if attribute not provided
