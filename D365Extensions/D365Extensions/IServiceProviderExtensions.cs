@@ -1,4 +1,5 @@
-﻿using System;
+﻿using D365Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,12 +32,23 @@ namespace Microsoft.Xrm.Sdk
 
         /// <summary>
         /// Gets ITracingService from service provider
+        /// For better tracing experience check GetPluginExecutionTraceContext method        
         /// </summary>
         /// <param name="serviceProvider"></param>
         /// <returns></returns>
         public static ITracingService GetTracingService(this IServiceProvider serviceProvider)
         {
             return serviceProvider.GetService(typeof(ITracingService)) as ITracingService;
+        }
+
+        /// <summary>
+        /// Gets PluginExecutionTraceContext from service provider
+        /// </summary>
+        /// <returns>PluginExecutionTraceContext is a disposable wrapper around IPluginExecutionContext and ITracingService
+        /// that simplifies tracing of plugin execution context properties in memory efficient way</returns>
+        public static PluginExecutionTraceContext GetPluginExecutionTraceContext(this IServiceProvider serviceProvider, PluginExecutionTraceContextSettings settings = null) 
+        {
+            return new PluginExecutionTraceContext(serviceProvider.GetTracingService(), serviceProvider.GetPluginExecutionContext(), settings);
         }
     }
 }
