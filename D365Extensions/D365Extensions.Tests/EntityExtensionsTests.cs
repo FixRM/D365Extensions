@@ -395,5 +395,22 @@ namespace D365Extensions.Tests
 
             Assert.AreEqual("value", keyReference.KeyAttributes["key"]);
         }
+
+        [TestMethod()]
+        public void ToTraceStringTest()
+        {
+            // Setup
+            Entity entity = new Entity("account");
+
+            string expectedTraceString = 
+$@"Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
+Attributes: AttributeCollection {{ Count = 0 }}";
+
+            // Act
+            string actualTraceString = entity.ToTraceString();
+
+            // Assert
+            Assert.AreEqual(expectedTraceString, actualTraceString);
+        }
     }
 }

@@ -34,5 +34,14 @@ namespace Microsoft.Xrm.Sdk
         {
             return entityReference.ToEntity().ToEntity<T>();
         }
+
+        /// <summary>
+        /// Returns EntityReference string representation
+        /// </summary>
+        /// <returns></returns>
+        public static string ToTraceString(this EntityReference reference)
+        {
+            return $@"EntityReference {{ LogicalName = ""{reference.LogicalName}"", Id = ""{reference.Id:B}"" }}";
+        }
     }
 }
