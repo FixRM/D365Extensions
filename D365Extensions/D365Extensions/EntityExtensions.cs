@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -143,6 +144,18 @@ namespace Microsoft.Xrm.Sdk
             }
             
             return reference;
+        }
+
+        /// <summary>
+        /// Returns Entity string representation
+        /// </summary>
+        /// <returns></returns>
+        public static string ToTraceString(this Entity entity) 
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendEntity(entity);
+
+            return sb.ToString();
         }
     }
 }
