@@ -1,4 +1,14 @@
 # What's new
+## [2.1.0](https://github.com/FixRM/D365Extensions/compare/v2.0.0...v2.1.0) (2023-05-30)
+
+
+### Features
+
+* add ITracingService extensions ([c1d3dcc](https://github.com/FixRM/D365Extensions/commit/c1d3dcc4f7d6682bbc44682395f302c091b40ef1))
+* add PluginExecutionTraceContext ([7991677](https://github.com/FixRM/D365Extensions/commit/7991677b2ffde2583f4f744155cd93b81d48770b))
+* add ToTraceString extension method to Entity ([cf781ab](https://github.com/FixRM/D365Extensions/commit/cf781ab3056d29deb1a7a517266e8eb6a479d043))
+* add ToTraceString extension to EntityReference, Money and OptionSetValue ([2bcc2fd](https://github.com/FixRM/D365Extensions/commit/2bcc2fd2edb0680df6793ef5a35bd887aa32586a))
+
 ## [2.0.0](https://github.com/FixRM/D365Extensions/compare/v1.5.3...v2.0.0) (2023-05-01)
 
 
