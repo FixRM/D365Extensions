@@ -36,7 +36,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Execute batch of requests using ExecuteMultipleRequest while taking care of butch size
+        /// Execute batch of requests using ExecuteMultipleRequest while taking care of batch size
         /// 
         /// NEVER use this extension as well as ExecuteMultipleRequest itself in Plugin code
         /// https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin
@@ -44,11 +44,10 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="requests">The collection of message requests to execute</param>
         /// <param name="settings">The settings that define whether execution should continue if an
         //  error occurs and if responses for each message request processed are to be returned</param>
-        /// <param name="batchSize">The number of requests to be sent in each ExecuteMultipleRequest</param>
-        /// ExecuteMultipleRequest call</param>
+        /// <param name="batchSize">The number of requests to be sent in each ExecuteMultipleRequest.</param>
         public static IEnumerable<ExecuteMultipleResponse> Execute(this IOrganizationService service,
             IEnumerable<OrganizationRequest> requests,
-            int batchSize = 1000,
+            int batchSize = 100,
             ExecuteMultipleSettings settings = null)
         {
             //TODO: throw if IOrganizationService is not OOB web service wrapper?
