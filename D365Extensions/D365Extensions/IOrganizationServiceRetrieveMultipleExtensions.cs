@@ -53,8 +53,8 @@ namespace Microsoft.Xrm.Sdk
             CheckParam.CheckForNull(query, nameof(query));
 
             /// For performance reasons it's better to load XML once
-            XDocument document = XDocument.Parse(query.Query);            
-            
+            XDocument document = XDocument.Parse(query.Query);
+
             CheckParam.CheckPageNumber(query, document);
 
             EntityCollection collection = new EntityCollection
@@ -75,6 +75,31 @@ namespace Microsoft.Xrm.Sdk
                     yield return entity;
                 }
             }
+        }
+
+        /// <summary>
+        /// RetrieveMultiple method override optimized for FetchExpression. Returns all pages using callback or 'yield' iterator
+        /// </summary>
+        /// <param name="query">A query in fetch XML</param>
+        /// <param name="callback">Optional function to be called for each record page</param>
+        /// <returns>Entity set as 'yield' iterator</returns>
+        public static IEnumerable<Entity> RetrieveMultiple(this IOrganizationService service, string fetchXml, Action<EntityCollection> callback = null)
+        {
+            CheckParam.CheckForNull(fetchXml, nameof(fetchXml));
+
+            return RetrieveMultiple(service, new FetchExpression(fetchXml), callback);
+        }
+
+        /// <summary>
+        /// Retrieves a collection of records
+        /// </summary>
+        /// <param name="fetchXml">A query in fetch XML</param>
+        /// <returns>EntityCollection</returns>
+        public static EntityCollection RetrieveMultiple(this IOrganizationService service, string fetchXml)
+        {
+            CheckParam.CheckForNull(fetchXml, nameof(fetchXml));
+
+            return service.RetrieveMultiple(new FetchExpression(fetchXml));
         }
     }
 }
