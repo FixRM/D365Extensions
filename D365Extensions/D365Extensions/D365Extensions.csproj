@@ -20,16 +20,8 @@
     <AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="System.DirectoryServices" Version="4.*" />
-    <PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.*" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.*" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.*" />
-    <PackageReference Include="System.Net.Http" Version="4.*" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.2.0.2" />
-    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.2.0.2" />
-    <PackageReference Include="Microsoft.IdentityModel" Version="6.1.7600.16394" />
+    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.1.0" />
+    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework" />

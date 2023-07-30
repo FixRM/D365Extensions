@@ -18,20 +18,10 @@
 	</PropertyGroup>
 	<Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
 	<ItemGroup>
-		<PackageReference Include="System.DirectoryServices" Version="4.*" />
-		<PackageReference Include="System.DirectoryServices.AccountManagement" Version="4.*" />
-	</ItemGroup>
-	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+		<PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+		<PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
 		<PackageReference Include="FakeXrmEasy.2016" Version="1.58.1" />
-		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.2.0.2" />
-		<PackageReference Include="Microsoft.CrmSdk.Deployment" Version="8.1.0.2" />
-		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.2.0.2" />
-		<PackageReference Include="Microsoft.CrmSdk.XrmTooling.CoreAssembly" Version="8.1.0.2" />
-		<PackageReference Include="Microsoft.IdentityModel" Version="6.1.7600.16394" />
-		<PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="2.22.302111727" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-		<PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
-		<PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="PresentationFramework" />
