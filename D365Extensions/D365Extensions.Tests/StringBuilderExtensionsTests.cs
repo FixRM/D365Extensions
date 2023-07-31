@@ -17,7 +17,7 @@ namespace D365Extensions.Tests
             ///Setup
             const string id = "{9e0b39ed-1d15-443b-a312-a092f081d832}";
             const string logicalName = "account";
-            string expectedTraceString = $@"EntityReference {{ LogicalName = ""{logicalName}"", Id = ""{id}"" }}";
+            string expectedTraceString = $$"""EntityReference { LogicalName = "{{logicalName}}", Id = "{{id}}" }""";
 
             EntityReference entityReference = new EntityReference(logicalName, new Guid(id));
 
@@ -37,7 +37,7 @@ namespace D365Extensions.Tests
         {
             ///Setup
             const decimal value = 100.50M;
-            string expectedTraceString = $"Money {{ Value = {value} }}";
+            string expectedTraceString = $$"""Money { Value = {{value}} }""";
 
             Money money = new Money(value);
 
@@ -56,7 +56,7 @@ namespace D365Extensions.Tests
         {
             ///Setup
             const int value = 1;
-            var expectedTraceString = $"OptionSetValue {{ Value = {value} }}";
+            var expectedTraceString = $$"""OptionSetValue { Value = {{value}} }""";
 
             OptionSetValue optionSet = new OptionSetValue(value);
 
@@ -84,9 +84,11 @@ namespace D365Extensions.Tests
             entity.Attributes.Add(name, value);
 
             string expectedTraceString = 
-$@"Entity {{ LogicalName = ""{logicalName}"", Id = ""{id}"" }}
-Attributes: AttributeCollection {{ Count = 1 }}
-""{name}"": ""{value}""";
+                $$"""
+                Entity { LogicalName = "{{logicalName}}", Id = "{{id}}" }
+                Attributes: AttributeCollection { Count = 1 }
+                "{{name}}": "{{value}}"
+                """;
 
             var sb = new StringBuilder();
 
@@ -121,11 +123,13 @@ Attributes: AttributeCollection {{ Count = 1 }}
             };
 
             string expectedTraceString =
-$@"{header}: ParameterCollection {{ Count = 3 }}
-""{target}"": Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 0 }}
-""{stateCode}"": OptionSetValue {{ Value = 0 }}
-""{custom}"": {rating}";
+                $$"""
+                {{header}}: ParameterCollection { Count = 3 }
+                "{{target}}": Entity { LogicalName = "account", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 0 }
+                "{{stateCode}}": OptionSetValue { Value = 0 }
+                "{{custom}}": {{rating}}
+                """;
 
             var sb = new StringBuilder();
 
@@ -157,17 +161,19 @@ Attributes: AttributeCollection {{ Count = 0 }}
             Entity entity = new Entity("email");
             entity["to"] = collection;
 
-            string expectedTraceString = 
-$@"Entity {{ LogicalName = ""email"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 1 }}
-""to"": EntityCollection {{ EntityName = ""{activityparty}"" }}
-Entities: {{ Count = 2 }} 
-Entity {{ LogicalName = ""contact"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 1 }}
-""email"": ""artem@grunin.ru""
-Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 1 }}
-""email"": ""fix@rm.ru""";
+            string expectedTraceString =
+                $$"""
+                Entity { LogicalName = "email", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 1 }
+                "to": EntityCollection { EntityName = "{{activityparty}}" }
+                Entities: { Count = 2 } 
+                Entity { LogicalName = "contact", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 1 }
+                "email": "artem@grunin.ru"
+                Entity { LogicalName = "account", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 1 }
+                "email": "fix@rm.ru"
+                """;
 
             var sb = new StringBuilder();
 
@@ -184,9 +190,11 @@ Attributes: AttributeCollection {{ Count = 1 }}
         public void AppendStringTest()
         {
             ///Setup
-            const string str = "key";            
+            const string str = "key";
 
-            string expectedTraceString = $@"""{str}""";
+            string expectedTraceString = $"""
+                "{str}"
+                """;
 
             var sb = new StringBuilder();
 
@@ -205,7 +213,9 @@ Attributes: AttributeCollection {{ Count = 1 }}
             ///Setup
             Guid id = Guid.Empty;
 
-            string expectedTraceString = $@"""{{00000000-0000-0000-0000-000000000000}}""";
+            string expectedTraceString = $$"""
+                "{00000000-0000-0000-0000-000000000000}"
+                """;
 
             var sb = new StringBuilder();
 

@@ -35,15 +35,17 @@ namespace D365Extensions.Tests
             };
 
             string expectedTraceString =
-$@"MessageName: ""{pluginContext.MessageName}""
-Stage: {pluginContext.Stage}
-PrimaryEntityId: ""{{{pluginContext.PrimaryEntityId}}}""
-PrimaryEntityName: ""{pluginContext.PrimaryEntityName}""
-UserId: ""{{{pluginContext.UserId}}}""
-InitiatingUserId: ""{{{pluginContext.InitiatingUserId}}}""
-Depth: {pluginContext.Depth}
-Mode: {pluginContext.Mode}
-";
+                    $$"""
+                    MessageName: "{{pluginContext.MessageName}}"
+                    Stage: {{pluginContext.Stage}}
+                    PrimaryEntityId: "{{{pluginContext.PrimaryEntityId}}}"
+                    PrimaryEntityName: "{{pluginContext.PrimaryEntityName}}"
+                    UserId: "{{{pluginContext.UserId}}}"
+                    InitiatingUserId: "{{{pluginContext.InitiatingUserId}}}"
+                    Depth: {{pluginContext.Depth}}
+                    Mode: {{pluginContext.Mode}}
+
+                    """;
 
             //Act
             traceService.TracePluginContext(pluginContext);
@@ -69,10 +71,12 @@ Mode: {pluginContext.Mode}
             pluginContext.InputParameters.Add(targetKey, target);
 
             string expectedTraceString =
-$@"InputParameters: ParameterCollection {{ Count = 1 }}
-""{targetKey}"": Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 0 }}
-";
+                $$"""
+                InputParameters: ParameterCollection { Count = 1 }
+                "{{targetKey}}": Entity { LogicalName = "account", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 0 }
+
+                """;
 
             //Act
             traceService.TraceInputParameters(pluginContext);
@@ -98,9 +102,11 @@ Attributes: AttributeCollection {{ Count = 0 }}
             pluginContext.OutputParameters.Add(idKey, id);
 
             string expectedTraceString =
-$@"OutputParameters: ParameterCollection {{ Count = 1 }}
-""{idKey}"": ""{{00000000-0000-0000-0000-000000000000}}""
-";
+                $$"""
+                OutputParameters: ParameterCollection { Count = 1 }
+                "{{idKey}}": "{00000000-0000-0000-0000-000000000000}"
+
+                """;
 
             //Act
             traceService.TraceOutputParameters(pluginContext);
@@ -126,9 +132,11 @@ $@"OutputParameters: ParameterCollection {{ Count = 1 }}
             pluginContext.SharedVariables.Add(variableKey, variableValue);
 
             string expectedTraceString =
-$@"SharedVariables: ParameterCollection {{ Count = 1 }}
-""{variableKey}"": ""{variableValue}""
-";
+                $$"""
+                SharedVariables: ParameterCollection { Count = 1 }
+                "{{variableKey}}": "{{variableValue}}"
+
+                """;
 
             //Act
             traceService.TraceSharedVariables(pluginContext);
@@ -154,10 +162,12 @@ $@"SharedVariables: ParameterCollection {{ Count = 1 }}
             pluginContext.PreEntityImages.Add(imageName, image);
 
             string expectedTraceString =
-$@"PreEntityImages: EntityImageCollection {{ Count = 1 }}
-""{imageName}"": Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 0 }}
-";
+                $$"""
+                PreEntityImages: EntityImageCollection { Count = 1 }
+                "{{imageName}}": Entity { LogicalName = "account", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 0 }
+
+                """;
 
             //Act
             traceService.TracePreEntityImages(pluginContext);
@@ -183,10 +193,12 @@ Attributes: AttributeCollection {{ Count = 0 }}
             pluginContext.PostEntityImages.Add(imageName, image);
 
             string expectedTraceString =
-$@"PostEntityImages: EntityImageCollection {{ Count = 1 }}
-""{imageName}"": Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 0 }}
-";
+                $$"""
+                PostEntityImages: EntityImageCollection { Count = 1 }
+                "{{imageName}}": Entity { LogicalName = "account", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 0 }
+
+                """;
 
             //Act
             traceService.TracePostEntityImages(pluginContext);
