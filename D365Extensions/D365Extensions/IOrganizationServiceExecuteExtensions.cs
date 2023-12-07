@@ -52,6 +52,8 @@ namespace Microsoft.Xrm.Sdk
         {
             //TODO: throw if IOrganizationService is not OOB web service wrapper?
 
+            settings = settings ?? new ExecuteMultipleSettings();
+
             foreach (var collection in requests.Chunk(batchSize))
             {
                 var response = service.Execute(new ExecuteMultipleRequest()
