@@ -9,6 +9,12 @@ namespace Microsoft.Xrm.Sdk
 {
     public static class DataCollectionExtensions
     {
+        /// <summary>
+        /// Safely gets value from DataCollection/ParameterCollection
+        /// </summary>
+        /// <typeparam name="T">parameter type</typeparam>
+        /// <param name="key">parameter name</param>
+        /// <returns></returns>
         public static T GetValue<T>(this DataCollection<string, object> collection, string key)
         {
             if (collection.TryGetValue(key, out var value))
