@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using D365Extensions.Tests.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk.Query;
 using System.Xml.Linq;
 
@@ -92,6 +93,23 @@ namespace D365Extensions.Tests
         }
 
         [TestMethod]
+        public void QueryByAttributeNextPage_No_PageTest()
+        {
+            /// Setup
+            string expectedCookie = "<cookie page=\"1\"><accountid last=\"{ E79B8B61 - 9658 - 460F - B6B5 - A11CECF9F872}\" first=\"{ D65C4096 - B356 - 4EDB - A6C6 - A12EDA3F34EF}\" /></cookie>";
+
+            //this constructor doesn't initialize PageInfo
+            QueryByAttribute query = new QueryByAttribute(Account.EntityLogicalName);
+
+            // Act
+            (query as QueryBase).NextPage(expectedCookie);
+
+            //Assert
+            Assert.AreEqual(expectedCookie, query.PageInfo.PagingCookie);
+            Assert.AreEqual(1, query.PageInfo.PageNumber);
+        }
+
+        [TestMethod]
         public void FetchExpressionGetPageNumberTest()
         {
             /// Setup
@@ -147,6 +165,20 @@ namespace D365Extensions.Tests
         {
             /// Setup
             QueryByAttribute query = new QueryByAttribute();
+
+            // Act
+            int actualPageNumber = (query as QueryBase).GetPageNumber();
+
+            //Assert
+            Assert.AreEqual(0, actualPageNumber);
+        }
+
+        [TestMethod]
+        public void QueryByAttributeGetPageNumber_No_Page_Test()
+        {
+            /// Setup
+            ///this constructor doesn't initialize PageInfo
+            QueryByAttribute query = new QueryByAttribute(Account.EntityLogicalName);
 
             // Act
             int actualPageNumber = (query as QueryBase).GetPageNumber();

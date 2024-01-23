@@ -9,6 +9,8 @@ using System.Xml.Linq;
 
 namespace Microsoft.Xrm.Sdk.Query
 {
+    //BC: this class should be internal
+
     /// <summary>
     /// Extensions for Microsoft.Xrm.Sdk.Query types
     /// </summary>
@@ -47,6 +49,8 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static void NextPage(this QueryByAttribute query, string pagingCookie)
         {
+            if (query.PageInfo == null) query.PageInfo = new PagingInfo();
+
             query.PageInfo.PageNumber++;
             query.PageInfo.PagingCookie = pagingCookie;
         }
@@ -103,7 +107,7 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static int GetPageNumber(this QueryByAttribute query)
         {
-            return query.PageInfo.PageNumber;
+            return query.PageInfo != null ? query.PageInfo.PageNumber : 0;
         }
 
         /// <summary>
