@@ -114,6 +114,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="value"></param>
         /// <returns>true if new attribute added</returns>
+        [Obsolete("blame on me, use entity[] to set values")]
         public static bool SetAttributeValue(this Entity entity, String name, Object value)
         {
             if (entity.Contains(name))
