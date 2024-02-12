@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Linq;
 
 namespace D365Extensions.Tests
 {
@@ -402,15 +403,358 @@ namespace D365Extensions.Tests
             // Setup
             Entity entity = new Entity("account");
 
-            string expectedTraceString = 
-$@"Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 0 }}";
+            string expectedTraceString =
+                $$"""
+                Entity { LogicalName = "account", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 0 }
+                """;
 
             // Act
             string actualTraceString = entity.ToTraceString();
 
             // Assert
             Assert.AreEqual(expectedTraceString, actualTraceString);
+        }
+
+        [TestMethod()]
+        public void ShouldSkipGuidChangeTest()
+        {
+            //Setup
+            Guid? g1 = null;
+            Guid? g2 = null;
+
+            //Act + Assert
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(g1, g2));
+
+            g1 = Guid.Parse("{A3EA732C-8872-4EAA-BA3B-1E72827FF350}");
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(g1, g2));
+
+            g2 = Guid.Parse("{A3EA732C-8872-4EAA-BA3B-1E72827FF350}");
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(g1, g2));
+
+            g2 = Guid.Parse("{31EA92D9-AAC3-4853-8B63-19D5E4B78D55}");
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(g1, g2));
+
+            g1 = null;
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(g1, g2));
+        }
+
+        [TestMethod()]
+        public void ShouldSkipBigIntChangeTest()
+        {
+            //Setup
+            long? l1 = null;
+            long? l2 = null;
+
+            //Act + Assert
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(l1, l2));
+
+            l1 = 1000L;
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(l1, l2));
+
+            l2 = 1000L;
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(l1, l2));
+
+            l2 = 2000L;
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(l1, l2));
+
+            l1 = null;
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(l1, l2));
+        }
+
+        [TestMethod()]
+        public void ShouldTrackByteArrayChangeTest()
+        {
+            //Setup
+            byte[] b1 = null;
+            byte[] b2 = null;
+
+            //Act + Assert
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(b1, b2));
+
+            b1 = new byte[] { 1, 2, 3 };
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(b1, b2));
+
+            b2 = new byte[] { 1, 2, 3 };
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(b1, b2));
+
+            b2 = new byte[] { 1, 2, 4 };
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(b1, b2));
+
+            b1 = null;
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(b1, b2));
+        }
+
+        [TestMethod()]
+        public void ShouldTrackCollectionChangeTest()
+        {
+            //Setup
+            EntityCollection c1 = null;
+            EntityCollection c2 = null;
+
+            //Act + Assert
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(c1, c2));
+
+            c1 = new EntityCollection();
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(c1, c2));
+
+            c2 = new EntityCollection();
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(c1, c2));
+
+            c1.Entities.Add(new Entity() { Id = Guid.Parse("{489B9C29-73AD-4145-AEA0-E6CF03CB82DF}") });
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(c1, c2));
+
+            c2.Entities.Add(new Entity() { Id = Guid.Parse("{489B9C29-73AD-4145-AEA0-E6CF03CB82DF}") });
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(c1, c2));
+
+            c1.Entities.Add(new Entity() { Id = Guid.Parse("{77E2CB34-A621-4CA9-844D-F484A0458D2F}") });
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(c1, c2));
+
+            c2.Entities.Clear();
+            c2.Entities.Add(new Entity() { Id = Guid.Parse("{77E2CB34-A621-4CA9-844D-F484A0458D2F}") });
+            c2.Entities.Add(new Entity() { Id = Guid.Parse("{489B9C29-73AD-4145-AEA0-E6CF03CB82DF}") });
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(c1, c2));
+
+            c1 = null;
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(c1, c2));
+        }
+
+        [TestMethod()]
+        public void ShouldTrackIntChangeTest()
+        {
+            //Setup
+            int? i1 = null;
+            int? i2 = null;
+
+            //Act + Assert
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(i1, i2));
+
+            i1 = 1;
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(i1, i2));
+
+            i2 = 1;
+            Assert.IsFalse(EntityExtensions.ShouldTrackChange(i1, i2));
+
+            i2 = 2;
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(i1, i2));
+
+            i1 = null;
+            Assert.IsTrue(EntityExtensions.ShouldTrackChange(i1, i2));
+        }
+
+        [TestMethod()]
+        public void NoChangesTest()
+        {
+            // Setup
+            EntityCollection tCollection = new EntityCollection();
+            tCollection.Entities.Add(new Entity("activityparty", Guid.Parse("{37825B8C-200B-4653-A270-927540B44435}")));
+
+            var target = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}"),
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}")),
+                ["datetime"] = new DateTime?(new DateTime(1985, 8, 8)),
+                ["bool"] = new bool?(false),
+                ["int"] = new int?(1),
+                ["long"] = new long?(100000L),
+                ["double"] = new double?(200.00),
+                ["decimal"] = new decimal?(300.00m),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(0),
+                ["entityreference"] = new EntityReference("team", Guid.Parse("{10AA9454-85C9-45CA-91E2-79DDD9B12D21}")),
+                ["money"] = new Money(1000m),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = tCollection,
+            };
+
+            EntityCollection sCollection = new EntityCollection();
+            sCollection.Entities.Add(new Entity("activityparty", Guid.Parse("{37825B8C-200B-4653-A270-927540B44435}")));
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}"),
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}")),
+                ["datetime"] = new DateTime?(new DateTime(1985, 8, 8)),
+                ["bool"] = new bool?(false),
+                ["int"] = new int?(1),
+                ["long"] = new long?(100000L),
+                ["double"] = new double?(200.00),
+                ["decimal"] = new decimal?(300.00m),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(0),
+                ["entityreference"] = new EntityReference("team", Guid.Parse("{10AA9454-85C9-45CA-91E2-79DDD9B12D21}")),
+                ["money"] = new Money(1000m),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = sCollection,
+                ["inotexistintaget1"] = 1,
+                ["inotexistintaget2"] = "hello",
+                ["inotexistintaget3"] = new OptionSetValue(1)
+            };
+
+            // Act
+            var changes = target.Changes(source);
+
+            // Assert
+            Assert.AreEqual(target.Id, changes.Id);
+            Assert.AreEqual(target.LogicalName, changes.LogicalName);
+            Assert.AreEqual(0, changes.Attributes.Count);
+        }
+
+        [TestMethod()]
+        public void ChangedToNullTest()
+        {
+            // Setup
+            EntityCollection tCollection = new EntityCollection();
+            tCollection.Entities.Add(new Entity("activityparty", Guid.Parse("{37825B8C-200B-4653-A270-927540B44435}")));
+
+            var target = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}"),
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}")),
+                ["datetime"] = new DateTime?(new DateTime(1985, 8, 8)),
+                ["bool"] = new bool?(false),
+                ["int"] = new int?(1),
+                ["long"] = new long?(100000L),
+                ["double"] = new double?(200.00),
+                ["decimal"] = new decimal?(300.00m),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(0),
+                ["entityreference"] = new EntityReference("team", Guid.Parse("{10AA9454-85C9-45CA-91E2-79DDD9B12D21}")),
+                ["money"] = new Money(1000m),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = tCollection,
+            };
+
+            var expectedKeys = target.Attributes.Keys.ToList();
+            // We don't want to break concurrency behavior with RowVersion attribute, or EntityImage_Timestamp or
+            // other internal stuff. BigInt (long) attributes are internal only according to documentation
+            expectedKeys.Remove("long");
+            // Guid (not EntityReference) attributes are used for primary keys or different internal staff
+            // such as address1(2,3)_addressid, entityimageid, businessprocessflowinstanceid, processid, stageid,
+            // azureactivedirectoryobjectid, conversationtrackingid, privilegeusergroupid, etc
+            // You got it. Most likely, this attributes will be ignored during Update, otherwise they should be
+            // used with care and be set manually
+            expectedKeys.Remove("guid");
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}"),
+                //Native types
+                ["string"] = null,
+                ["guid"] = null,
+                ["datetime"] = null,
+                ["bool"] = null,
+                ["int"] = null,
+                ["long"] = null,
+                ["double"] = null,
+                ["decimal"] = null,
+                //Dynamics types
+                ["optionsetvalue"] = null,
+                ["entityreference"] = null,
+                ["money"] = null,
+                ["entityreferencecollection"] = null,
+                ["entityimage"] = null,
+                ["parylist"] = null,
+                ["inotexistintaget1"] = null,
+                ["inotexistintaget2"] = null,
+                ["inotexistintaget3"] = null
+            };
+
+            // Act
+            var changes = target.Changes(source);
+
+            // Assert
+            Assert.AreEqual(target.Id, changes.Id);
+            Assert.AreEqual(target.LogicalName, changes.LogicalName);
+            Assert.AreEqual(expectedKeys.Count, changes.Attributes.Count);
+
+            Assert.IsTrue(expectedKeys.SequenceEqual(changes.Attributes.Keys));
+            var nulls = changes.Attributes.All(a => a.Value == null);
+            Assert.IsTrue(nulls);
+        }
+
+        [TestMethod()]
+        public void ChangedFromNullTest()
+        {
+            // Setup
+            var target = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}"),
+                //Native types
+                ["string"] = null,
+                ["guid"] = null,
+                ["datetime"] = null,
+                ["bool"] = null,
+                ["int"] = null,
+                ["long"] = null,
+                ["double"] = null,
+                ["decimal"] = null,
+                //Dynamics types
+                ["optionsetvalue"] = null,
+                ["entityreference"] = null,
+                ["money"] = null,
+                ["entityimage"] = null,
+                ["parylist"] = null,
+            };
+
+            var expectedKeys = target.Attributes.Keys.ToList();
+            // We don't want to break concurrency behavior with RowVersion attribute, or EntityImage_Timestamp or
+            // other internal stuff. BigInt (long) attributes are internal only according to documentation
+            expectedKeys.Remove("long");
+            // Guid (not EntityReference) attributes are used for primary keys or different internal staff
+            // such as address1(2,3)_addressid, entityimageid, businessprocessflowinstanceid, processid, stageid,
+            // azureactivedirectoryobjectid, conversationtrackingid, privilegeusergroupid, etc
+            // You got it. Most likely, this attributes will be ignored during Update, otherwise they should be
+            // used with care and be set manually
+            expectedKeys.Remove("guid");
+
+            EntityCollection sCollection = new EntityCollection();
+            sCollection.Entities.Add(new Entity("activityparty", Guid.Parse("{37825B8C-200B-4653-A270-927540B44435}")));
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}"),
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}")),
+                ["datetime"] = new DateTime?(new DateTime(1985, 8, 8)),
+                ["bool"] = new bool?(false),
+                ["int"] = new int?(1),
+                ["long"] = new long?(100000L),
+                ["double"] = new double?(200.00),
+                ["decimal"] = new decimal?(300.00m),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(0),
+                ["entityreference"] = new EntityReference("team", Guid.Parse("{10AA9454-85C9-45CA-91E2-79DDD9B12D21}")),
+                ["money"] = new Money(1000m),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = sCollection,
+                ["inotexistintaget1"] = 1,
+                ["inotexistintaget2"] = "hello",
+                ["inotexistintaget3"] = new OptionSetValue(1)
+            };
+
+            // Act
+            var changes = target.Changes(source);
+
+            // Assert
+            Assert.AreEqual(target.Id, changes.Id);
+            Assert.AreEqual(target.LogicalName, changes.LogicalName);
+            Assert.AreEqual(expectedKeys.Count, changes.Attributes.Count);
+
+            Assert.IsTrue(expectedKeys.SequenceEqual(changes.Attributes.Keys));
         }
     }
 }
