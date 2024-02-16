@@ -174,7 +174,11 @@ namespace Microsoft.Xrm.Sdk
             return target.Changes(source, new EntityReflectionDeconstructor<TSource>());
         }
 
-        // TODO: should we check if ID and LogicalName are equal?
+        // We have 2 cases for that logic:
+        // 1. We want to compare Target with PreImage and remove unchanged fields in a plugin
+        // 2. We want to compare Entity with DTO and remove unchanged fields in integration scenario
+        // In second scenario we also want to ad changes from source if they are. 
+
         public static TTarget Changes<TTarget, TSource>(this TTarget target, TSource source, IDeconstructor<TSource> deconstructor) where TTarget : Entity, new()
         {
             CheckParam.CheckForNull(source, nameof(source));
@@ -189,15 +193,52 @@ namespace Microsoft.Xrm.Sdk
             foreach (var (key, sValue) in deconstructor.GetAttributeValues(source))
             {
                 bool keyExists = target.Attributes.TryGetValue(key, out object tValue);
+                if (!keyExists)
+                    continue;
+
                 bool valuesAreNotEqual = ShouldTrackChange(sValue, tValue);
 
-                if (keyExists && valuesAreNotEqual)
+                if (valuesAreNotEqual)
                 {
                     changes[key] = sValue;
                 }
             }
 
             return changes;
+        }
+
+        public static void RemoveUnchanged<TTarget, TSource>(this TTarget target, TSource source, IDeconstructor<TSource> deconstructor) where TTarget : Entity, new()
+        {
+            CheckParam.CheckForNull(source, nameof(source));
+            CheckParam.CheckForNull(deconstructor, nameof(deconstructor));
+
+            foreach (var (key, sValue) in deconstructor.GetAttributeValues(source))
+            {
+                bool keyExists = target.Attributes.TryGetValue(key, out object tValue);
+                bool valuesAreNotEqual = ShouldTrackChange(sValue, tValue);
+
+                if (keyExists && !valuesAreNotEqual)
+                {
+                    target.Attributes.Remove(key);
+                }
+            }
+        }
+
+        public static void SyncChanges<TTarget, TSource>(this TTarget target, TSource source, IDeconstructor<TSource> deconstructor) where TTarget : Entity, new()
+        {
+            CheckParam.CheckForNull(source, nameof(source));
+            CheckParam.CheckForNull(deconstructor, nameof(deconstructor));
+
+            foreach (var (key, sValue) in deconstructor.GetAttributeValues(source))
+            {
+                bool keyExists = target.Attributes.TryGetValue(key, out object tValue);
+                bool valuesAreNotEqual = ShouldTrackChange(sValue, tValue);
+
+                if (keyExists && !valuesAreNotEqual)
+                {
+                    target[key] = sValue;
+                }
+            }
         }
 
         // TODO: time to update to support OptionSetValueCollection attributes?
