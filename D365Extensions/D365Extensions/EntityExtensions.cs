@@ -159,94 +159,29 @@ namespace Microsoft.Xrm.Sdk
             return sb.ToString();
         }
 
-        public static Entity Changes(this Entity target, Entity source)
-        {
-            return target.Changes<Entity>(source);
-        }
-
-        public static T Changes<T>(this T target, T source) where T : Entity, new()
-        {
-            return target.Changes(source, new EntityDeconstructor<T>());
-        }
-
-        public static TTarget Changes<TTarget, TSource>(this TTarget target, TSource source) where TTarget : Entity, new()
-        {
-            return target.Changes(source, new EntityReflectionDeconstructor<TSource>());
-        }
-
-        // We have 2 cases for that logic:
-        // 1. We want to compare Target with PreImage and remove unchanged fields in a plugin
-        // 2. We want to compare Entity with DTO and remove unchanged fields in integration scenario
-        // In second scenario we also want to ad changes from source if they are. 
-
-        public static TTarget Changes<TTarget, TSource>(this TTarget target, TSource source, IDeconstructor<TSource> deconstructor) where TTarget : Entity, new()
+        /// <summary>
+        /// Remove attributes form target Entity if they have the same value in source Entity
+        /// 
+        /// Note that EntityCollection attributes are compared only by Entity Id's
+        /// </summary>
+        /// <param name="source">Entity to compare attributes with</param>
+        public static void RemoveUnchanged(this Entity target, Entity source)
         {
             CheckParam.CheckForNull(source, nameof(source));
-            CheckParam.CheckForNull(deconstructor, nameof(deconstructor));
 
-            var changes = new TTarget()
+            foreach (var key in target.Attributes.Keys.ToArray())
             {
-                LogicalName = target.LogicalName,
-                Id = target.Id
-            };
-
-            foreach (var (key, sValue) in deconstructor.GetAttributeValues(source))
-            {
-                bool keyExists = target.Attributes.TryGetValue(key, out object tValue);
-                if (!keyExists)
-                    continue;
-
-                bool valuesAreNotEqual = ShouldTrackChange(sValue, tValue);
-
-                if (valuesAreNotEqual)
-                {
-                    changes[key] = sValue;
-                }
-            }
-
-            return changes;
-        }
-
-        public static void RemoveUnchanged<TTarget, TSource>(this TTarget target, TSource source, IDeconstructor<TSource> deconstructor) where TTarget : Entity, new()
-        {
-            CheckParam.CheckForNull(source, nameof(source));
-            CheckParam.CheckForNull(deconstructor, nameof(deconstructor));
-
-            foreach (var (key, sValue) in deconstructor.GetAttributeValues(source))
-            {
-                bool keyExists = target.Attributes.TryGetValue(key, out object tValue);
-                bool valuesAreNotEqual = ShouldTrackChange(sValue, tValue);
-
-                if (keyExists && !valuesAreNotEqual)
+                if (AreEqual(target[key], source.GetAttributeValue<object>(key)))
                 {
                     target.Attributes.Remove(key);
                 }
             }
         }
 
-        public static void SyncChanges<TTarget, TSource>(this TTarget target, TSource source, IDeconstructor<TSource> deconstructor) where TTarget : Entity, new()
-        {
-            CheckParam.CheckForNull(source, nameof(source));
-            CheckParam.CheckForNull(deconstructor, nameof(deconstructor));
-
-            foreach (var (key, sValue) in deconstructor.GetAttributeValues(source))
-            {
-                bool keyExists = target.Attributes.TryGetValue(key, out object tValue);
-                bool valuesAreNotEqual = ShouldTrackChange(sValue, tValue);
-
-                if (keyExists && !valuesAreNotEqual)
-                {
-                    target[key] = sValue;
-                }
-            }
-        }
-
-        // TODO: time to update to support OptionSetValueCollection attributes?
-        // TODO: tests
-        internal static bool ShouldTrackChange(object sValue, object tValue)
+        internal static bool AreEqual(object sValue, object tValue)
         {
             if (tValue == null && sValue == null)
-                return false;
+                return true;
 
             var obj = sValue ?? tValue;
 
@@ -257,50 +192,31 @@ namespace Microsoft.Xrm.Sdk
                 // azureactivedirectoryobjectid, conversationtrackingid, privilegeusergroupid, etc
                 // You got it. Most likely, this attributes will be ignored during Update, otherwise they should be
                 // used with care and be set manually
-                case Guid _:
-                    return false;
+                //case Guid _:
+                //    return true;
 
+                // BigInt (long) attributes are internal only according to documentation
                 // We don't want to break concurrency behavior with RowVersion attribute, or EntityImage_Timestamp or
-                // other internal stuff. BigInt (long) attributes are internal only according to documentation
-                case long _:
-                    return false;
+                // other internal stuff. 
+                //case long _:
+                //    return true;
 
-                // EntityImage attributes are byte arrays (byte[]) while annotation bodies are strings
-                // technically we should use EntityImage_Timestamp attribute to check if there are changes
-                // but it was ignored in previous step
+                // EntityImage attributes are byte arrays (byte[]) while Annotation bodies are strings
+                // Technically we should use EntityImage_Timestamp (BigInt/long) attribute to check if there are changes
                 // Note that v9.1+ file & image attributes can't be compared this way
                 case byte[] _:
-                    return !ByteArraysAreEqual((byte[])tValue, (byte[])sValue);
+                    return ByteArraysAreEqual((byte[])tValue, (byte[])sValue);
 
+                // EntityCollection attributes are almost always PartyList's (with rare exceptions such as CalendarRules)
+                // ActivityParty entities are mostly immutable, its attributes can't be changed with UI, the only thing
+                // that can be changed is a list of parties itself
                 case EntityCollection _:
-                    return !CollectionsAreEqual((EntityCollection)tValue, (EntityCollection)sValue);
+                    return CollectionsAreEqual((EntityCollection)tValue, (EntityCollection)sValue);
 
                 default:
-                    return !(tValue?.Equals(sValue) == true);
+                    //return tValue?.Equals(sValue) == true;
+                    return Equals(tValue, sValue);
             }
-        }
-
-        // EntityCollection attributes are almost always PartyList's (with rare exceptions such as CalendarRules)
-        // ActivityParty entities are mostly immutable, its attributes can't be changed with UI, the only thing
-        // that can be changed is a list of parties itself
-        // TODO: empty collection instead of null
-        private static bool CollectionsAreEqual(EntityCollection tValue, EntityCollection sValue)
-        {
-            if (tValue == null && sValue == null)
-                return true;
-
-            //TODO: should empty collections be eq to null?
-            if (tValue == null ^ sValue == null)
-                return false;
-
-            if (tValue.Entities.Count != sValue.Entities.Count)
-                return false;
-
-            // we expect short lists, so sorting shouldn't be too expensive
-            var tIds = tValue.Entities.Select(e => e.Id).OrderBy(id => id);
-            var sIds = tValue.Entities.Select(e => e.Id).OrderBy(id => id);
-
-            return tIds.SequenceEqual(sIds);
         }
 
         private static bool ByteArraysAreEqual(byte[] b1, byte[] b2)
@@ -315,6 +231,25 @@ namespace Microsoft.Xrm.Sdk
                 return false;
 
             return b1.SequenceEqual(b2);
+        }
+
+        private static bool CollectionsAreEqual(EntityCollection tValue, EntityCollection sValue)
+        {
+            if (tValue == null && sValue == null)
+                return true;
+
+            //TODO: should empty collections be eq to null?
+            if (tValue == null ^ sValue == null)
+                return false;
+
+            if (tValue.Entities.Count != sValue.Entities.Count)
+                return false;
+
+            // we expect short lists, so sorting shouldn't be too expensive
+            var tIds = tValue.Entities.Select(e => e.Id).OrderBy(id => id);
+            var sIds = sValue.Entities.Select(e => e.Id).OrderBy(id => id);
+
+            return tIds.SequenceEqual(sIds);
         }
     }
 }
