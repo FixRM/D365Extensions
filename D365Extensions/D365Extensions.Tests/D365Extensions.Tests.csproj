@@ -23,10 +23,10 @@
 		<PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
 		<PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
 		<PackageReference Include="FakeXrmEasy.2016" Version="1.58.1" />
-		<PackageReference Include="PolySharp" Version="1.13.2">
+		<!--<PackageReference Include="PolySharp" Version="1.14.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-		</PackageReference>
+		</PackageReference>-->
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="PresentationFramework" />

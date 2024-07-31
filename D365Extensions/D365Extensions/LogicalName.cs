@@ -1,5 +1,4 @@
-﻿using D365Extensions;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using System;
 using System.Collections.Concurrent;
@@ -15,8 +14,6 @@ namespace D365Extensions
     /// </summary>
     internal static class LogicalName
     {
-        static ConcurrentDictionary<MemberInfo, string> memberChache = new ConcurrentDictionary<MemberInfo, string>();
-
         internal static string[] GetNames<T>(params Expression<Func<T, object>>[] expressions)
         {
             var names = new string[expressions.Length];
@@ -36,7 +33,7 @@ namespace D365Extensions
             return GetName(expression.Body);
         }
 
-        static string GetName(Expression expression)
+        internal static string GetName(Expression expression)
         {
             // Property, field of method returning value type
             if (expression is UnaryExpression unaryExpression)
@@ -49,19 +46,26 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpession.Member;
 
-                if (!memberChache.TryGetValue(member, out string logicalName))
-                {
-                    logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>()?.LogicalName
-                        // fallback if attribute not provided
-                        ?? member.Name.ToLowerInvariant();
-
-                    memberChache.TryAdd(member, logicalName);
-                }
-
-                return logicalName;
+                return GetName(member);
             }
 
             throw CheckParam.InvalidExpression(nameof(expression));
+        }
+
+        static ConcurrentDictionary<MemberInfo, string> memberChache = new ConcurrentDictionary<MemberInfo, string>();
+
+        internal static string GetName(MemberInfo member)
+        {
+            if (!memberChache.TryGetValue(member, out string logicalName))
+            {
+                logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>()?.LogicalName
+                    // fallback if attribute not provided
+                    ?? member.Name.ToLowerInvariant();
+
+                memberChache.TryAdd(member, logicalName);
+            }
+
+            return logicalName;
         }
 
         static ConcurrentDictionary<Type, string> typeChache = new ConcurrentDictionary<Type, string>();
@@ -69,7 +73,7 @@ namespace D365Extensions
         internal static string GetName<T>() where T : Entity
         {
             var type = typeof(T);
-                        
+
             if (!typeChache.TryGetValue(type, out string logicalName))
             {
                 logicalName = type.GetCustomAttribute<EntityLogicalNameAttribute>()?.LogicalName

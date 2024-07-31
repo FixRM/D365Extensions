@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Linq;
 
 namespace D365Extensions.Tests
 {
@@ -402,15 +403,380 @@ namespace D365Extensions.Tests
             // Setup
             Entity entity = new Entity("account");
 
-            string expectedTraceString = 
-$@"Entity {{ LogicalName = ""account"", Id = ""{{00000000-0000-0000-0000-000000000000}}"" }}
-Attributes: AttributeCollection {{ Count = 0 }}";
+            string expectedTraceString =
+                $$"""
+                Entity { LogicalName = "account", Id = "{00000000-0000-0000-0000-000000000000}" }
+                Attributes: AttributeCollection { Count = 0 }
+                """;
 
             // Act
             string actualTraceString = entity.ToTraceString();
 
             // Assert
             Assert.AreEqual(expectedTraceString, actualTraceString);
+        }
+
+        [TestMethod()]
+        public void ByteArraysAreEqualTest()
+        {
+            //Setup
+            byte[] b1 = null;
+            byte[] b2 = null;
+
+            //Act + Assert
+            Assert.IsTrue(EntityExtensions.AreEqual(b1, b2));
+
+            b1 = new byte[] { 1, 2, 3 };
+            Assert.IsFalse(EntityExtensions.AreEqual(b1, b2));
+
+            b2 = new byte[] { 1, 2, 3 };
+            Assert.IsTrue(EntityExtensions.AreEqual(b1, b2));
+
+            b2 = new byte[] { 1, 2, 4 };
+            Assert.IsFalse(EntityExtensions.AreEqual(b1, b2));
+
+            b1 = null;
+            Assert.IsFalse(EntityExtensions.AreEqual(b1, b2));
+        }
+
+        [TestMethod()]
+        public void CollectionsAreEqualTest()
+        {
+            //Setup
+            EntityCollection c1 = null;
+            EntityCollection c2 = null;
+
+            //Act + Assert
+            Assert.IsTrue(EntityExtensions.AreEqual(c1, c2));
+
+            c1 = new EntityCollection();
+            Assert.IsFalse(EntityExtensions.AreEqual(c1, c2));
+
+            c2 = new EntityCollection();
+            Assert.IsTrue(EntityExtensions.AreEqual(c1, c2));
+
+            c1.Entities.Add(new Entity() { Id = Guid.Parse("{489B9C29-73AD-4145-AEA0-E6CF03CB82DF}") });
+            Assert.IsFalse(EntityExtensions.AreEqual(c1, c2));
+
+            c2.Entities.Add(new Entity() { Id = Guid.Parse("{489B9C29-73AD-4145-AEA0-E6CF03CB82DF}") });
+            Assert.IsTrue(EntityExtensions.AreEqual(c1, c2));
+
+            c2.Entities.Clear();
+            c2.Entities.Add(new Entity() { Id = Guid.Parse("{489B9C29-73AD-4145-AEA0-E6CF03CB82DA}") });
+            Assert.IsFalse(EntityExtensions.AreEqual(c1, c2));
+
+            c1.Entities.Add(new Entity() { Id = Guid.Parse("{77E2CB34-A621-4CA9-844D-F484A0458D2F}") });
+            Assert.IsFalse(EntityExtensions.AreEqual(c1, c2));
+
+            c2.Entities.Clear();
+            c2.Entities.Add(new Entity() { Id = Guid.Parse("{77E2CB34-A621-4CA9-844D-F484A0458D2F}") });
+            c2.Entities.Add(new Entity() { Id = Guid.Parse("{489B9C29-73AD-4145-AEA0-E6CF03CB82DF}") });
+            Assert.IsTrue(EntityExtensions.AreEqual(c1, c2));
+
+            c1 = null;
+            Assert.IsFalse(EntityExtensions.AreEqual(c1, c2));
+        }
+
+        [TestMethod()]
+        public void IntsAreEqualTest()
+        {
+            //Setup
+            int? i1 = null;
+            int? i2 = null;
+
+            //Act + Assert
+            Assert.IsTrue(EntityExtensions.AreEqual(i1, i2));
+
+            i1 = 1;
+            Assert.IsFalse(EntityExtensions.AreEqual(i1, i2));
+
+            i2 = 1;
+            Assert.IsTrue(EntityExtensions.AreEqual(i1, i2));
+
+            i2 = 2;
+            Assert.IsFalse(EntityExtensions.AreEqual(i1, i2));
+
+            i1 = null;
+            Assert.IsFalse(EntityExtensions.AreEqual(i1, i2));
+        }
+
+        [TestMethod()]
+        public void ShouldRemoveAllAttributesTest()
+        {
+            // Setup
+            const string partyId = "{37825B8C-200B-4653-A270-927540B44435}";
+            Guid guid = Guid.Parse("{FB105FC9-5050-41E2-96C4-E770E821E5FF}");
+            const string referenceId = "{10AA9454-85C9-45CA-91E2-79DDD9B12D21}";
+            DateTime dateTime = new DateTime(1985, 8, 8);
+            const bool @bool = false;
+            const int @int = 1;
+            const long @long = 100000L;
+            const double @double = 200.00;
+            const decimal @decimal = 300.00m;
+            const decimal money = 1000m;
+            const int optionsetvalue = 0;
+
+            EntityCollection tCollection = new EntityCollection();
+            tCollection.Entities.Add(new Entity("activityparty", Guid.Parse(partyId)));
+
+            var target = new Entity()
+            {
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(guid),
+                ["datetime"] = new DateTime?(dateTime),
+                ["bool"] = new bool?(@bool),
+                ["int"] = new int?(@int),
+                ["long"] = new long?(@long),
+                ["double"] = new double?(@double),
+                ["decimal"] = new decimal?(@decimal),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(optionsetvalue),
+                ["entityreference"] = new EntityReference("team", Guid.Parse(referenceId)),
+                ["money"] = new Money(money),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = tCollection,
+            };
+
+            EntityCollection sCollection = new EntityCollection();
+            sCollection.Entities.Add(new Entity("activityparty", Guid.Parse(partyId)));
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = guid,
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(guid),
+                ["datetime"] = new DateTime?(dateTime),
+                ["bool"] = new bool?(@bool),
+                ["int"] = new int?(@int),
+                ["long"] = new long?(@long),
+                ["double"] = new double?(@double),
+                ["decimal"] = new decimal?(@decimal),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(optionsetvalue),
+                ["entityreference"] = new EntityReference("team", Guid.Parse(referenceId)),
+                ["money"] = new Money(money),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = sCollection,
+                ["inotexistintaget1"] = 123,
+                ["inotexistintaget2"] = "hello",
+                ["inotexistintaget3"] = new OptionSetValue(456)
+            };
+
+            // Act
+            target.RemoveUnchanged(source);
+
+            // Assert           
+            Assert.AreEqual(0, target.Attributes.Count);
+        }
+
+        /// <summary>
+        /// Just in case. Normally we shouldn't have nulls in source entity as
+        /// system will not return attributes without values
+        /// </summary>
+        [TestMethod()]
+        public void ShouldRemoveNothingComparingToNullsTest()
+        {
+            // Setup
+            EntityCollection tCollection = new EntityCollection();
+            tCollection.Entities.Add(new Entity("activityparty", Guid.NewGuid()));
+
+            var target = new Entity()
+            {
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(Guid.NewGuid()),
+                ["datetime"] = new DateTime?(new DateTime(1985, 8, 8)),
+                ["bool"] = new bool?(false),
+                ["int"] = new int?(1),
+                ["long"] = new long?(100000L),
+                ["double"] = new double?(200.00),
+                ["decimal"] = new decimal?(300.00m),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(0),
+                ["entityreference"] = new EntityReference("team", Guid.NewGuid()),
+                ["money"] = new Money(1000m),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = tCollection,
+            };
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.NewGuid(),
+                //Native types
+                ["string"] = null,
+                ["guid"] = null,
+                ["datetime"] = null,
+                ["bool"] = null,
+                ["int"] = null,
+                ["long"] = null,
+                ["double"] = null,
+                ["decimal"] = null,
+                //Dynamics types
+                ["optionsetvalue"] = null,
+                ["entityreference"] = null,
+                ["money"] = null,
+                ["entityimage"] = null,
+                ["parylist"] = null,
+                ["inotexistintaget1"] = null,
+                ["inotexistintaget2"] = null,
+                ["inotexistintaget3"] = null
+            };
+
+            var expectedAttributeCount = target.Attributes.Count;
+
+            // Act
+            target.RemoveUnchanged(source);
+
+            // Assert           
+            Assert.AreEqual(expectedAttributeCount, target.Attributes.Count);
+        }
+
+        [TestMethod()]
+        public void ShouldRemoveNothingTest()
+        {
+            // Setup
+            EntityCollection tCollection = new EntityCollection();
+            tCollection.Entities.Add(new Entity("activityparty", Guid.NewGuid()));
+
+            var target = new Entity()
+            {
+                //Native types
+                ["string"] = "Artem",
+                ["guid"] = new Guid?(Guid.NewGuid()),
+                ["datetime"] = new DateTime?(new DateTime(1985, 8, 8)),
+                ["bool"] = new bool?(false),
+                ["int"] = new int?(1),
+                ["long"] = new long?(1L),
+                ["double"] = new double?(200.00),
+                ["decimal"] = new decimal?(300.00m),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(0),
+                ["entityreference"] = new EntityReference("team", Guid.NewGuid()),
+                ["money"] = new Money(1000m),
+                ["entityimage"] = new byte[] { 1, 2, 3 },
+                ["parylist"] = tCollection,
+                ["inotexistinsource1"] = 1,
+                ["inotexistinsource2"] = 2,
+            };
+
+            EntityCollection sCollection = new EntityCollection();
+            sCollection.Entities.Add(new Entity("activityparty", Guid.NewGuid()));
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.NewGuid(),
+                //Native types
+                ["string"] = "Artem Grunin",
+                ["guid"] = new Guid?(Guid.NewGuid()),
+                ["datetime"] = DateTime.UtcNow,
+                ["bool"] = new bool?(true),
+                ["int"] = new int?(2),
+                ["long"] = new long?(2L),
+                ["double"] = new double?(300.00),
+                ["decimal"] = new decimal?(400.00m),
+                //Dynamics types
+                ["optionsetvalue"] = new OptionSetValue(1),
+                ["entityreference"] = new EntityReference("systemuser", Guid.NewGuid()),
+                ["money"] = new Money(2000m),
+                ["entityimage"] = new byte[] { 2, 3 },
+                ["parylist"] = sCollection,
+                ["inotexistintaget1"] = 1,
+                ["inotexistintaget2"] = 2,
+            };
+
+            var expectedAttributeCount = target.Attributes.Count;
+
+            // Act
+            target.RemoveUnchanged(source);
+
+            // Assert           
+            Assert.AreEqual(expectedAttributeCount, target.Attributes.Count);
+        }
+
+        /// <summary>
+        /// Just in case. Normally we shouldn't have nulls in source entity as
+        /// system will not return attributes without values
+        /// </summary>
+        [TestMethod]
+        public void ShouldRemoveNullsComparingToOtherNullsTest()
+        {
+            // Setup
+            var target = new Entity()
+            {
+                //Native types
+                ["string"] = null,
+                ["guid"] = null,
+                ["datetime"] = null,
+                ["bool"] = null,
+                ["int"] = null,
+                ["long"] = null,
+                ["double"] = null,
+                ["decimal"] = null,
+                //Dynamics types
+                ["optionsetvalue"] = null,
+                ["entityreference"] = null,
+                ["money"] = null,
+                ["entityimage"] = null,
+                ["parylist"] = null,
+            };
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.NewGuid(),
+                //Native types
+                ["string"] = null,
+                ["guid"] = null,
+                ["datetime"] = null,
+                ["bool"] = null,
+                ["int"] = null,
+                ["long"] = null,
+                ["double"] = null,
+                ["decimal"] = null,
+                //Dynamics types
+                ["optionsetvalue"] = null,
+                ["entityreference"] = null,
+                ["money"] = null,
+                ["entityimage"] = null,
+                ["parylist"] = null,
+                ["inotexistintaget1"] = null,
+                ["inotexistintaget2"] = null,
+                ["inotexistintaget3"] = null
+            };
+
+            // Act
+            target.RemoveUnchanged(source);
+
+            // Assert           
+            Assert.AreEqual(0, target.Attributes.Count);
+        }
+
+        [TestMethod]
+        public void ShouldRemoveNullsIfAttributeNotExistInSourceTest()
+        {
+            // Setup
+            var target = new Entity()
+            {
+                //Native types
+                ["whatever"] = null,
+            };
+
+            var source = new Entity()
+            {
+                LogicalName = "account",
+                Id = Guid.NewGuid()
+            };
+
+            // Act
+            target.RemoveUnchanged(source);
+
+            // Assert           
+            Assert.AreEqual(0, target.Attributes.Count);
         }
     }
 }

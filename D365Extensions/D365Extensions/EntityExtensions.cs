@@ -32,7 +32,7 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(alias, nameof(alias));
 
-            String aliasedAttributeName = attributeLogicalName != null?  alias + "." + attributeLogicalName : alias;
+            String aliasedAttributeName = attributeLogicalName != null ? alias + "." + attributeLogicalName : alias;
             AliasedValue aliasedValue = entity.GetAttributeValue<AliasedValue>(aliasedAttributeName);
 
             if (aliasedValue != null)
@@ -143,7 +143,7 @@ namespace Microsoft.Xrm.Sdk
             {
                 reference.KeyAttributes = entity.KeyAttributes;
             }
-            
+
             return reference;
         }
 
@@ -151,12 +151,105 @@ namespace Microsoft.Xrm.Sdk
         /// Returns Entity string representation
         /// </summary>
         /// <returns></returns>
-        public static string ToTraceString(this Entity entity) 
+        public static string ToTraceString(this Entity entity)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendEntity(entity);
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Remove attributes form target Entity if they have the same value in source Entity
+        /// 
+        /// Note that EntityCollection attributes are compared only by Entity Id's
+        /// </summary>
+        /// <param name="source">Entity to compare attributes with</param>
+        public static void RemoveUnchanged(this Entity target, Entity source)
+        {
+            CheckParam.CheckForNull(source, nameof(source));
+
+            foreach (var key in target.Attributes.Keys.ToArray())
+            {
+                if (AreEqual(target[key], source.GetAttributeValue<object>(key)))
+                {
+                    target.Attributes.Remove(key);
+                }
+            }
+        }
+
+        internal static bool AreEqual(object sValue, object tValue)
+        {
+            if (tValue == null && sValue == null)
+                return true;
+
+            var obj = sValue ?? tValue;
+
+            switch (obj)
+            {
+                // Guid (not EntityReference) attributes are used for primary keys or different internal staff
+                // such as address1(2,3)_addressid, entityimageid, businessprocessflowinstanceid, processid, stageid,
+                // azureactivedirectoryobjectid, conversationtrackingid, privilegeusergroupid, etc
+                // You got it. Most likely, this attributes will be ignored during Update, otherwise they should be
+                // used with care and be set manually
+                //case Guid _:
+                //    return true;
+
+                // BigInt (long) attributes are internal only according to documentation
+                // We don't want to break concurrency behavior with RowVersion attribute, or EntityImage_Timestamp or
+                // other internal stuff. 
+                //case long _:
+                //    return true;
+
+                // EntityImage attributes are byte arrays (byte[]) while Annotation bodies are strings
+                // Technically we should use EntityImage_Timestamp (BigInt/long) attribute to check if there are changes
+                // Note that v9.1+ file & image attributes can't be compared this way
+                case byte[] _:
+                    return ByteArraysAreEqual((byte[])tValue, (byte[])sValue);
+
+                // EntityCollection attributes are almost always PartyList's (with rare exceptions such as CalendarRules)
+                // ActivityParty entities are mostly immutable, its attributes can't be changed with UI, the only thing
+                // that can be changed is a list of parties itself
+                case EntityCollection _:
+                    return CollectionsAreEqual((EntityCollection)tValue, (EntityCollection)sValue);
+
+                default:
+                    //return tValue?.Equals(sValue) == true;
+                    return Equals(tValue, sValue);
+            }
+        }
+
+        private static bool ByteArraysAreEqual(byte[] b1, byte[] b2)
+        {
+            if (b1 == null && b2 == null)
+                return true;
+
+            if (b1 == null ^ b2 == null)
+                return false;
+
+            if (b1.Length != b2.Length)
+                return false;
+
+            return b1.SequenceEqual(b2);
+        }
+
+        private static bool CollectionsAreEqual(EntityCollection tValue, EntityCollection sValue)
+        {
+            if (tValue == null && sValue == null)
+                return true;
+
+            //TODO: should empty collections be eq to null?
+            if (tValue == null ^ sValue == null)
+                return false;
+
+            if (tValue.Entities.Count != sValue.Entities.Count)
+                return false;
+
+            // we expect short lists, so sorting shouldn't be too expensive
+            var tIds = tValue.Entities.Select(e => e.Id).OrderBy(id => id);
+            var sIds = sValue.Entities.Select(e => e.Id).OrderBy(id => id);
+
+            return tIds.SequenceEqual(sIds);
         }
     }
 }
