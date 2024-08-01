@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using D365Extensions;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace D365Extensions
+namespace Microsoft.Xrm.Sdk
 {
     /// <summary>
     /// Set of extension methods for Microsoft.Xrm.Sdk.ITracingService base class.
