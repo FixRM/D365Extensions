@@ -107,5 +107,89 @@ namespace D365Extensions.Tests
             Assert.IsNull(requests);
             Assert.IsNull(request);
         }
+
+        [TestMethod()]
+        public void ExecuteShouldStopAfterFirstErrorTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+            var service = context.GetOrganizationService();
+
+            var requests = new List<OrganizationRequest>()
+            {
+                new OrganizationRequest() { RequestId = Guid.NewGuid() },
+                new OrganizationRequest() { RequestId = Guid.NewGuid() },
+                new OrganizationRequest() { RequestId = Guid.NewGuid(), RequestName = "IShouldFail" },
+                new OrganizationRequest() { RequestId = Guid.NewGuid() },
+                new OrganizationRequest() { RequestId = Guid.NewGuid() },
+                new OrganizationRequest() { RequestId = Guid.NewGuid() },
+                new OrganizationRequest() { RequestId = Guid.NewGuid() },
+            };
+
+            var settings = new ExecuteMultipleSettings()
+            {
+                ContinueOnError = false
+            };
+
+            context.AddExecutionMock<ExecuteMultipleRequest>((request) =>
+            {
+                var eMultipleRequest = request as ExecuteMultipleRequest;
+
+                var responce = new ExecuteMultipleResponse()
+                {
+                    ["Responses"] = new ExecuteMultipleResponseItemCollection()
+                };
+
+                for (var i = 0; i < eMultipleRequest.Requests.Count; i++)
+                {
+                    var eMultipleResponceItem = new ExecuteMultipleResponseItem
+                    {
+                        RequestIndex = i
+                    };
+
+                    var orgRequest = eMultipleRequest.Requests[i];
+
+                    if (orgRequest.RequestName != "IShouldFail")
+                    {
+                        eMultipleResponceItem.Response = new OrganizationResponse()
+                        {
+                            //to simplify request-responce mathing in a test
+                            ResponseName = orgRequest.RequestId.ToString()
+                        };
+                    }
+                    else
+                    {
+                        eMultipleResponceItem.Fault = new OrganizationServiceFault()
+                        {
+                            //to simplify request-responce mathing in a test
+                            Message = orgRequest.RequestId.ToString()
+                        };
+                        responce["IsFaulted"] = true;
+                    }
+
+                    responce.Responses.Add(eMultipleResponceItem);
+                }
+
+                return responce;
+            });
+
+            //Act
+            var result = service.Execute(requests, 2, settings).ToList();
+
+            //Assert
+            //We expect to stop after 2 batches
+            Assert.AreEqual(2, result.Count);
+
+            var firstBatch = result[0];
+            Assert.AreEqual(firstBatch.Responses.Count, 2);
+            Assert.AreEqual(firstBatch.Responses[0].Response.ResponseName, requests[0].RequestId.ToString());
+            Assert.AreEqual(firstBatch.Responses[1].Response.ResponseName, requests[1].RequestId.ToString());
+
+            var secondBatch = result[1];
+            Assert.AreEqual(secondBatch.Responses.Count, 2);
+            Assert.AreEqual(secondBatch.Responses[0].Fault.Message, requests[2].RequestId.ToString());
+            Assert.AreEqual(secondBatch.Responses[1].Response.ResponseName, requests[3].RequestId.ToString());
+
+        }
     }
 }

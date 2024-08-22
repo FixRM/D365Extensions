@@ -50,7 +50,7 @@ namespace Microsoft.Xrm.Sdk
             int batchSize = 100,
             ExecuteMultipleSettings settings = null)
         {
-            //TODO: throw if IOrganizationService is not OOB web service wrapper?
+            CheckParam.CheckForNull(requests, nameof(requests));
 
             settings = settings ?? new ExecuteMultipleSettings();
 
@@ -66,6 +66,11 @@ namespace Microsoft.Xrm.Sdk
                 response["Requests"] = collection;
 
                 yield return response;
+
+                if (!settings.ContinueOnError && response.IsFaulted)
+                {
+                    yield break;
+                }
             }
         }
     }
