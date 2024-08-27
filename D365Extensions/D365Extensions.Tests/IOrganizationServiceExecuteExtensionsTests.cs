@@ -1,4 +1,5 @@
-﻿using FakeItEasy;
+﻿#pragma warning disable CS0618 // Type or member is obsolete
+using FakeItEasy;
 using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -7,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace D365Extensions.Tests
 {
@@ -15,7 +15,7 @@ namespace D365Extensions.Tests
     public class IOrganizationServiceExecuteExtensionsTests
     {
         [TestMethod()]
-        public void ExecuteTest()
+        public void ExecuteMultipleRequests_Legacy_Test()
         {
             //Setup
             var context = new XrmFakedContext();
@@ -109,7 +109,7 @@ namespace D365Extensions.Tests
         }
 
         [TestMethod()]
-        public void ExecuteShouldStopAfterFirstErrorTest()
+        public void ExecuteMultipleRequest_Legacy_ShouldStopAfterFirstErrorTest()
         {
             //Setup
             var context = new XrmFakedContext();
@@ -190,6 +190,168 @@ namespace D365Extensions.Tests
             Assert.AreEqual(secondBatch.Responses[0].Fault.Message, requests[2].RequestId.ToString());
             Assert.AreEqual(secondBatch.Responses[1].Response.ResponseName, requests[3].RequestId.ToString());
 
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleRequestsShouldReturnAllResultsTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+            var service = context.GetOrganizationService();
+
+            var requests = new List<OrganizationRequest>()
+            {
+                FakeExecuteMultipleExecutor.GoodRequest,
+                FakeExecuteMultipleExecutor.GoodRequest,
+                FakeExecuteMultipleExecutor.FailRequest,
+                FakeExecuteMultipleExecutor.GoodRequest,
+                FakeExecuteMultipleExecutor.GoodRequest,
+            };
+
+            int expectedResultsCount = requests.Count;
+
+            var failedOne = requests.Where(r => r.RequestName != null).Single();
+            var failedIndex = requests.IndexOf(failedOne);
+
+            //5 response items: 1 have Fault set to a value
+            //https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/execute-multiple-requests
+            var settings = new ExecuteMultipleSettings()
+            {
+                ContinueOnError = true,
+                ReturnResponses = true,
+            };
+
+            int batchSize = 2;
+
+            int expectedEMultipleRequestsCount = (int)Math.Round(expectedResultsCount / (double)batchSize, MidpointRounding.AwayFromZero);
+
+            var expectedRequestsChunks = new List<List<OrganizationRequest>>();
+
+            for (int i = 0; i < expectedEMultipleRequestsCount; i++)
+            {
+                var expectedRequestsChunk = requests.Skip(i * batchSize).Take(batchSize).ToList();
+                expectedRequestsChunks.Add(expectedRequestsChunk);
+            }
+
+            //Act
+            var actualCallbacks = new List<ExecuteMultipleResponse>();
+
+            Action<OrganizationRequestCollection, ExecuteMultipleResponse> callback = (coll, resp) =>
+            {
+                actualCallbacks.Add(resp);
+            };
+
+
+            var fakeExecutor = new FakeExecuteMultipleExecutor();
+            context.AddFakeMessageExecutor<ExecuteMultipleRequest>(fakeExecutor);
+
+            var result = service.Execute(requests, batchSize, settings, callback).ToList();
+
+            //Assert
+            Assert.AreEqual(expectedResultsCount, result.Count);
+            Assert.AreEqual(expectedEMultipleRequestsCount, fakeExecutor.ActualRequests.Count);
+            Assert.AreEqual(expectedEMultipleRequestsCount, fakeExecutor.Responses.Count);
+            Assert.AreEqual(expectedEMultipleRequestsCount, actualCallbacks.Count);
+
+            for (int i = 0; i < expectedEMultipleRequestsCount; i++)
+            {
+                //setings are set correctly
+                ExecuteMultipleRequest actualEMultipleRequest = fakeExecutor.ActualRequests[i];
+                Assert.AreEqual(settings, actualEMultipleRequest.Settings);
+
+                //OrgRequests are chunked as expected
+                var expectedRequestsChunk = requests.Skip(i * batchSize).Take(batchSize).ToArray();
+                CollectionAssert.AreEqual(expectedRequestsChunk, actualEMultipleRequest.Requests);
+
+                //ExecMultiple requests and responses are associated correctly
+                //var responseRequests = fakeExecutor.Responses[i].GetRequests();
+                //Assert.AreEqual(actualEMultipleRequest.Requests, responseRequests);
+
+                //Callback works as expected
+                Assert.AreEqual(fakeExecutor.Responses[i], actualCallbacks[i]);
+            }
+
+            for (int i = 0; i < expectedResultsCount; i++)
+            {
+                //results are associated with correct request
+                Assert.AreEqual(requests[i], result[i].Request);
+                Assert.AreEqual(requests[i].RequestId, FakeExecuteMultipleExecutor.GetRequestId(result[i].ExecuteMultipleResponseItem));
+
+                if (i != failedIndex)
+                {
+                    Assert.IsNotNull(result[i].Response);
+                    Assert.IsNull(result[i].Fault);
+                }
+                else
+                {
+                    Assert.IsNull(result[i].Response);
+                    Assert.IsNotNull(result[i].Fault);
+                }
+            }
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleRequestsShouldStopAfterFirstErrorTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+            var service = context.GetOrganizationService();
+
+            var requests = new List<OrganizationRequest>()
+            {
+                FakeExecuteMultipleExecutor.GoodRequest,
+                FakeExecuteMultipleExecutor.GoodRequest,
+                FakeExecuteMultipleExecutor.FailRequest,
+                FakeExecuteMultipleExecutor.GoodRequest,
+                FakeExecuteMultipleExecutor.GoodRequest,
+            };
+
+            //3 response items: 1 have Fault set to a value
+            //https://learn.microsoft.com/en-us/power-apps/developer/data-platform/org-service/execute-multiple-requests
+            var settings = new ExecuteMultipleSettings()
+            {
+                ContinueOnError = false,
+                ReturnResponses = true,
+            };
+
+            int batchSize = 2;
+
+            //Act
+            var actualEMultipleResponses = new List<ExecuteMultipleResponse>();
+
+            var callback = new Action<OrganizationRequestCollection, ExecuteMultipleResponse>((coll, resp) =>
+            {
+                actualEMultipleResponses.Add(resp);
+            });
+
+
+            var fakeExecutor = new FakeExecuteMultipleExecutor();
+            context.AddFakeMessageExecutor<ExecuteMultipleRequest>(fakeExecutor);
+
+            var result = service.Execute(requests, batchSize, settings, callback).ToList();
+
+            //Assert
+            Assert.AreEqual(3, result.Count);
+            Assert.AreEqual(2, fakeExecutor.ActualRequests.Count);
+
+            //We have 3 results, one have Fault
+            ExecuteMultipleOperationResponse result0 = result[0];
+            Assert.IsNotNull(result0.Response);
+            Assert.IsNull(result0.Fault);
+            Assert.AreEqual(requests[0], result0.Request);
+
+            ExecuteMultipleOperationResponse result1 = result[1];
+            Assert.IsNotNull(result1.Response);
+            Assert.IsNull(result1.Fault);
+            Assert.AreEqual(requests[1], result1.Request);
+
+            ExecuteMultipleOperationResponse result2 = result[2];
+            Assert.IsNull(result2.Response);
+            Assert.IsNotNull(result2.Fault);
+            Assert.AreEqual(requests[2], result2.Request);
+
+            //Callback works as expected
+            CollectionAssert.AreEqual(fakeExecutor.Responses, actualEMultipleResponses);
         }
     }
 }
