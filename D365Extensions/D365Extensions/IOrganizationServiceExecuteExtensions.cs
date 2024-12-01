@@ -1,7 +1,10 @@
 ﻿using D365Extensions;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -105,7 +108,7 @@ namespace Microsoft.Xrm.Sdk
                 }) as ExecuteMultipleResponse;
 
                 callback?.Invoke(collection, eMultipleResponse);
-                
+
                 for (int i = 0; i < eMultipleResponse.Responses.Count; i++)
                 {
                     ExecuteMultipleResponseItem item = eMultipleResponse.Responses[i];
@@ -119,6 +122,94 @@ namespace Microsoft.Xrm.Sdk
                 if (!settings.ContinueOnError && eMultipleResponse.IsFaulted)
                     yield break;
             }
+        }
+
+        /// <summary>
+        /// Runs query and executes action for each retrieved Entity using ExecuteMultipleRequest
+        /// 
+        /// NEVER use this extension as well as ExecuteMultipleRequest itself in Plugin code
+        /// https://learn.microsoft.com/en-us/power-apps/developer/data-platform/best-practices/business-logic/avoid-batch-requests-plugin
+        /// </summary>
+        /// <param name="query">Query to retrieve entities</param>
+        /// <param name="toRequest">Delegate that converts Entity to OrganizationRequest that should be executed. Return null if no action is required</param>
+        /// <param name="settings">Settings to be passed with ExecuteMultipleRequest</param>
+        /// <param name="batchSize">The number of requests to be sent in each ExecuteMultipleRequest</param>
+        /// <param name="onResponse">Optional function to be called for each ExecuteMultipleOperationResponse</param>
+        /// <param name="onProgress">Optional function to report progress. Progress is calculated as processed * 100.0 / queried items</param>
+        /// <param name="cancellationToken">Optional cancellation token that can be used to cancel bulk processing</param>
+        public static void Execute(this IOrganizationService service,
+            QueryBase query,
+            Func<Entity, OrganizationRequest> toRequest,
+            ExecuteMultipleSettings settings = null,
+            int batchSize = 100,
+            Action<ExecuteMultipleOperationResponse> onResponse = null,
+            Action<ExecuteMultipleProgress> onProgress = null,
+            CancellationToken cancellationToken = default)
+        {
+            CheckParam.CheckForNull(query, nameof(query));
+            CheckParam.CheckForNull(toRequest, nameof(toRequest));
+
+            uint queried = 0;
+            uint processed = 0;
+            uint skipped = 0;
+            uint errors = 0;
+
+            void reportProgress() => onProgress?.Invoke(new ExecuteMultipleProgress(queried, processed, skipped, errors));
+
+            bool notSkipped(OrganizationRequest req)
+            {
+                if (req == null) skipped++;
+
+                return req != null;
+            }
+
+            Action<EntityCollection> queryProgress = null;
+            Action<OrganizationRequestCollection, ExecuteMultipleResponse> batchProgress = null;
+
+            if (onProgress != null)
+            {
+                queryProgress = (ec) =>
+                {
+                    queried += (uint)ec.Entities.Count;
+                    reportProgress();
+                };
+
+                batchProgress = (coll, emr) =>
+                {
+                    if (emr.IsFaulted)
+                    {
+                        if (settings.ReturnResponses == false)
+                        {
+                            errors += (uint)emr.Responses.Count;
+                        }
+                        else // less optimal fallback
+                        {
+                            errors += (uint)emr.GetFaultedResponsesInternal().Count();
+                        }
+                    }
+
+                    processed += (uint)coll.Count;
+                    reportProgress();
+                };
+            }
+
+            var entities = service.RetrieveMultiple(query, queryProgress);
+
+            var requests = entities.Select(toRequest).Where(notSkipped);
+
+            var eMultipleOperationResponses = service.Execute(requests, batchSize, settings, batchProgress);
+
+            foreach (var eMultipleOperationResponse in eMultipleOperationResponses)
+            {
+                onResponse?.Invoke(eMultipleOperationResponse);
+
+                // It is not async method so we, probably, should silently exit instead of throwing the error
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+            }
+
+            //to update if last requests where skipped
+            reportProgress();
         }
     }
 }

@@ -4,6 +4,7 @@ using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -324,7 +325,6 @@ namespace D365Extensions.Tests
                 actualEMultipleResponses.Add(resp);
             });
 
-
             var fakeExecutor = new FakeExecuteMultipleExecutor();
             context.AddFakeMessageExecutor<ExecuteMultipleRequest>(fakeExecutor);
 
@@ -352,6 +352,444 @@ namespace D365Extensions.Tests
 
             //Callback works as expected
             CollectionAssert.AreEqual(fakeExecutor.Responses, actualEMultipleResponses);
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleWithQueryTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+            context.MaxRetrieveCount = 10;
+
+            var entities = new Entity[context.MaxRetrieveCount * 2];
+            for (int i = 0; i < entities.Length; i++)
+            {
+                entities[i] = new Entity()
+                {
+                    Id = Guid.NewGuid(),
+                    LogicalName = "contact"
+                };
+            }
+
+            context.Initialize(entities);
+
+            var query = new QueryExpression("contact");
+
+            Func<Entity, OrganizationRequest> toReq = (entity) => new UpdateRequest()
+            {
+                Target = new Entity(entity.LogicalName, entity.Id)
+                {
+                    ["name"] = "Artem Grunin"
+                }
+            };
+
+            var settings = new ExecuteMultipleSettings()
+            {
+                ContinueOnError = true,
+                ReturnResponses = true,
+            };
+
+            int batchSize = context.MaxRetrieveCount;
+
+            int actualResponceCount = 0;
+
+            Action<ExecuteMultipleOperationResponse> onResponse = (r) => actualResponceCount++;
+
+            var progressReports = new List<ExecuteMultipleProgress>();
+
+            Action<ExecuteMultipleProgress> progress = progressReports.Add;
+
+            IOrganizationService service = context.GetOrganizationService();
+
+            //Act
+            service.Execute(query, toReq, settings, batchSize, onResponse, progress);
+
+            //Assert
+            var assertQuery = new QueryExpression("contact")
+            {
+                Criteria = new FilterExpression()
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("name", ConditionOperator.NotNull)
+                    }
+                }
+            };
+
+            var updatedRecords = service.RetrieveMultiple(assertQuery, null).ToArray();
+
+            Assert.AreEqual(entities.Length, updatedRecords.Length);
+            Assert.AreEqual(entities.Length, actualResponceCount);
+
+            //2 page loads, 2 batches and 1 final
+            Assert.AreEqual(5, progressReports.Count);
+
+            //10 queried 0 processed
+            Assert.AreEqual<uint>(10, progressReports[0].Queried);
+            Assert.AreEqual<uint>(0, progressReports[0].Processed);
+            Assert.AreEqual<uint>(0, progressReports[0].Errors);
+            Assert.AreEqual<uint>(0, progressReports[0].Skipped);
+
+            Assert.AreEqual<float>(0.0F, progressReports[0].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[0].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[0].SkippedRate);
+
+            //10 loaded 10 processed
+            Assert.AreEqual<uint>(10, progressReports[1].Queried);
+            Assert.AreEqual<uint>(10, progressReports[1].Processed);
+            Assert.AreEqual<uint>(0, progressReports[1].Errors);
+            Assert.AreEqual<uint>(0, progressReports[1].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[1].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[1].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[1].SkippedRate);
+
+            //20 loaded 10 processed
+            Assert.AreEqual<uint>(20, progressReports[2].Queried);
+            Assert.AreEqual<uint>(10, progressReports[2].Processed);
+            Assert.AreEqual<uint>(0, progressReports[2].Errors);
+            Assert.AreEqual<uint>(0, progressReports[2].Skipped);
+
+            Assert.AreEqual<float>(50.0F, progressReports[2].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[2].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[2].SkippedRate);
+
+            //20 loaded 20 processed
+            Assert.AreEqual<uint>(20, progressReports[3].Queried);
+            Assert.AreEqual<uint>(20, progressReports[3].Processed);
+            Assert.AreEqual<uint>(0, progressReports[3].Errors);
+            Assert.AreEqual<uint>(0, progressReports[3].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[3].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[3].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[3].SkippedRate);
+
+            //final recalculation
+            Assert.AreEqual<uint>(20, progressReports[4].Queried);
+            Assert.AreEqual<uint>(20, progressReports[4].Processed);
+            Assert.AreEqual<uint>(0, progressReports[4].Errors);
+            Assert.AreEqual<uint>(0, progressReports[4].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[4].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[4].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[4].SkippedRate);
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleWithQueryMinimalTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+            context.MaxRetrieveCount = 10;
+
+            var entities = new Entity[context.MaxRetrieveCount + 1];
+            for (int i = 0; i < entities.Length; i++)
+            {
+                entities[i] = new Entity()
+                {
+                    Id = Guid.NewGuid(),
+                    LogicalName = "contact"
+                };
+            }
+
+            context.Initialize(entities);
+
+            IOrganizationService service = context.GetOrganizationService();
+
+            Func<Entity, OrganizationRequest> toReq = (entity) => new UpdateRequest()
+            {
+                Target = new Entity(entity.LogicalName, entity.Id)
+                {
+                    ["name"] = "Artem Grunin"
+                }
+            };
+
+            var batchQuery = new QueryExpression("contact");
+
+            //Act
+            service.Execute(batchQuery, toReq);
+
+            //Assert
+            var assertQuery = new QueryExpression("contact")
+            {
+                Criteria = new FilterExpression()
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("name", ConditionOperator.NotNull)
+                    }
+                }
+            };
+
+            var updatedRecords = service.RetrieveMultiple(assertQuery, null).ToArray();
+
+            Assert.AreEqual(entities.Length, updatedRecords.Length);
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleWithQueryWithNoResultsTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+
+            var batchQuery = new QueryExpression("contact");
+
+            Func<Entity, OrganizationRequest> toReq = (entity) =>
+            {
+                return new UpdateRequest()
+                {
+                    Target = new Entity(entity.LogicalName, entity.Id)
+                    {
+                        ["name"] = "Artem Grunin"
+                    }
+                };
+            };
+
+            var progressReports = new List<ExecuteMultipleProgress>();
+
+            Action<ExecuteMultipleProgress> progress = progressReports.Add;
+
+            IOrganizationService service = context.GetOrganizationService();
+
+            //Act
+            service.Execute(batchQuery, toReq, onProgress: progress);
+
+            //Assert
+
+            //1 page load and 1 final report
+            Assert.AreEqual(2, progressReports.Count);
+
+            //0 loaded mean 100% compleate
+            Assert.AreEqual<uint>(0, progressReports[0].Queried);
+            Assert.AreEqual<uint>(0, progressReports[0].Processed);
+            Assert.AreEqual<uint>(0, progressReports[0].Errors);
+            Assert.AreEqual<uint>(0, progressReports[0].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[0].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[0].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[0].SkippedRate);
+
+            //final recalculation
+            Assert.AreEqual<uint>(0, progressReports[1].Queried);
+            Assert.AreEqual<uint>(0, progressReports[1].Processed);
+            Assert.AreEqual<uint>(0, progressReports[1].Errors);
+            Assert.AreEqual<uint>(0, progressReports[1].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[1].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[1].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[1].SkippedRate);
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleWithQueryWithNoRequestsTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+            context.MaxRetrieveCount = 10;
+
+            var entities = new Entity[context.MaxRetrieveCount * 2];
+            for (int i = 0; i < entities.Length; i++)
+            {
+                entities[i] = new Entity()
+                {
+                    Id = Guid.NewGuid(),
+                    LogicalName = "contact"
+                };
+            }
+
+            context.Initialize(entities);
+
+            var batchQuery = new QueryExpression("contact");
+
+            //skip this entity
+            Func<Entity, OrganizationRequest> toReq = (entity) => null;
+
+            int batchSize = context.MaxRetrieveCount;
+
+            var progressReports = new List<ExecuteMultipleProgress>();
+
+            Action<ExecuteMultipleProgress> progress = (p) =>
+            {
+                progressReports.Add(p);
+            };
+
+            IOrganizationService service = context.GetOrganizationService();
+
+            //Act
+            service.Execute(batchQuery, toReq, batchSize: batchSize, onProgress: progress);
+
+            //Assert
+            var assertQuery = new QueryExpression("contact")
+            {
+                Criteria = new FilterExpression()
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("name", ConditionOperator.NotNull)
+                    }
+                }
+            };
+
+            var updatedRecords = service.RetrieveMultiple(assertQuery, null).ToArray();
+
+            Assert.AreEqual(0, updatedRecords.Length);
+
+            //2 page loads, 0 batches and 1 final recalculation
+            Assert.AreEqual(3, progressReports.Count);
+
+            //10 loaded 0 processed
+            Assert.AreEqual<uint>(10, progressReports[0].Queried);
+            Assert.AreEqual<uint>(0, progressReports[0].Processed);
+            Assert.AreEqual<uint>(0, progressReports[0].Errors);
+            Assert.AreEqual<uint>(0, progressReports[0].Skipped);
+
+            Assert.AreEqual<float>(0.0F, progressReports[0].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[0].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[0].SkippedRate);
+
+            //20 loaded 0 processed 10 skipped
+            Assert.AreEqual<uint>(20, progressReports[1].Queried);
+            Assert.AreEqual<uint>(0, progressReports[1].Processed);
+            Assert.AreEqual<uint>(0, progressReports[1].Errors);
+            Assert.AreEqual<uint>(10, progressReports[1].Skipped);
+
+            Assert.AreEqual<float>(50.0F, progressReports[1].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[1].ErrorRate);
+            Assert.AreEqual<float>(50.0F, progressReports[1].SkippedRate);
+
+            //final recalculation
+            Assert.AreEqual<uint>(20, progressReports[2].Queried);
+            Assert.AreEqual<uint>(0, progressReports[2].Processed);
+            Assert.AreEqual<uint>(0, progressReports[2].Errors);
+            Assert.AreEqual<uint>(20, progressReports[2].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[2].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[2].ErrorRate);
+            Assert.AreEqual<float>(100.0F, progressReports[2].SkippedRate);
+        }
+
+        [TestMethod()]
+        public void ExecuteMultipleWithQueryWithErrorsTest()
+        {
+            //Setup
+            var context = new XrmFakedContext();
+            context.MaxRetrieveCount = 10;
+
+            var entities = new Entity[context.MaxRetrieveCount * 2];
+            for (int i = 0; i < entities.Length; i++)
+            {
+                entities[i] = new Entity()
+                {
+                    Id = Guid.NewGuid(),
+                    LogicalName = "contact"
+                };
+            }
+
+            context.Initialize(entities);
+
+            var fakeExecutor = new FakeExecuteMultipleExecutor();
+            context.AddFakeMessageExecutor<ExecuteMultipleRequest>(fakeExecutor);
+
+            var query = new QueryExpression("contact");
+
+            Func<Entity, OrganizationRequest> toReq = (entity) =>
+            {
+                return FakeExecuteMultipleExecutor.FailRequest;
+            };
+
+            var settings = new ExecuteMultipleSettings()
+            {
+                ContinueOnError = true,
+                ReturnResponses = false,
+            };
+
+            int batchSize = context.MaxRetrieveCount;
+
+            int actualResponceCount = 0;
+
+            Action<ExecuteMultipleOperationResponse> onResponse = (r) =>
+            {
+                actualResponceCount++;
+            };
+
+            var progressReports = new List<ExecuteMultipleProgress>();
+
+            Action<ExecuteMultipleProgress> progress = progressReports.Add;
+
+            IOrganizationService service = context.GetOrganizationService();
+
+            //Act
+            service.Execute(query, toReq, settings, batchSize, onResponse, progress);
+
+            //Assert
+            var assertQuery = new QueryExpression("contact")
+            {
+                Criteria = new FilterExpression()
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("name", ConditionOperator.NotNull)
+                    }
+                }
+            };
+
+            var updatedRecords = service.RetrieveMultiple(assertQuery, null).ToArray();
+
+            Assert.AreEqual(0, updatedRecords.Length);
+            Assert.AreEqual(entities.Length, actualResponceCount);
+
+            //2 page loads, 2 batches and 1 final
+            Assert.AreEqual(5, progressReports.Count);
+
+            //10 loaded 0 processed 0 errors
+            Assert.AreEqual<uint>(10, progressReports[0].Queried);
+            Assert.AreEqual<uint>(0, progressReports[0].Processed);
+            Assert.AreEqual<uint>(0, progressReports[0].Errors);
+            Assert.AreEqual<uint>(0, progressReports[0].Skipped);
+
+            Assert.AreEqual<float>(0.0F, progressReports[0].Progress);
+            Assert.AreEqual<float>(0.0F, progressReports[0].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[0].SkippedRate);
+
+            //10 loaded 10 processed 10 errors
+            Assert.AreEqual<uint>(10, progressReports[1].Queried);
+            Assert.AreEqual<uint>(10, progressReports[1].Processed);
+            Assert.AreEqual<uint>(10, progressReports[1].Errors);
+            Assert.AreEqual<uint>(0, progressReports[1].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[1].Progress);
+            Assert.AreEqual<float>(100.0F, progressReports[1].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[1].SkippedRate);
+
+            //20 loaded 10 processed 10 errors
+            Assert.AreEqual<uint>(20, progressReports[2].Queried);
+            Assert.AreEqual<uint>(10, progressReports[2].Processed);
+            Assert.AreEqual<uint>(10, progressReports[2].Errors);
+            Assert.AreEqual<uint>(0, progressReports[2].Skipped);
+
+            Assert.AreEqual<float>(50.0F, progressReports[2].Progress);
+            Assert.AreEqual<float>(100.0F, progressReports[2].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[2].SkippedRate);
+
+            //20 loaded 20 processed 20 errors
+            Assert.AreEqual<uint>(20, progressReports[3].Queried);
+            Assert.AreEqual<uint>(20, progressReports[3].Processed);
+            Assert.AreEqual<uint>(20, progressReports[3].Errors);
+            Assert.AreEqual<uint>(0, progressReports[3].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[3].Progress);
+            Assert.AreEqual<float>(100.0F, progressReports[3].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[3].SkippedRate);
+
+            //final recalculation
+            Assert.AreEqual<uint>(20, progressReports[4].Queried);
+            Assert.AreEqual<uint>(20, progressReports[4].Processed);
+            Assert.AreEqual<uint>(20, progressReports[4].Errors);
+            Assert.AreEqual<uint>(0, progressReports[4].Skipped);
+
+            Assert.AreEqual<float>(100.0F, progressReports[4].Progress);
+            Assert.AreEqual<float>(100.0F, progressReports[4].ErrorRate);
+            Assert.AreEqual<float>(0.0F, progressReports[4].SkippedRate);
         }
     }
 }
