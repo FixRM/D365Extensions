@@ -56,6 +56,8 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static implicit operator ColumnSet(ColumnSet<T> t)
         {
+            if (t == null) return null;
+
             return new ColumnSet(LogicalName.GetNames(t.Columns.ToArray()));
         }
     }

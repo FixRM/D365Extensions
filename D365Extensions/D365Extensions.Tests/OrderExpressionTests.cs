@@ -35,5 +35,17 @@ namespace D365Extensions.Tests
             // Assert not throw
             Assert.IsNotNull(order);
         }
+
+        [TestMethod()]
+        public void Null_Test()
+        {
+            //Setup
+            OrderExpression<TestEntity> orderT = null;
+            // Act
+            OrderExpression order = orderT;
+
+            // Assert not throw
+            Assert.IsNull(order);
+        }
     }
 }

@@ -86,6 +86,8 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static implicit operator ConditionExpression(ConditionExpression<T> t)
         {
+            if (t == null) return null;
+
             return new ConditionExpression(t.EntityName,
                 LogicalName.GetName(t.AttributeName),
                 t.Operator,

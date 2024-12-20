@@ -13,6 +13,20 @@ namespace D365Extensions.Tests
     public class ColumnSetTests
     {
         [TestMethod()]
+        public void Defaut_Constructor_Test()
+        {
+            // Act
+            ColumnSet columnSet = new ColumnSet<TestEntity>();
+
+            var query = new QueryExpression();
+
+            // Assert
+            var actual = columnSet.Columns;
+
+            Assert.AreEqual(0, actual.Count);
+        }
+
+        [TestMethod()]
         public void Implicit_Cast_Test()
         {
             // Setup
@@ -34,7 +48,7 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void ColumnSet_Test()
         {
-             // Setup
+            // Setup
             Expression<Func<TestEntity, object>> expected1 = (t) => t.ReferenceTypeProperty;
             Expression<Func<TestEntity, object>> expected2 = (t) => t.ValueTypeProperty;
 
@@ -82,6 +96,19 @@ namespace D365Extensions.Tests
             Assert.AreEqual(2, actual.Count);
             Assert.AreEqual(LogicalName.GetName(expected1), LogicalName.GetName(actual[0]));
             Assert.AreEqual(LogicalName.GetName(expected2), LogicalName.GetName(actual[1]));
+        }
+
+        [TestMethod()]
+        public void Null_Test()
+        {
+            // Setup
+            ColumnSet<TestEntity> columnSetT = null;
+
+            // Act
+            ColumnSet columnSet = columnSetT;
+
+            // Assert
+            Assert.IsNull(columnSet);
         }
     }
 }

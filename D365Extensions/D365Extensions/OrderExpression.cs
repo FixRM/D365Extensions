@@ -49,6 +49,8 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static implicit operator OrderExpression(OrderExpression<T> t)
         {
+            if (t == null) return null;
+
             return new OrderExpression(LogicalName.GetName(t.AttributeName), t.OrderType);
         }
     }

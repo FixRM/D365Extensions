@@ -67,5 +67,18 @@ namespace D365Extensions.Tests
             // Assert
             Assert.AreEqual(expectedOperator, linkEntity.JoinOperator);
         }
+
+        [TestMethod()]
+        public void Null_Test()
+        {
+            // Setup
+            LinkEntity<EntityFrom, EntityTo> linkEntityT = null;
+
+            // Act
+            LinkEntity linkEntity = linkEntityT;
+
+            // Assert
+            Assert.IsNull(linkEntity);
+        }
     }
 }

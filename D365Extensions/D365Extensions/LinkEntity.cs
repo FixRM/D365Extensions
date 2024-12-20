@@ -84,6 +84,8 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         public static implicit operator LinkEntity(LinkEntity<TFrom, TTo> t)
         {
+            if (t == null) return null;
+
             LinkEntity linkEntity = new LinkEntity()
             {
                 Columns = t.Columns,

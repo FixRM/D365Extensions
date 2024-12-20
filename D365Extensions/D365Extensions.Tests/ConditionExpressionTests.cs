@@ -80,5 +80,18 @@ namespace D365Extensions.Tests
             // Assert not throw
             Assert.IsNotNull(condition);
         }
+
+        [TestMethod()]
+        public void Null_Test()
+        {
+            // Setup
+            ConditionExpression<TestEntity> conditionT = null;
+            
+            // Act
+            ConditionExpression condition = conditionT;
+
+            // Assert not throw
+            Assert.IsNull(condition);
+        }
     }
 }
