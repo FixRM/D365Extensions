@@ -22,6 +22,7 @@ namespace D365Extensions.Tests
 
             // Act
             ConditionExpression condition = new ConditionExpression<TestEntity>(
+                expectedEntityName,
                 t => t.ValueTypeProperty,
                 expectedOperator,
                 expectedValue);
