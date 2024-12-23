@@ -26,15 +26,12 @@ namespace D365Extensions
             return names;
         }
 
-        internal static string GetName<T>(Expression<Func<T, object>> expression)
+        internal static string GetName<T>(Expression<Func<T, object>> lambda)
         {
-            if (expression == null) return null;
+            if (lambda == null) return null;
 
-            return GetName(expression.Body);
-        }
-
-        internal static string GetName(Expression expression)
-        {
+            Expression expression = lambda.Body;
+            
             // Property, field of method returning value type
             if (expression is UnaryExpression unaryExpression)
             {
@@ -46,6 +43,15 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpession.Member;
 
+                // Hotfix: (Guid) Id attribute is declared in Entity class and is overriden in child EB-classes
+                // For some reason, lamda is assigned with MemberInfo of Entity instead of inheritor
+                // TODO: this fix is limited to single case of "Id" attribute, as it is not obvious if we need
+                // more generic solution. Why does one need to override any other attribute schema name in
+                // inherited class?
+
+                if (member.Name == "Id") 
+                    member = typeof(T).GetMember(member.Name).SingleOrDefault();
+
                 return GetName(member);
             }
 
@@ -56,6 +62,8 @@ namespace D365Extensions
 
         internal static string GetName(MemberInfo member)
         {
+            CheckParam.CheckForNull(member, nameof(member));
+
             if (!memberChache.TryGetValue(member, out string logicalName))
             {
                 logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>()?.LogicalName

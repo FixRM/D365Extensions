@@ -178,5 +178,15 @@ namespace D365Extensions.Tests
         {
             Parallel.For(0, 1000, i => { Oob_Entity_Test(); });
         }
+
+        [TestMethod()]
+        public void Id_Test()
+        {
+            // Act
+            var name = LogicalName.GetName<Account>(a => a.Id);
+
+            // Assert
+            Assert.AreEqual("accountid", name);
+        }
     }
 }
