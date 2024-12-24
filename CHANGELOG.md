@@ -1,4 +1,26 @@
 # What's new
+## [2.2.0](https://github.com/FixRM/D365Extensions/compare/v2.1.0...v2.2.0) (2024-12-24)
+
+
+### Features
+
+* add EntityImageCollectionExtensions ([1a2c1f6](https://github.com/FixRM/D365Extensions/commit/1a2c1f60aea7031192799940f6b52cf26ef00c48))
+* add ErrorCodes enumeration generated from official Microsoft documentation ([9f46f48](https://github.com/FixRM/D365Extensions/commit/9f46f4827c636c09299ff96b6e1d9212b5c113e0))
+* add extensions for ExecuteMultipleResponse and ExecuteMultipleResponseItem ([c8ddf12](https://github.com/FixRM/D365Extensions/commit/c8ddf1278e2282b63e76b832fa3ab9747216fe0b))
+* add IEnumerable<ExecuteMultipleOperationResponse> Execute(IEnumerable<OrganizationRequest> requests, int batchSize, ExecuteMultipleSettings settings, Action<OrganizationRequestCollection, ExecuteMultipleResponse> callback) extension method ([c3f7d78](https://github.com/FixRM/D365Extensions/commit/c3f7d789fd1173193da0a33978d8775f5f8b40fd))
+* add public static ErrorCodes? GetErrorCode(this FaultException<OrganizationServiceFault> fault) extension method ([b862ed0](https://github.com/FixRM/D365Extensions/commit/b862ed04b3f34b9547475cf27112c6e7767f7d43))
+* add public void Execute(QueryBase query, ([393e33d](https://github.com/FixRM/D365Extensions/commit/393e33d217e8966dcdcb7256988ecda735a97982))
+* add RemoveUnchanged extension method to Entity ([0ffe971](https://github.com/FixRM/D365Extensions/commit/0ffe971b6f8f2e03e9e661b245f2a59fdffc82c6))
+* add two simple RetrieveMultiple overrides ([044dbbd](https://github.com/FixRM/D365Extensions/commit/044dbbdf7f820f2886dbf7316fbd8b08db9b5022))
+
+
+### Bug Fixes
+
+* add default value for ExecuteMultipleSettings ([63ccfcb](https://github.com/FixRM/D365Extensions/commit/63ccfcb5aca4a7efe302fd205fd9aa1220083dda))
+* add null check for implicit cast operators ([63986cc](https://github.com/FixRM/D365Extensions/commit/63986cc6fe6c0b3ac3189864971ed4ae9f7fd826))
+* EntityName attribute of ConditionExpression<T> was assigned with LogicalName of T by default ([60c731d](https://github.com/FixRM/D365Extensions/commit/60c731d2c3f8d5cf13a758c1d3a41d6d8ab27413))
+* IOrganizationService.Execute(IEnumerable<OrganizationRequest> requests) method now respect ContinueOnError setting ([edbe9f8](https://github.com/FixRM/D365Extensions/commit/edbe9f88deba9977b49c10b55ce6d1554f5654f5))
+
 ## [2.1.0](https://github.com/FixRM/D365Extensions/compare/v2.0.0...v2.1.0) (2023-05-30)
 
 
