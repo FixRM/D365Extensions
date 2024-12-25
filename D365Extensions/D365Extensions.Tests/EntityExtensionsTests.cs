@@ -314,6 +314,25 @@ namespace D365Extensions.Tests
         }
 
         [TestMethod()]
+        public void GetAliasedEntityPrefixTest()
+        {
+            /// Setup
+            Entity entity = new Entity()
+            {
+                ["name"] = "FixRM",
+                ["accountid"] = new EntityReference("account", Guid.NewGuid()),
+            };
+
+            /// Act
+            Entity aliasedEntity1 = entity.GetAliasedEntity("account", "na");
+            Entity aliasedEntity2 = entity.GetAliasedEntity("account");
+
+            /// Assert "name" not matched with prefix "na" or "account
+            Assert.IsNull(aliasedEntity1.GetAttributeValue<string>("accountid"));
+            Assert.IsNull(aliasedEntity2.GetAttributeValue<string>("name"));
+        }
+
+        [TestMethod()]
         public void MergeAttributesTest()
         {
             /// Setup test data

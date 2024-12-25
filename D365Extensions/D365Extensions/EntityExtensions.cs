@@ -70,7 +70,7 @@ namespace Microsoft.Xrm.Sdk
             CheckParam.CheckForNull(entityLogicalName, nameof(entityLogicalName));
 
             /// Use LogicalName as alias if it is not specified
-            String aliasPrefix = alias ?? entityLogicalName + ".";
+            string aliasPrefix = (alias ?? entityLogicalName) + ".";
 
             var aliasedAttributes = entity.Attributes.Where(a => a.Key.StartsWith(aliasPrefix))
                 .Select(a => a.Value as AliasedValue)
