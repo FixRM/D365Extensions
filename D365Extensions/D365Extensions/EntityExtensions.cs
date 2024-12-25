@@ -21,6 +21,20 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
+        /// Simplifies getting values from Entity.FormattedValues collection
+        /// <param name="attributeLogicalName">Attribute name</param>
+        /// <param name="attributeLogicalName">Entity alias</param>
+        /// <returns>Attribute formated value</returns>
+        public static string GetFormatedValue(this Entity entity, string attributeLogicalName, string alias)
+        {
+            CheckParam.CheckForNull(attributeLogicalName, nameof(attributeLogicalName));
+            CheckParam.CheckForNull(attributeLogicalName, nameof(alias));
+
+            entity.FormattedValues.TryGetValue($"{alias}.{attributeLogicalName}", out string outValue);
+            return outValue;
+        }
+
+        /// <summary>
         /// Simplifies getting values from linked entities attributes wrapped in AliasedValue class
         /// This kind of attributes can be queried by FetchExpression or QueryExpression using Linked Entities 
         /// </summary>
