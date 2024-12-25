@@ -65,7 +65,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="entityLogicalName">Logical name of linked Entity</param>
         /// <param name="alias">Entity alias used in LinkedEntity definition</param>
         /// <returns>Entity with specified logical name that contains all attribute values with specified alias</returns>
-        public static Entity GetAliasedEntity(this Entity entity, String entityLogicalName, String alias = null)
+        public static Entity GetAliasedEntity(this Entity entity, string entityLogicalName, string alias = null)
         {
             CheckParam.CheckForNull(entityLogicalName, nameof(entityLogicalName));
 
@@ -75,12 +75,21 @@ namespace Microsoft.Xrm.Sdk
             var aliasedAttributes = entity.Attributes.Where(a => a.Key.StartsWith(aliasPrefix))
                 .Select(a => a.Value as AliasedValue)
                 .Where(a => a != null)
-                .Select(a => new KeyValuePair<String, Object>(a.AttributeLogicalName, a.Value));
+                .Select(a => new KeyValuePair<string, object>(a.AttributeLogicalName, a.Value));
+
+            var aliasedFormatedValues = entity.FormattedValues.Where(a => a.Key.StartsWith(aliasPrefix))
+                .Select(a => new KeyValuePair<string, string>(GetAttributePart(a.Key), a.Value));
 
             Entity aliasedEntity = new Entity(entityLogicalName);
             aliasedEntity.Attributes.AddRange(aliasedAttributes);
+            aliasedEntity.FormattedValues.AddRange(aliasedFormatedValues);
 
             return aliasedEntity;
+        }
+
+        private static string GetAttributePart(string name)
+        {
+            return name.Substring(name.IndexOf(".") + 1);
         }
 
         /// <summary>

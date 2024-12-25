@@ -129,6 +129,7 @@ namespace D365Extensions.Tests
             String attributeLogicalName2 = "birthdate";
             DateTime? value2 = new DateTime(1985, 8, 8);
             AliasedValue aliasedValue2 = new AliasedValue(linkedEntityLogicalName1, attributeLogicalName2, value2);
+            String formatedValue2 = "08.08.1985";
 
             String attributeLogicalName3 = "name";
             String value3 = "Microsoft acquiring";
@@ -154,6 +155,9 @@ namespace D365Extensions.Tests
             entity.Attributes.Add(aliasedName1, aliasedValue1);
             entity.Attributes.Add(aliasedName2, aliasedValue2);
             entity.Attributes.Add(aliasedName3, aliasedValue3);
+
+            /// Add formated values
+            entity.FormattedValues.Add(aliasedName2, formatedValue2);
 
             Entity actualEntity;
             /// Test for required parameters
@@ -181,6 +185,8 @@ namespace D365Extensions.Tests
             DateTime? actualAttributeValue2 = actualEntity.GetAttributeValue<DateTime?>(attributeLogicalName2);
             Assert.IsNotNull(actualAttributeValue2);
             Assert.AreEqual<DateTime?>(value2, actualAttributeValue2);
+
+            Assert.AreEqual(formatedValue2, actualEntity.FormattedValues[attributeLogicalName2]);
 
             /// Test without alias
             actualEntity = entity.GetAliasedEntity(linkedEntityLogicalName2);
