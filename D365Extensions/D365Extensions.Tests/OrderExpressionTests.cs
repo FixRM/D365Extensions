@@ -29,11 +29,14 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void OrderExpression_Default_Test()
         {
+            //Setup
+            var orderDefault = new OrderExpression();
             // Act
             OrderExpression order = new OrderExpression<TestEntity>();
 
-            // Assert not throw
-            Assert.IsNotNull(order);
+            // Assert
+            Assert.AreEqual(orderDefault.AttributeName, order.AttributeName);
+            Assert.AreEqual(orderDefault.OrderType, order.OrderType);
         }
 
         [TestMethod()]
