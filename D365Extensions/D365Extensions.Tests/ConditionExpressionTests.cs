@@ -35,6 +35,27 @@ namespace D365Extensions.Tests
         }
 
         [TestMethod()]
+        public void Constructor_No_Entity_Name_Test()
+        {
+            // Setup
+            var expectedAttributeName = nameof(TestEntity.ValueTypeProperty).ToLower();
+            var expectedOperator = ConditionOperator.Equal;
+            var expectedValue = new object[] { 42 };
+
+            // Act
+            ConditionExpression condition = new ConditionExpression<TestEntity>(
+                t => t.ValueTypeProperty,
+                expectedOperator,
+                expectedValue);
+
+            // Assert
+            Assert.IsNull(condition.EntityName);
+            Assert.AreEqual(expectedAttributeName, condition.AttributeName);
+            Assert.AreEqual(expectedOperator, condition.Operator);
+            CollectionAssert.AreEqual(expectedValue, condition.Values.ToArray());
+        }
+
+        [TestMethod()]
         public void Constructor_Single_Value_Test()
         {
             // Setup
@@ -49,6 +70,7 @@ namespace D365Extensions.Tests
                 expectedValue);
 
             // Assert
+            Assert.IsNull(condition.EntityName);
             Assert.AreEqual(expectedAttributeName, condition.AttributeName);
             Assert.AreEqual(expectedOperator, condition.Operator);
             Assert.AreEqual(expectedValue, condition.Values[0]);
@@ -67,6 +89,7 @@ namespace D365Extensions.Tests
                 expectedOperator);
 
             // Assert
+            Assert.IsNull(condition.EntityName);
             Assert.AreEqual(expectedAttributeName, condition.AttributeName);
             Assert.AreEqual(expectedOperator, condition.Operator);
             Assert.AreEqual(0, condition.Values.Count);
@@ -75,11 +98,17 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void Constructor_Default_Test()
         {
+            //Setup
+            ConditionExpression conditionDefault = new ConditionExpression();
+
             // Act
             ConditionExpression condition = new ConditionExpression<TestEntity>();
 
-            // Assert not throw
-            Assert.IsNotNull(condition);
+            // Assert
+            Assert.AreEqual(conditionDefault.EntityName, condition.EntityName);
+            Assert.AreEqual(conditionDefault.AttributeName, condition.AttributeName);
+            Assert.AreEqual(conditionDefault.Operator, condition.Operator);
+            Assert.AreEqual(0, condition.Values.Count);
         }
 
         [TestMethod()]

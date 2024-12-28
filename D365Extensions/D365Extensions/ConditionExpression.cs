@@ -45,6 +45,16 @@ namespace Microsoft.Xrm.Sdk.Query
         /// </summary>
         /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
         /// <param name="conditionOperator">The condition operator.</param>
+        /// <param name="values">The array of attribute values.</param>
+        public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator, params object[] values) : this(null, attributeName, conditionOperator, values)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ConditionExpression<T> class.
+        /// </summary>
+        /// <param name="attributeName">The logical name of the attribute in the condition expression.</param>
+        /// <param name="conditionOperator">The condition operator.</param>
         public ConditionExpression(Expression<Func<T, object>> attributeName, ConditionOperator conditionOperator) : this(null, attributeName, conditionOperator, new object[0])
         {
         }
