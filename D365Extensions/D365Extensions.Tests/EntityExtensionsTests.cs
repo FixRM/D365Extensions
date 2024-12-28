@@ -342,6 +342,13 @@ namespace D365Extensions.Tests
         public void MergeAttributesTest()
         {
             /// Setup test data
+            EntityReference accountId = new EntityReference()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "account",
+                Name = "FixRM"
+            };
+
             Entity target = new Entity();
             target.Attributes.Add("firstname", "Artem"); //exist in both
             target.Attributes.Add("lastname", "Grunin"); //exist in both 
@@ -351,12 +358,13 @@ namespace D365Extensions.Tests
             source.Attributes.Add("firstname", "Artem the great"); //changed in source
             source.Attributes.Add("lastname", "Grunin"); //exist in both
             source.Attributes.Add("birthdate", new DateTime(1985, 8, 8)); // exist only in source
+            source.Attributes.Add("accountid", accountId);
 
-            /// Run test
+            /// Act
             target.MergeAttributes(source);
 
-            /// Should be one more attribute
-            Assert.AreEqual(4, target.Attributes.Count);
+            /// Should be two more attribute
+            Assert.AreEqual(5, target.Attributes.Count);
 
             /// Should have original value
             String firstname = target.GetAttributeValue<String>("firstname");
@@ -369,6 +377,37 @@ namespace D365Extensions.Tests
             /// Test for new attribute 
             DateTime birthdate = target.GetAttributeValue<DateTime>("birthdate");
             Assert.AreEqual(new DateTime(1985, 8, 8), birthdate);
+
+            /// Test for EntityReference attribute
+            EntityReference actualAccountId = target.GetAttributeValue<EntityReference>("accountid");
+            Assert.AreEqual(actualAccountId, accountId);
+            Assert.AreEqual(actualAccountId.Name, accountId.Name);
+        }
+
+        [TestMethod()]
+        public void MergeAttributesNewRefsTest()
+        {
+            /// Setup test data
+            EntityReference accountId = new EntityReference()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "account",
+                Name = "FixRM"
+            };
+
+            Entity target = new Entity();
+
+            Entity source = new Entity();
+
+            source.Attributes.Add("accountid", accountId);
+
+            /// Act
+            target.MergeAttributes(source, newRefs: true);
+
+            /// Test for EntityReference attribute
+            EntityReference actualAccountId = target.GetAttributeValue<EntityReference>("accountid");
+            Assert.AreEqual(actualAccountId, accountId);
+            Assert.IsNull(actualAccountId.Name);
         }
 
         [TestMethod()]

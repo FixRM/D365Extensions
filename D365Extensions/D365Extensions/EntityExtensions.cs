@@ -118,7 +118,8 @@ namespace Microsoft.Xrm.Sdk
         /// Add attributes form source Entity if they don't exist in target Entity
         /// </summary>
         /// <param name="source">Entity to take attributes form </param>
-        public static void MergeAttributes(this Entity target, Entity source)
+        /// <param name="newRefs">Create new EntityReference values instead of taking from source entity. In rare cases, messages like MergeRequest can fail if entityReference.Name is specified</param>
+        public static void MergeAttributes(this Entity target, Entity source, bool newRefs = false)
         {
             if (source != null)
             {
@@ -126,7 +127,16 @@ namespace Microsoft.Xrm.Sdk
                 {
                     if (target.Attributes.ContainsKey(attribute.Key) == false)
                     {
-                        target.Attributes.Add(attribute);
+                        if (newRefs && attribute.Value is EntityReference reference)
+                        {
+                            var newReference = new EntityReference(reference.LogicalName, reference.Id);
+                            
+                            target.Attributes.Add(attribute.Key, newReference);
+                        }
+                        else
+                        {
+                            target.Attributes.Add(attribute);
+                        }
                     }
                 }
             }
