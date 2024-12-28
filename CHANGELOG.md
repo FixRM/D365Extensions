@@ -1,4 +1,20 @@
 # What's new
+## [2.3.0](https://github.com/FixRM/D365Extensions/compare/v2.2.0...v2.3.0) (2024-12-28)
+
+
+### Features
+
+* add GetFormatedValue override with alias support ([2c64444](https://github.com/FixRM/D365Extensions/commit/2c64444b4c2763a88143b5f84cc4cc0affbd16c7))
+* add new Retrieve<T> overrides ([bb9ab85](https://github.com/FixRM/D365Extensions/commit/bb9ab851bcbf9fc815025b2390b96ca5d609ef29))
+* add optional parameter to MergeAttributes to address very specific issue ([457dbe4](https://github.com/FixRM/D365Extensions/commit/457dbe4cf7a44e02e0c336f3bc7f62921a40fb8d))
+* add some EntityCollection extensions ([f5b764a](https://github.com/FixRM/D365Extensions/commit/f5b764a0bbce9711f08cf5e5a4754e8d3a2c8645))
+
+
+### Bug Fixes
+
+* GetAliasedEntity may return unwanted attributes ([4872b51](https://github.com/FixRM/D365Extensions/commit/4872b519d43630c53e13bcbe85611239d302cadc))
+* GetAliasedEntity now return FormatedValues ([a428b92](https://github.com/FixRM/D365Extensions/commit/a428b921d5abd2eeea14876c9e80888b9a8be7c0))
+
 ## [2.2.0](https://github.com/FixRM/D365Extensions/compare/v2.1.0...v2.2.0) (2024-12-24)
 
 
