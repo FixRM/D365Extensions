@@ -3622,11 +3622,350 @@ namespace D365Extensions.Tests.Entities
 			}
 		}
 	}
-	
-	/// <summary>
-	/// Represents a source of entities bound to a CRM service. It tracks and manages changes made to the retrieved entities.
-	/// </summary>
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("CrmSvcUtil", "9.1.0.28")]
+
+    /// <summary>
+    /// Лицо или группа, связанные с действием. У действия может несколько сторон действия.
+    /// </summary>
+    [System.Runtime.Serialization.DataContractAttribute()]
+    [Microsoft.Xrm.Sdk.Client.EntityLogicalNameAttribute("activityparty")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("CrmSvcUtil", "9.1.0.41")]
+    public partial class ActivityParty : Microsoft.Xrm.Sdk.Entity, System.ComponentModel.INotifyPropertyChanging, System.ComponentModel.INotifyPropertyChanged
+    {
+
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
+        public ActivityParty() :
+                base(EntityLogicalName)
+        {
+        }
+
+        public const string EntityLogicalName = "activityparty";
+
+        public const int EntityTypeCode = 135;
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        public event System.ComponentModel.PropertyChangingEventHandler PropertyChanging;
+
+        private void OnPropertyChanged(string propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void OnPropertyChanging(string propertyName)
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, new System.ComponentModel.PropertyChangingEventArgs(propertyName));
+            }
+        }
+
+        /// <summary>
+        /// Уникальный идентификатор действия, связанного со стороной действия ("cторона" - это любой человек, связанный с действием).
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("activityid")]
+        public Microsoft.Xrm.Sdk.EntityReference ActivityId
+        {
+            get
+            {
+                return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("activityid");
+            }
+            set
+            {
+                this.OnPropertyChanging("ActivityId");
+                this.SetAttributeValue("activityid", value);
+                this.OnPropertyChanged("ActivityId");
+            }
+        }
+
+        /// <summary>
+        /// Уникальный идентификатор стороны действия.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("activitypartyid")]
+        public System.Nullable<System.Guid> ActivityPartyId
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<System.Guid>>("activitypartyid");
+            }
+            set
+            {
+                this.OnPropertyChanging("ActivityPartyId");
+                this.SetAttributeValue("activitypartyid", value);
+                if (value.HasValue)
+                {
+                    base.Id = value.Value;
+                }
+                else
+                {
+                    base.Id = System.Guid.Empty;
+                }
+                this.OnPropertyChanged("ActivityPartyId");
+            }
+        }
+
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("activitypartyid")]
+        public override System.Guid Id
+        {
+            get
+            {
+                return base.Id;
+            }
+            set
+            {
+                this.ActivityPartyId = value;
+            }
+        }
+
+        /// <summary>
+        /// Адрес электронной почты, на который доставляется электронная почта и с которым связана целевая сущность.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("addressused")]
+        public string AddressUsed
+        {
+            get
+            {
+                return this.GetAttributeValue<string>("addressused");
+            }
+            set
+            {
+                this.OnPropertyChanging("AddressUsed");
+                this.SetAttributeValue("addressused", value);
+                this.OnPropertyChanged("AddressUsed");
+            }
+        }
+
+        /// <summary>
+        /// Номер столбца адреса электронной почты от связанной стороны.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("addressusedemailcolumnnumber")]
+        public System.Nullable<int> AddressUsedEmailColumnNumber
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<int>>("addressusedemailcolumnnumber");
+            }
+        }
+
+        /// <summary>
+        /// Сведения о том, следует ли разрешить отправку электронной почты стороне действия.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotemail")]
+        public System.Nullable<bool> DoNotEmail
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<bool>>("donotemail");
+            }
+        }
+
+        /// <summary>
+        /// Сведения о том, следует ли разрешить отправку факсов стороне действия.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotfax")]
+        public System.Nullable<bool> DoNotFax
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<bool>>("donotfax");
+            }
+        }
+
+        /// <summary>
+        /// Сведения о том, разрешены ли звонки интересу.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotphone")]
+        public System.Nullable<bool> DoNotPhone
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<bool>>("donotphone");
+            }
+        }
+
+        /// <summary>
+        /// Сведения о том, разрешена ли отправка писем интересу.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("donotpostalmail")]
+        public System.Nullable<bool> DoNotPostalMail
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<bool>>("donotpostalmail");
+            }
+        }
+
+        /// <summary>
+        /// Объем усилий, используемых ресурсом в действии встречи по сервису.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("effort")]
+        public System.Nullable<double> Effort
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<double>>("effort");
+            }
+            set
+            {
+                this.OnPropertyChanging("Effort");
+                this.SetAttributeValue("effort", value);
+                this.OnPropertyChanged("Effort");
+            }
+        }
+
+        /// <summary>
+        /// Только для внутреннего использования.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("exchangeentryid")]
+        public string ExchangeEntryId
+        {
+            get
+            {
+                return this.GetAttributeValue<string>("exchangeentryid");
+            }
+            set
+            {
+                this.OnPropertyChanging("ExchangeEntryId");
+                this.SetAttributeValue("exchangeentryid", value);
+                this.OnPropertyChanged("ExchangeEntryId");
+            }
+        }
+
+        /// <summary>
+        /// Тип экземпляра повторяющегося ряда.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("instancetypecode")]
+        public Microsoft.Xrm.Sdk.OptionSetValue InstanceTypeCode
+        {
+            get
+            {
+                return this.GetAttributeValue<Microsoft.Xrm.Sdk.OptionSetValue>("instancetypecode");
+            }
+        }
+
+        /// <summary>
+        /// Сведения о том, удалена ли базовая запись сущности.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ispartydeleted")]
+        public System.Nullable<bool> IsPartyDeleted
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<bool>>("ispartydeleted");
+            }
+        }
+
+        /// <summary>
+        /// Уникальный идентификатор пользователя или рабочей группы, ответственных за activity_party.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("ownerid")]
+        public Microsoft.Xrm.Sdk.EntityReference OwnerId
+        {
+            get
+            {
+                return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("ownerid");
+            }
+        }
+
+        /// <summary>
+        /// Роль лица в действии (например, отправитель, получатель, получатель копии, получатель скрытой копии, необязательное лицо, организатор или ответственный).
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("participationtypemask")]
+        public Microsoft.Xrm.Sdk.OptionSetValue ParticipationTypeMask
+        {
+            get
+            {
+                return this.GetAttributeValue<Microsoft.Xrm.Sdk.OptionSetValue>("participationtypemask");
+            }
+            set
+            {
+                this.OnPropertyChanging("ParticipationTypeMask");
+                this.SetAttributeValue("participationtypemask", value);
+                this.OnPropertyChanged("ParticipationTypeMask");
+            }
+        }
+
+        /// <summary>
+        /// Уникальный идентификатор стороны, связанной с действием.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("partyid")]
+        public Microsoft.Xrm.Sdk.EntityReference PartyId
+        {
+            get
+            {
+                return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("partyid");
+            }
+            set
+            {
+                this.OnPropertyChanging("PartyId");
+                this.SetAttributeValue("partyid", value);
+                this.OnPropertyChanged("PartyId");
+            }
+        }
+
+        /// <summary>
+        /// Уникальный идентификатор спецификации ресурса для стороны действия.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("resourcespecid")]
+        public Microsoft.Xrm.Sdk.EntityReference ResourceSpecId
+        {
+            get
+            {
+                return this.GetAttributeValue<Microsoft.Xrm.Sdk.EntityReference>("resourcespecid");
+            }
+            set
+            {
+                this.OnPropertyChanging("ResourceSpecId");
+                this.SetAttributeValue("resourcespecid", value);
+                this.OnPropertyChanged("ResourceSpecId");
+            }
+        }
+
+        /// <summary>
+        /// Плановое время окончания действия.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("scheduledend")]
+        public System.Nullable<System.DateTime> ScheduledEnd
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<System.DateTime>>("scheduledend");
+            }
+        }
+
+        /// <summary>
+        /// Плановое время начала действия.
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("scheduledstart")]
+        public System.Nullable<System.DateTime> ScheduledStart
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<System.DateTime>>("scheduledstart");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Microsoft.Xrm.Sdk.AttributeLogicalNameAttribute("versionnumber")]
+        public System.Nullable<long> VersionNumber
+        {
+            get
+            {
+                return this.GetAttributeValue<System.Nullable<long>>("versionnumber");
+            }
+        }        
+    }
+
+    /// <summary>
+    /// Represents a source of entities bound to a CRM service. It tracks and manages changes made to the retrieved entities.
+    /// </summary>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("CrmSvcUtil", "9.1.0.28")]
 	public partial class XrmSvc : Microsoft.Xrm.Sdk.Client.OrganizationServiceContext
 	{
 		
