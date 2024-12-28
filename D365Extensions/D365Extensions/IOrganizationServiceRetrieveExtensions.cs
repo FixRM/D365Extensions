@@ -40,6 +40,26 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
+        /// Retrieve method override. Returns strongly typed entity object
+        /// </summary>
+        /// <param name="id">The Id of record that yu want to retrieve</param>
+        public static T Retrieve<T>(this IOrganizationService service, Guid id, ColumnSet columnSet) where T : Entity
+        {
+            Entity entity = service.Retrieve(LogicalName.GetName<T>(), id, columnSet);
+
+            return entity.ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Retrieve method override. Returns strongly typed entity object
+        /// </summary>
+        /// <param name="id">The Id of record that yu want to retrieve</param>
+        public static T Retrieve<T>(this IOrganizationService service, Guid id, params string[] columns) where T : Entity
+        {
+            return service.Retrieve<T>(id, new ColumnSet(columns));
+        }
+
+        /// <summary>
         /// Retrieve method override. Takes EntityReference as input parameter and return strongly typed entity object
         /// </summary>
         /// <param name="reference">Entity to retrieve</param>
