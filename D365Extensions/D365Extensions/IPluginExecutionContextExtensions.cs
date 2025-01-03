@@ -236,7 +236,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type, furthermore
+        /// Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type. Furthermore
         /// two options possible: when "A" entity is associated with array of "B", or "B" is associated with array of "A".
         /// 
         /// This method generates universal dictionary of arguments which is suitable in all cases
@@ -244,6 +244,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="keyEntity">Key entity schema name</param>
         /// <param name="valueEntity">Secondary entity schema name</param>
         /// <returns></returns>
+        [Obsolete("Use GetRelatedEntitiesAsTuples")]
         public static Dictionary<EntityReference, EntityReferenceCollection> GetRelatedEntitiesByTarget(this IPluginExecutionContext pluginContext,
             String keyEntity,
             String valueEntity)
@@ -251,7 +252,7 @@ namespace Microsoft.Xrm.Sdk
             /// Check that we handling appropriate message
             if (pluginContext.MessageName != "Associate" && pluginContext.MessageName != "Disassociate")
             {
-                throw new InvalidOperationException($"This method is not supported for { pluginContext.MessageName } message");
+                throw new InvalidOperationException($"This method is not supported for {pluginContext.MessageName} message");
             }
 
             /// Get InputParameters for Associate и Disassociate 
@@ -275,6 +276,53 @@ namespace Microsoft.Xrm.Sdk
                 {
                     dictionary.Add(key, new EntityReferenceCollection() { target });
                 }
+            }
+
+            return dictionary;
+        }
+
+        internal const string WrongMessageForGetRelatedEntities = "This method is not supported for {0} message";
+
+        /// <summary>
+        /// Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type. Furthermore
+        /// two options possible: when "A" entity is associated with array of "B", or "B" is associated with array of "A".
+        /// 
+        /// This method generates universal dictionary of arguments which is suitable in all cases
+        /// </summary>
+        /// <param name="targetEntityLogicalName">Key entity schema name</param>
+        /// <returns>List of Tuples or empty list if associated/disassociated entity types don't match with required</returns>
+        public static List<Tuple<EntityReference, EntityReference>> GetRelatedEntitiesAsTuples(this IPluginExecutionContext pluginContext,
+            string targetEntityLogicalName,
+            string relatedEntityLogicalName)
+        {
+            /// Check that we handling appropriate message
+            if (pluginContext.MessageName != "Associate" && pluginContext.MessageName != "Disassociate")
+            {
+                throw new InvalidOperationException(string.Format(WrongMessageForGetRelatedEntities, pluginContext.MessageName));
+            }
+
+            /// Get InputParameters for Associate и Disassociate 
+            EntityReference target = pluginContext.InputParameters[Target] as EntityReference;
+            EntityReferenceCollection relatedEntities = pluginContext.InputParameters["RelatedEntities"] as EntityReferenceCollection;
+
+            /// Get schema names for this participating entities
+            string targetName = target.LogicalName;
+            string relatedName = relatedEntities.First().LogicalName;
+
+            /// Generate result dictionary
+            List<Tuple<EntityReference, EntityReference>> dictionary = new List<Tuple<EntityReference, EntityReference>>(relatedEntities.Count);
+
+            foreach (EntityReference relatedReference in relatedEntities)
+            {
+                if (targetName == targetEntityLogicalName && relatedName == relatedEntityLogicalName)
+                {
+                    dictionary.Add(new Tuple<EntityReference, EntityReference>(target, relatedReference));
+                }
+                else if (relatedName == targetEntityLogicalName && targetName == relatedEntityLogicalName)
+                {
+                    dictionary.Add(new Tuple<EntityReference, EntityReference>(relatedReference, target));
+                }
+                else break;
             }
 
             return dictionary;

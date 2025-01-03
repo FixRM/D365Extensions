@@ -307,5 +307,155 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedUnitRef.Id, actualUnitRef.Id);
             Assert.AreEqual(expectedUnitRef.LogicalName, actualUnitRef.LogicalName);
         }
+
+        [TestMethod()]
+        public void GetRelatedEntitiesAsTuplesWrongMessageTest()
+        {
+            /// Arrange
+            EntityReference account1 = new EntityReference();
+            account1.LogicalName = "account";
+            account1.Id = Guid.NewGuid();
+
+            EntityReference account2 = new EntityReference();
+            account2.LogicalName = "account";
+            account2.Id = Guid.NewGuid();
+
+            EntityReference contact1 = new EntityReference();
+            contact1.LogicalName = "contact";
+            contact1.Id = Guid.NewGuid();
+
+            ParameterCollection inputParameters = new ParameterCollection();
+            inputParameters.Add("Target", contact1);
+            inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.InputParameters = inputParameters;
+            context.MessageName = "Wrong";
+
+            var expectedError = string.Format(IPluginExecutionContextExtensions.WrongMessageForGetRelatedEntities, context.MessageName);
+
+            /// Act, Assert
+            var error = Assert.ThrowsException<InvalidOperationException>(() => context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName));
+
+            Assert.AreEqual(expectedError, error.Message);
+        }
+
+        [TestMethod]
+        [Description("Should return empty collection if message is for unexpected pair of entities")]
+        public void GetRelatedEntitiesAsTuplesWrongTypeTest()
+        {
+            /// Arrange
+            EntityReference account1 = new EntityReference();
+            account1.LogicalName = "account";
+            account1.Id = Guid.NewGuid();
+
+            EntityReference account2 = new EntityReference();
+            account2.LogicalName = "account";
+            account2.Id = Guid.NewGuid();
+
+            EntityReference contact1 = new EntityReference();
+            contact1.LogicalName = "contact";
+            contact1.Id = Guid.NewGuid();
+
+            ParameterCollection inputParameters = new ParameterCollection();
+            inputParameters.Add("Target", contact1);
+            inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.InputParameters = inputParameters;
+            context.MessageName = "Associate";
+
+            /// Act, Assert
+            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, "incident");
+            Assert.AreEqual(0, result.Count);
+
+            result = context.GetRelatedEntitiesAsTuples(contact1.LogicalName, "incident");
+            Assert.AreEqual(0, result.Count);
+
+            result = context.GetRelatedEntitiesAsTuples("incident", contact1.LogicalName);
+            Assert.AreEqual(0, result.Count);
+
+            result = context.GetRelatedEntitiesAsTuples("incident", account1.LogicalName);
+            Assert.AreEqual(0, result.Count);
+
+            result = context.GetRelatedEntitiesAsTuples("incident", "product");
+            Assert.AreEqual(0, result.Count);
+        }
+
+        [TestMethod]
+        [Description("Should work if entity one is associated with array of entity two")]
+        public void GetRelatedEntitiesAsTuplesDirectTest()
+        {
+            /// Arrange
+            EntityReference account1 = new EntityReference();
+            account1.LogicalName = "account";
+            account1.Id = Guid.NewGuid();
+
+            EntityReference contact1 = new EntityReference();
+            contact1.LogicalName = "contact";
+            contact1.Id = Guid.NewGuid();
+
+            EntityReference contact2 = new EntityReference();
+            contact2.LogicalName = "contact";
+            contact2.Id = Guid.NewGuid();
+
+            ParameterCollection inputParameters = new ParameterCollection();
+            inputParameters.Add("Target", account1);
+            inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { contact1, contact2 });
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.InputParameters = inputParameters;
+            context.MessageName = "Associate";
+
+            /// Act
+            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName);
+
+            /// Assert
+            Assert.AreEqual(2, result.Count);
+
+            Assert.AreEqual(account1, result[0].Item1);
+            Assert.AreEqual(contact1, result[0].Item2);
+
+            Assert.AreEqual(account1, result[1].Item1);
+            Assert.AreEqual(contact2, result[1].Item2);
+        }
+
+        [TestMethod]
+        [Description("Should work if entity two is associated with array of entity one")]
+        public void GetRelatedEntitiesAsTuplesInvertedTest()
+        {
+            /// Arrange
+            EntityReference account1 = new EntityReference();
+            account1.LogicalName = "account";
+            account1.Id = Guid.NewGuid();
+
+            EntityReference account2 = new EntityReference();
+            account2.LogicalName = "account";
+            account2.Id = Guid.NewGuid();
+
+            EntityReference contact1 = new EntityReference();
+            contact1.LogicalName = "contact";
+            contact1.Id = Guid.NewGuid();
+
+            ParameterCollection inputParameters = new ParameterCollection();
+            inputParameters.Add("Target", contact1);
+            inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
+
+            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            context.InputParameters = inputParameters;
+            context.MessageName = "Associate";
+
+            /// Act
+            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName);
+
+            /// Assert
+            Assert.AreEqual(2, result.Count);
+
+            Assert.AreEqual(account1, result[0].Item1);
+            Assert.AreEqual(contact1, result[0].Item2);
+
+            Assert.AreEqual(account2, result[1].Item1);
+            Assert.AreEqual(contact1, result[1].Item2);
+        }
     }
 }
