@@ -341,7 +341,7 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void MergeAttributesTest()
         {
-            /// Setup test data
+            /// Setup
             EntityReference accountId = new EntityReference()
             {
                 Id = Guid.NewGuid(),
@@ -350,38 +350,60 @@ namespace D365Extensions.Tests
             };
 
             Entity target = new Entity();
-            target.Attributes.Add("firstname", "Artem"); //exist in both
-            target.Attributes.Add("lastname", "Grunin"); //exist in both 
-            target.Attributes.Add("middlename", "Igorevich"); // exist only in target
+            target.Attributes.Add("firstname", "Artem The Great"); //changed in target
+            target.Attributes.Add("middlename", "Igorevich"); //added in target
 
+            target.Attributes.Add("statuscode", new OptionSetValue(2)); //changed in target
+            target.FormattedValues.Add("statuscode", "Confirmed"); //changed in target
+
+            // entity image
             Entity source = new Entity();
-            source.Attributes.Add("firstname", "Artem the great"); //changed in source
-            source.Attributes.Add("lastname", "Grunin"); //exist in both
-            source.Attributes.Add("birthdate", new DateTime(1985, 8, 8)); // exist only in source
+            source.Attributes.Add("firstname", "Artem"); //original value
+            source.Attributes.Add("lastname", "Grunin"); 
             source.Attributes.Add("accountid", accountId);
+
+            source.Attributes.Add("birthdate", new DateTime(1985, 8, 8));
+            source.Attributes.Add("statecode", new OptionSetValue(0));
+            source.Attributes.Add("statuscode", new OptionSetValue(1));
+
+            source.FormattedValues.Add("birthdate", "1985-08-08Z");
+            source.FormattedValues.Add("statecode", "Active");
+            source.FormattedValues.Add("statuscode", "Active");
 
             /// Act
             target.MergeAttributes(source);
 
-            /// Should be two more attribute
-            Assert.AreEqual(5, target.Attributes.Count);
+            /// Assert
+            Assert.AreEqual(7, target.Attributes.Count);
 
-            /// Should have original value
-            String firstname = target.GetAttributeValue<String>("firstname");
-            Assert.AreEqual("Artem", firstname);
+            var firstname = target.GetAttributeValue<string>("firstname");
+            Assert.AreEqual("Artem The Great", firstname);
 
-            /// Test for existing attribute
-            String lastname = target.GetAttributeValue<String>("lastname");
+            var lastname = target.GetAttributeValue<string>("lastname");
             Assert.AreEqual("Grunin", lastname);
 
-            /// Test for new attribute 
+            var middlename = target.GetAttributeValue<string>("middlename");
+            Assert.AreEqual("Igorevich", middlename);
+
+            var statecode = target.GetAttributeValue<OptionSetValue>("statecode");
+            Assert.AreEqual(0, statecode.Value);
+
+            var statuscode = target.GetAttributeValue<OptionSetValue>("statuscode");
+            Assert.AreEqual(2, statuscode.Value);
+
             DateTime birthdate = target.GetAttributeValue<DateTime>("birthdate");
             Assert.AreEqual(new DateTime(1985, 8, 8), birthdate);
 
-            /// Test for EntityReference attribute
             EntityReference actualAccountId = target.GetAttributeValue<EntityReference>("accountid");
             Assert.AreEqual(actualAccountId, accountId);
+            Assert.AreEqual(actualAccountId.LogicalName, accountId.LogicalName);
             Assert.AreEqual(actualAccountId.Name, accountId.Name);
+
+            Assert.AreEqual(3, target.FormattedValues.Count);
+
+            Assert.AreEqual("Confirmed", target.FormattedValues["statuscode"]);
+            Assert.AreEqual("Active", target.FormattedValues["statecode"]);
+            Assert.AreEqual("1985-08-08Z", target.FormattedValues["birthdate"]);
         }
 
         [TestMethod()]

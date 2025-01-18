@@ -125,19 +125,25 @@ namespace Microsoft.Xrm.Sdk
             {
                 foreach (var attribute in source.Attributes)
                 {
-                    if (target.Attributes.ContainsKey(attribute.Key) == false)
+                    if (target.Attributes.ContainsKey(attribute.Key)) continue;
+
+                    if (newRefs && attribute.Value is EntityReference reference)
                     {
-                        if (newRefs && attribute.Value is EntityReference reference)
-                        {
-                            var newReference = new EntityReference(reference.LogicalName, reference.Id);
-                            
-                            target.Attributes.Add(attribute.Key, newReference);
-                        }
-                        else
-                        {
-                            target.Attributes.Add(attribute);
-                        }
+                        var newReference = new EntityReference(reference.LogicalName, reference.Id);
+
+                        target.Attributes.Add(attribute.Key, newReference);
                     }
+                    else
+                    {
+                        target.Attributes.Add(attribute);
+                    }
+                }
+
+                foreach (var formattedValue in source.FormattedValues)
+                {
+                    if (target.FormattedValues.ContainsKey(formattedValue.Key)) continue;
+
+                    target.FormattedValues.Add(formattedValue);
                 }
             }
         }
