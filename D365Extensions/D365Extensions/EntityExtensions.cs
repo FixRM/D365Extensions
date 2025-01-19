@@ -217,6 +217,25 @@ namespace Microsoft.Xrm.Sdk
             }
         }
 
+        /// <summary>
+        /// Creates a copy of given Entity
+        /// 
+        /// Note that RowVersion, EntityState, ExtensionData and RelatedEntities are not copied
+        /// </summary>
+        /// <returns>Entity copy</returns>
+        public static T Clone<T>(this T entity) where T : Entity, new()
+        {
+            var clone = new T();
+            clone.FormattedValues.AddRange(entity.FormattedValues);
+            clone.Attributes.AddRange(entity.Attributes);
+            clone.KeyAttributes.AddRange(entity.KeyAttributes);
+            clone.LogicalName = entity.LogicalName;
+            //it is called last to avoid adding duplicate key to Attributes collection
+            clone.Id = entity.Id; 
+
+            return clone;
+        }
+
         internal static bool AreEqual(object sValue, object tValue)
         {
             if (tValue == null && sValue == null)

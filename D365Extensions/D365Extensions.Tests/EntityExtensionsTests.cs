@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using D365Extensions.Tests.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Linq;
@@ -359,7 +360,7 @@ namespace D365Extensions.Tests
             // entity image
             Entity source = new Entity();
             source.Attributes.Add("firstname", "Artem"); //original value
-            source.Attributes.Add("lastname", "Grunin"); 
+            source.Attributes.Add("lastname", "Grunin");
             source.Attributes.Add("accountid", accountId);
 
             source.Attributes.Add("birthdate", new DateTime(1985, 8, 8));
@@ -864,6 +865,54 @@ namespace D365Extensions.Tests
 
             // Assert           
             Assert.AreEqual(0, target.Attributes.Count);
+        }
+
+        [TestMethod()]
+        public void CloneTest()
+        {
+            // Setup
+            var entity = new Entity();
+            entity.Id = Guid.NewGuid();
+            entity.LogicalName = "account";
+            entity.KeyAttributes["code"] = 123456;
+            entity.Attributes["name"] = "FixRM";
+            entity.FormattedValues["code"] = "123 456";
+
+            // Act
+            var clone = entity.Clone();
+
+            // Assert
+            Assert.AreNotEqual(entity, clone);
+
+            Assert.AreEqual(clone.Id, entity.Id);
+            Assert.AreEqual(clone.LogicalName, entity.LogicalName);
+            CollectionAssert.AreEqual(clone.KeyAttributes.ToList(), entity.KeyAttributes.ToList());
+            CollectionAssert.AreEqual(clone.Attributes.ToList(), entity.Attributes.ToList());
+            CollectionAssert.AreEqual(clone.FormattedValues.ToList(), entity.FormattedValues.ToList());
+        }
+
+        [TestMethod()]
+        public void TCloneTest()
+        {
+            // Setup
+            var entity = new Account();
+            entity.Id = Guid.NewGuid();
+            entity.LogicalName = "account";
+            entity.KeyAttributes["code"] = 123456;
+            entity.Attributes["name"] = "FixRM";
+            entity.FormattedValues["code"] = "123 456";
+
+            // Act
+            Account clone = entity.Clone();
+
+            // Assert
+            Assert.AreNotEqual(entity, clone);
+
+            Assert.AreEqual(clone.Id, entity.Id);
+            Assert.AreEqual(clone.LogicalName, entity.LogicalName);
+            CollectionAssert.AreEqual(clone.KeyAttributes.ToList(), entity.KeyAttributes.ToList());
+            CollectionAssert.AreEqual(clone.Attributes.ToList(), entity.Attributes.ToList());
+            CollectionAssert.AreEqual(clone.FormattedValues.ToList(), entity.FormattedValues.ToList());
         }
     }
 }
