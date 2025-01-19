@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FakeXrmEasy;
 
 namespace D365Extensions.Tests
 {
@@ -36,7 +37,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", contact1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Wrong";
 
@@ -69,7 +70,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", contact1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Associate";
 
@@ -115,7 +116,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", account1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { contact1, contact2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Associate";
 
@@ -157,7 +158,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", contact1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Associate";
 
@@ -184,7 +185,7 @@ namespace D365Extensions.Tests
             int? structType = 42;
             string referenceType = "ultimate question of life the universe and everything";
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = new ParameterCollection();
             context.InputParameters.Add("struct", structType);
             context.InputParameters.Add("class", referenceType);
@@ -199,7 +200,7 @@ namespace D365Extensions.Tests
             // Setup
             var expectedOrgId = Guid.NewGuid();
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.OrganizationId = expectedOrgId;
 
             // Act
@@ -220,7 +221,7 @@ namespace D365Extensions.Tests
                 LogicalName = "account"
             };
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.PrimaryEntityId = expectedEntityRef.Id;
             context.PrimaryEntityName = expectedEntityRef.LogicalName;
 
@@ -236,7 +237,7 @@ namespace D365Extensions.Tests
         public void GetPrimaryEntity_No_Primary_Id_Test()
         {
             // Setup
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
 
             // Act
             var actualEntityRef = context.GetPrimaryEntity();
@@ -255,7 +256,7 @@ namespace D365Extensions.Tests
                 LogicalName = "systemuser"
             };
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.UserId = expectedUserRef.Id;
 
             // Act
@@ -276,7 +277,7 @@ namespace D365Extensions.Tests
                 LogicalName = "systemuser"
             };
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InitiatingUserId = expectedUserRef.Id;
 
             // Act
@@ -297,7 +298,7 @@ namespace D365Extensions.Tests
                 LogicalName = "businessunit"
             };
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.BusinessUnitId= expectedUnitRef.Id;
 
             // Act
@@ -328,7 +329,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", contact1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Wrong";
 
@@ -361,7 +362,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", contact1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Associate";
 
@@ -403,7 +404,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", account1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { contact1, contact2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Associate";
 
@@ -441,7 +442,7 @@ namespace D365Extensions.Tests
             inputParameters.Add("Target", contact1);
             inputParameters.Add("RelatedEntities", new EntityReferenceCollection() { account1, account2 });
 
-            TestPluginExecutionContext context = new TestPluginExecutionContext();
+            var context = new XrmFakedPluginExecutionContext();
             context.InputParameters = inputParameters;
             context.MessageName = "Associate";
 

@@ -429,6 +429,7 @@ namespace D365Extensions.Tests
             /// Test for EntityReference attribute
             EntityReference actualAccountId = target.GetAttributeValue<EntityReference>("accountid");
             Assert.AreEqual(actualAccountId, accountId);
+            Assert.AreEqual(actualAccountId.LogicalName, accountId.LogicalName);
             Assert.IsNull(actualAccountId.Name);
         }
 
