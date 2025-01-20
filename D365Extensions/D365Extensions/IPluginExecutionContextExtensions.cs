@@ -191,9 +191,10 @@ namespace Microsoft.Xrm.Sdk
             Entity target = GetTarget(context);
             Entity image = GetPreImage(context, preImageName);
 
-            target?.MergeAttributes(image);
+            Entity result = target.Clone();
+            result.MergeAttributes(image);
 
-            return target;
+            return result;
         }
 
         /// <summary>
@@ -216,9 +217,10 @@ namespace Microsoft.Xrm.Sdk
             Entity target = GetTarget(context);
             Entity image = GetPostImage(context, postImageName);
 
-            target?.MergeAttributes(image);
+            Entity result = target.Clone();
+            result.MergeAttributes(image);
 
-            return target;
+            return result;
         }
 
         /// <summary>

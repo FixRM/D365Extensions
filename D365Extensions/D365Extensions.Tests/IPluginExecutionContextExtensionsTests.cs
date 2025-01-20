@@ -458,5 +458,102 @@ namespace D365Extensions.Tests
             Assert.AreEqual(account2, result[1].Item1);
             Assert.AreEqual(contact1, result[1].Item2);
         }
+
+        [TestMethod()]
+        public void GetPreTargetTest()
+        {
+            // Setup
+            var target = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "account",
+                ["name"] = "FixRM Corp",
+                ["foundationdate"] = new DateTime(1985, 8, 8)
+            };
+            target.FormattedValues["foundationdate"] = "08.08.1985";
+
+            var preImage = new Entity()
+            {
+                Id = target.Id,
+                LogicalName = target.LogicalName,
+                ["name"] = "FixRM",
+                ["statecode"] = new OptionSetValue(0)
+            };
+            preImage.FormattedValues["statecode"] = "Active";
+
+            var context = new XrmFakedPluginExecutionContext();
+            context.InputParameters = new ParameterCollection
+            {
+                { "Target", target }
+            };
+            context.PreEntityImages = new EntityImageCollection
+            {
+                { "PreImage", preImage }
+            };
+
+            // Act
+            var preTarget = context.GetPreTarget();
+
+            // Assert
+            Assert.AreNotEqual(preTarget, target);
+
+            Assert.AreEqual(preTarget.Id, target.Id);
+            Assert.AreEqual(preTarget.LogicalName, target.LogicalName);
+            Assert.AreEqual(preTarget["name"], target["name"]);
+            Assert.AreEqual(preTarget["foundationdate"], target["foundationdate"]);
+            Assert.AreEqual(preTarget["statecode"], preImage["statecode"]);
+
+            Assert.AreEqual(preTarget.FormattedValues["foundationdate"], target.FormattedValues["foundationdate"]);
+            Assert.AreEqual(preTarget.FormattedValues["statecode"], preImage.FormattedValues["statecode"]);
+        }
+
+        [TestMethod()]
+        public void GetPostTargetTest()
+        {
+            // Setup
+            var target = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "account",
+                ["name"] = "FixRM Corp",
+                ["foundationdate"] = new DateTime(1985, 8, 8)
+            };
+            target.FormattedValues["foundationdate"] = "08.08.1985";
+
+            var postImage = new Entity()
+            {
+                Id = target.Id,
+                LogicalName = target.LogicalName,
+                ["code"] = "1985-000001-XYZ",
+                ["statecode"] = new OptionSetValue(0)
+            };
+            postImage.FormattedValues["statecode"] = "Active";
+
+            var context = new XrmFakedPluginExecutionContext();
+            context.InputParameters = new ParameterCollection
+            {
+                { "Target", target }
+            };
+            context.PreEntityImages = new EntityImageCollection
+            {
+                { "PreImage", postImage }
+            };
+
+            // Act
+            var preTarget = context.GetPreTarget();
+
+            // Assert
+            Assert.AreNotEqual(preTarget, target);
+
+            Assert.AreEqual(preTarget.Id, target.Id);
+            Assert.AreEqual(preTarget.LogicalName, target.LogicalName);
+            Assert.AreEqual(preTarget["name"], target["name"]);
+            Assert.AreEqual(preTarget["foundationdate"], target["foundationdate"]);
+            Assert.AreEqual(preTarget["code"], postImage["code"]);
+            Assert.AreEqual(preTarget["statecode"], postImage["statecode"]);
+
+            Assert.AreEqual(preTarget.FormattedValues["foundationdate"], target.FormattedValues["foundationdate"]);
+            Assert.AreEqual(preTarget.FormattedValues["statecode"], postImage.FormattedValues["statecode"]);
+        }
     }
 }
