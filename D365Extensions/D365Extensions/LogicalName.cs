@@ -31,7 +31,7 @@ namespace D365Extensions
             if (lambda == null) return null;
 
             Expression expression = lambda.Body;
-            
+
             // Property, field of method returning value type
             if (expression is UnaryExpression unaryExpression)
             {
@@ -43,13 +43,9 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpession.Member;
 
-                // Hotfix: (Guid) Id attribute is declared in Entity class and is overriden in child EB-classes
+                // (Guid) Id attribute is declared in Entity class and is overriden in child EB-classes
                 // For some reason, lamda is assigned with MemberInfo of Entity instead of inheritor
-                // TODO: this fix is limited to single case of "Id" attribute, as it is not obvious if we need
-                // more generic solution. Why does one need to override any other attribute schema name in
-                // inherited class?
-
-                if (member.Name == "Id") 
+                if (member.DeclaringType != typeof(T))
                     member = typeof(T).GetMember(member.Name).SingleOrDefault();
 
                 return GetName(member);
