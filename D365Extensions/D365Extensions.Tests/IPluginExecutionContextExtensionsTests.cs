@@ -336,7 +336,11 @@ namespace D365Extensions.Tests
             var expectedError = string.Format(IPluginExecutionContextExtensions.WrongMessageForGetRelatedEntities, context.MessageName);
 
             /// Act, Assert
-            var error = Assert.ThrowsException<InvalidOperationException>(() => context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName));
+            var error = Assert.ThrowsException<InvalidOperationException>(() =>
+            {
+                context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName)
+                .ToList();
+            });
 
             Assert.AreEqual(expectedError, error.Message);
         }
@@ -367,19 +371,24 @@ namespace D365Extensions.Tests
             context.MessageName = "Associate";
 
             /// Act, Assert
-            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, "incident");
+            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, "incident")
+                .ToList();
             Assert.AreEqual(0, result.Count);
 
-            result = context.GetRelatedEntitiesAsTuples(contact1.LogicalName, "incident");
+            result = context.GetRelatedEntitiesAsTuples(contact1.LogicalName, "incident")
+                .ToList(); ;
             Assert.AreEqual(0, result.Count);
 
-            result = context.GetRelatedEntitiesAsTuples("incident", contact1.LogicalName);
+            result = context.GetRelatedEntitiesAsTuples("incident", contact1.LogicalName)
+                .ToList();
             Assert.AreEqual(0, result.Count);
 
-            result = context.GetRelatedEntitiesAsTuples("incident", account1.LogicalName);
+            result = context.GetRelatedEntitiesAsTuples("incident", account1.LogicalName)
+                .ToList();
             Assert.AreEqual(0, result.Count);
 
-            result = context.GetRelatedEntitiesAsTuples("incident", "product");
+            result = context.GetRelatedEntitiesAsTuples("incident", "product")
+                .ToList();
             Assert.AreEqual(0, result.Count);
         }
 
@@ -409,7 +418,8 @@ namespace D365Extensions.Tests
             context.MessageName = "Associate";
 
             /// Act
-            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName);
+            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName)                
+                .ToList();
 
             /// Assert
             Assert.AreEqual(2, result.Count);
@@ -447,7 +457,8 @@ namespace D365Extensions.Tests
             context.MessageName = "Associate";
 
             /// Act
-            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName);
+            var result = context.GetRelatedEntitiesAsTuples(account1.LogicalName, contact1.LogicalName)
+                .ToList();
 
             /// Assert
             Assert.AreEqual(2, result.Count);

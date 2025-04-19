@@ -204,6 +204,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPostTarget<T>(this IPluginExecutionContext context, string postImageName = PostImage) where T : Entity
         {
+            //TODO: use generic
             return GetPostTarget(context, postImageName).ToEntity<T>();
         }
 
@@ -289,11 +290,11 @@ namespace Microsoft.Xrm.Sdk
         /// Simplifies handling of Associate and Disassociate messages. This messages can't be filtered by entity type. Furthermore
         /// two options possible: when "A" entity is associated with array of "B", or "B" is associated with array of "A".
         /// 
-        /// This method generates universal dictionary of arguments which is suitable in all cases
+        /// This method generates universal pair of arguments which is suitable in all cases
         /// </summary>
         /// <param name="targetEntityLogicalName">Key entity schema name</param>
         /// <returns>List of Tuples or empty list if associated/disassociated entity types don't match with required</returns>
-        public static List<Tuple<EntityReference, EntityReference>> GetRelatedEntitiesAsTuples(this IPluginExecutionContext pluginContext,
+        public static IEnumerable<Tuple<EntityReference, EntityReference>> GetRelatedEntitiesAsTuples(this IPluginExecutionContext pluginContext,
             string targetEntityLogicalName,
             string relatedEntityLogicalName)
         {
@@ -311,23 +312,20 @@ namespace Microsoft.Xrm.Sdk
             string targetName = target.LogicalName;
             string relatedName = relatedEntities.First().LogicalName;
 
-            /// Generate result dictionary
-            List<Tuple<EntityReference, EntityReference>> dictionary = new List<Tuple<EntityReference, EntityReference>>(relatedEntities.Count);
-
             foreach (EntityReference relatedReference in relatedEntities)
             {
                 if (targetName == targetEntityLogicalName && relatedName == relatedEntityLogicalName)
                 {
-                    dictionary.Add(new Tuple<EntityReference, EntityReference>(target, relatedReference));
+                    yield return new Tuple<EntityReference, EntityReference>(target, relatedReference);
                 }
                 else if (relatedName == targetEntityLogicalName && targetName == relatedEntityLogicalName)
                 {
-                    dictionary.Add(new Tuple<EntityReference, EntityReference>(relatedReference, target));
+                    yield return new Tuple<EntityReference, EntityReference>(relatedReference, target);
                 }
                 else break;
             }
 
-            return dictionary;
+            yield break;
         }
     }
 }
