@@ -17,22 +17,22 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static Entity ToEntity(this EntityReference entityReference)
         {
-            return new Entity()
-            {
-                Id = entityReference.Id,
-                LogicalName = entityReference.LogicalName,
-                KeyAttributes = entityReference.KeyAttributes,
-                RowVersion = entityReference.RowVersion
-            };
+            return entityReference.ToEntity<Entity>();
         }
 
         /// <summary>
         /// Gets the entity based on the EntityReference as the specified type.
         /// </summary>
         /// <returns></returns>
-        public static T ToEntity<T>(this EntityReference entityReference) where T : Entity
+        public static T ToEntity<T>(this EntityReference entityReference) where T : Entity, new() 
         {
-            return entityReference.ToEntity().ToEntity<T>();
+            return new T()
+            {
+                Id = entityReference.Id,
+                LogicalName = entityReference.LogicalName,
+                KeyAttributes = entityReference.KeyAttributes,
+                RowVersion = entityReference.RowVersion
+            };
         }
 
         /// <summary>
