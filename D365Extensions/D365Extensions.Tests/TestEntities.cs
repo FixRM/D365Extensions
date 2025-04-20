@@ -141,4 +141,10 @@ namespace D365Extensions.Tests
             set => SetAttributeValue("theprop", value);
         }
     }
+
+    public enum StateCode
+    {
+        Active = 0,
+        Inactive = 1
+    }
 }
