@@ -914,5 +914,23 @@ namespace D365Extensions.Tests
             CollectionAssert.AreEqual(clone.Attributes.ToList(), entity.Attributes.ToList());
             CollectionAssert.AreEqual(clone.FormattedValues.ToList(), entity.FormattedValues.ToList());
         }
+
+        [TestMethod()]
+        public void ToColumnSetTest()
+        {
+            // Setup
+            var expectedColumnName = "accountnumber";
+            
+            var entity = new Entity()
+            {
+                [expectedColumnName] = "123"
+            };
+
+            // Act
+            var cloumnSet = entity.ToColumnSet();
+
+            // Assert
+            Assert.AreEqual(expectedColumnName, cloumnSet.Columns.Single());
+        }
     }
 }

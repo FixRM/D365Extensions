@@ -1,4 +1,5 @@
 ﻿using D365Extensions;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -234,6 +235,14 @@ namespace Microsoft.Xrm.Sdk
             clone.Id = entity.Id; 
 
             return clone;
+        }
+
+        public static ColumnSet ToColumnSet(this Entity entity)
+        {
+            var columnSet = new ColumnSet();
+            columnSet.Columns.AddRange(entity.Attributes.Keys);
+
+            return columnSet;
         }
 
         internal static bool AreEqual(object sValue, object tValue)
