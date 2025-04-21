@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.Xrm.Sdk.Tests
+namespace D365Extensions.Tests
 {
     [TestClass()]
     public class EntityCollectionExtensionsTests
