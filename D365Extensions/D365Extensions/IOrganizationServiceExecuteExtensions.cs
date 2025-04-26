@@ -211,5 +211,26 @@ namespace Microsoft.Xrm.Sdk
             //to update if last requests where skipped
             reportProgress();
         }
+
+        /// <summary>
+        /// Updates only changed attributes of the record.
+        /// 
+        /// WARNING: This method will execute Retrieve operation before performing Update.
+        /// Consider using Entity.RemoveUnchanged if you already have as-is and to-be entity instances
+        /// </summary
+        /// <param name="entity">An entity instance that has one or more properties set to be updated in the record</param>
+        public static void UpdateChanged(this IOrganizationService service, Entity entity)
+        {
+            var columnSet = entity.ToColumnSet();
+
+            // to retrieve via Id or alternative keys
+            var existingEntity = service.Retrieve(entity.ToEntityReference(withKeys: true), columnSet);
+
+            //TODO: optimize
+            var entityToUpdate = entity.Clone();
+            entityToUpdate.RemoveUnchanged(existingEntity);
+
+            service.Update(entityToUpdate);
+        }
     }
 }

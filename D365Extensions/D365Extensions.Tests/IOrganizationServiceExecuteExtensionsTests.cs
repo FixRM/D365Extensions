@@ -1,4 +1,4 @@
-﻿#pragma warning disable CS0618 // Type or member is obsolete
+﻿using D365Extensions.Tests.Entities;
 using FakeItEasy;
 using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -790,6 +790,49 @@ namespace D365Extensions.Tests
             Assert.AreEqual<float>(100.0F, progressReports[4].Progress);
             Assert.AreEqual<float>(100.0F, progressReports[4].ErrorRate);
             Assert.AreEqual<float>(0.0F, progressReports[4].SkippedRate);
+        }
+
+        [TestMethod()]
+        public void UpdateChangedTest()
+        {
+            // Setup
+            const string expectedName = "FixRM";
+            const string expectedNumber = "123";
+
+            var existingEntity = new Account
+            {
+                Id = Guid.NewGuid(),
+                Name = "FixRM Corp",
+                //AccountNumber = null,
+                TickerSymbol = "FM",
+            };
+
+            var entity = new Account
+            {
+                Id = existingEntity.Id,
+                // Should update
+                Name = expectedName,
+                // Should add
+                AccountNumber = expectedNumber,
+                // Should delete
+                TickerSymbol = null,
+            };
+
+            var context = new XrmFakedContext();
+            context.Initialize(existingEntity);
+
+            Entity actualEntity = null;
+            var service = context.GetOrganizationService();
+            A.CallTo(() => service.Update(A<Entity>.Ignored)).Invokes((Entity e) => actualEntity = e);
+
+            // Act
+            service.UpdateChanged(entity.ToEntity<Entity>());
+            var actualAccount = actualEntity.ToEntity<Account>();
+
+            // Assert
+            Assert.AreEqual(expectedName, actualAccount.Name);
+            Assert.AreEqual(expectedNumber, actualAccount.AccountNumber);
+            Assert.IsNull(actualAccount.TickerSymbol);
         }
     }
 }
