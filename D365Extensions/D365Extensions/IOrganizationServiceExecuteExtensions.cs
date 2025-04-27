@@ -226,11 +226,11 @@ namespace Microsoft.Xrm.Sdk
             // to retrieve via Id or alternative keys
             var existingEntity = service.Retrieve(entity.ToEntityReference(withKeys: true), columnSet);
 
-            //TODO: optimize
-            var entityToUpdate = entity.Clone();
-            entityToUpdate.RemoveUnchanged(existingEntity);
+            // It is usually not recommended to pass retrieved entity to Update metthod, but
+            // at this case there is no risk that we gonna make unnecessary changes
+            existingEntity.ApplyChanges(entity, removeUnchanged: true);
 
-            service.Update(entityToUpdate);
+            service.Update(existingEntity);
         }
     }
 }
