@@ -1,4 +1,24 @@
 # What's new
+## [2.4.0](https://github.com/FixRM/D365Extensions/compare/v2.3.0...v2.4.0) (2025-04-27)
+
+
+### Features
+
+* add ApplyChanges extension method for Entity ([70a4446](https://github.com/FixRM/D365Extensions/commit/70a44465c61e77f3392e17c866d3b0f028b1bfa7))
+* add Entity.Clone extention method ([4bb6314](https://github.com/FixRM/D365Extensions/commit/4bb6314249f709d13d0047947cb293cc28a7113a))
+* add GetRelatedEntitiesAsTuples method as the replacement for GetRelatedEntitiesByTarget ([9b154fe](https://github.com/FixRM/D365Extensions/commit/9b154fe3858119c1c439d1cd3e4c12c275761042))
+* add strongly typed version of the EntityReference class ([d339382](https://github.com/FixRM/D365Extensions/commit/d339382597868e864fd24e006c021075a2ee9e2a))
+* add strongly typed version of the KeyAttributeCollection class ([0af1fec](https://github.com/FixRM/D365Extensions/commit/0af1fece7d800baebce24d52f43a50c4ef0a61bf))
+* add strongly typed version of the OptionSetValue class ))) ([13797f3](https://github.com/FixRM/D365Extensions/commit/13797f3ce6cc48f4310a3e8d2c76b6300a698a58))
+* add ToColumnSet method ([3209c99](https://github.com/FixRM/D365Extensions/commit/3209c9935c58054bc57895517b36f1e4ada19415))
+* add UpdateChanged extension method for IOrganizationService ([17249ec](https://github.com/FixRM/D365Extensions/commit/17249ec0f13b7936f2122e27851da10f4f802df9))
+
+
+### Bug Fixes
+
+* GetPreTarget and GetPostTarget now returns a new Entity instead of modifying original Target ([4bde5c3](https://github.com/FixRM/D365Extensions/commit/4bde5c3ed1d97b9b96cc7a3702c30fb4fb1e836d))
+* MergeAttributes now takes FormattedValues into account ([3fee6df](https://github.com/FixRM/D365Extensions/commit/3fee6df721a5e07d46ee78fe679c407530f7d49d))
+
 ## [2.3.0](https://github.com/FixRM/D365Extensions/compare/v2.2.0...v2.3.0) (2024-12-28)
 
 

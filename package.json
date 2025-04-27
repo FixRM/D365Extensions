@@ -1,7 +1,7 @@
 {
   "name": "d365extensions",
   "author": "Artem Grunin",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "build and versioning scripts",
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
