@@ -245,6 +245,30 @@ namespace Microsoft.Xrm.Sdk
             return columnSet;
         }
 
+        /// <summary>
+        /// Update traget entity attributes with values from source entity and REMOVE values that didn't change
+        /// </summary>
+        /// <param name="source">Changed entity instance</param>
+        public static void ApplyChanges(this Entity target, Entity source, bool removeUnchanged = true)
+        {
+            CheckParam.CheckForNull(source, nameof(source));
+
+            foreach (var key in source.Attributes.Keys)
+            {
+                object tValue = target.GetAttributeValue<object>(key);
+                object sValue = source[key];
+
+                if (AreEqual(sValue, tValue) && !target.Id.Equals(tValue))
+                {
+                    target.Attributes.Remove(key);
+                }
+                else if (removeUnchanged) 
+                {
+                    target[key] = sValue;
+                }
+            }
+        }
+
         internal static bool AreEqual(object sValue, object tValue)
         {
             if (tValue == null && sValue == null)
