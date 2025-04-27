@@ -211,7 +211,9 @@ namespace Microsoft.Xrm.Sdk
 
             foreach (var key in target.Attributes.Keys.ToArray())
             {
-                if (AreEqual(target[key], source.GetAttributeValue<object>(key)))
+                object tValue = target[key];
+
+                if (AreEqual(tValue, source.GetAttributeValue<object>(key)) && !target.Id.Equals(tValue))
                 {
                     target.Attributes.Remove(key);
                 }
@@ -232,7 +234,7 @@ namespace Microsoft.Xrm.Sdk
             clone.KeyAttributes.AddRange(entity.KeyAttributes);
             clone.LogicalName = entity.LogicalName;
             //it is called last to avoid adding duplicate key to Attributes collection
-            clone.Id = entity.Id; 
+            clone.Id = entity.Id;
 
             return clone;
         }
@@ -284,13 +286,12 @@ namespace Microsoft.Xrm.Sdk
                 // You got it. Most likely, this attributes will be ignored during Update, otherwise they should be
                 // used with care and be set manually
                 //case Guid _:
-                //    return true;
+                //    return false;
 
                 // BigInt (long) attributes are internal only according to documentation
-                // We don't want to break concurrency behavior with RowVersion attribute, or EntityImage_Timestamp or
-                // other internal stuff. 
+                // We don't want to break EntityImage_Timestamp or other internal stuff. 
                 //case long _:
-                //    return true;
+                //    return false;
 
                 // EntityImage attributes are byte arrays (byte[]) while Annotation bodies are strings
                 // Technically we should use EntityImage_Timestamp (BigInt/long) attribute to check if there are changes

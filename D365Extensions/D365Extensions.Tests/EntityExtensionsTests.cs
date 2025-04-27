@@ -631,8 +631,6 @@ namespace D365Extensions.Tests
 
             var source = new Entity()
             {
-                LogicalName = "account",
-                Id = guid,
                 //Native types
                 ["string"] = "Artem",
                 ["guid"] = new Guid?(guid),
@@ -867,6 +865,29 @@ namespace D365Extensions.Tests
             Assert.AreEqual(0, target.Attributes.Count);
         }
 
+        [TestMethod]
+        public void ShouldNotRemovePrimaryAttribute()
+        {
+            // Setup
+            var target = new Account()
+            {
+                Id = Guid.NewGuid(),
+            };
+
+            var source = new Account()
+            {
+                Id = target.Id
+            };
+
+            // Act
+            target.RemoveUnchanged(source);
+
+            // Assert           
+            Assert.AreEqual(1, target.Attributes.Count);
+            Assert.IsNotNull(target.AccountId);
+            Assert.AreEqual(target.Id, target.AccountId);
+        }
+
         [TestMethod()]
         public void CloneTest()
         {
@@ -920,7 +941,7 @@ namespace D365Extensions.Tests
         {
             // Setup
             var expectedColumnName = "accountnumber";
-            
+
             var entity = new Entity()
             {
                 [expectedColumnName] = "123"
