@@ -330,7 +330,6 @@ namespace Microsoft.Xrm.Sdk
             if (tValue == null && sValue == null)
                 return true;
 
-            //TODO: should empty collections be eq to null?
             if (tValue == null ^ sValue == null)
                 return false;
 

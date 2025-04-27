@@ -204,7 +204,6 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPostTarget<T>(this IPluginExecutionContext context, string postImageName = PostImage) where T : Entity
         {
-            //TODO: use generic
             return GetPostTarget(context, postImageName).ToEntity<T>();
         }
 
