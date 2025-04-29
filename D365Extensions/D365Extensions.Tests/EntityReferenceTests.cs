@@ -58,7 +58,7 @@ namespace D365Extensions.Tests
             var expectedValue = "123";
 
             // Act
-            EntityReference reference = new EntityReference<Account>(expectedKey, expectedValue);
+            EntityReference reference = new EntityReference<Account>(a=> a.AccountNumber, expectedValue);
             var actualKey = reference.KeyAttributes.Single();
 
             // Assert
