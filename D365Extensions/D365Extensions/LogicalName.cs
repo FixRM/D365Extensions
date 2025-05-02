@@ -43,8 +43,8 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpession.Member;
 
-                // (Guid) Id attribute is declared in Entity class and is overriden in child EB-classes
-                // For some reason, lamda is assigned with MemberInfo of Entity instead of inheritor
+                // (Guid) Id attribute is declared in Entity class and is overridden in child EB-classes
+                // For some reason, lambda is assigned with MemberInfo of Entity instead of inheritor
                 if (member.DeclaringType != typeof(T) && member.DeclaringType.IsAssignableFrom(typeof(Entity)))
                     member = typeof(T).GetMember(member.Name).SingleOrDefault();
 
@@ -54,37 +54,37 @@ namespace D365Extensions
             throw CheckParam.InvalidExpression(nameof(expression));
         }
 
-        static ConcurrentDictionary<MemberInfo, string> memberChache = new ConcurrentDictionary<MemberInfo, string>();
+        static ConcurrentDictionary<MemberInfo, string> memberCache = new ConcurrentDictionary<MemberInfo, string>();
 
         internal static string GetName(MemberInfo member)
         {
             CheckParam.CheckForNull(member, nameof(member));
 
-            if (!memberChache.TryGetValue(member, out string logicalName))
+            if (!memberCache.TryGetValue(member, out string logicalName))
             {
                 logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>()?.LogicalName
                     // fallback if attribute not provided
                     ?? member.Name.ToLowerInvariant();
 
-                memberChache.TryAdd(member, logicalName);
+                memberCache.TryAdd(member, logicalName);
             }
 
             return logicalName;
         }
 
-        static ConcurrentDictionary<Type, string> typeChache = new ConcurrentDictionary<Type, string>();
+        static ConcurrentDictionary<Type, string> typeCache = new ConcurrentDictionary<Type, string>();
 
         internal static string GetName<T>() where T : Entity
         {
             var type = typeof(T);
 
-            if (!typeChache.TryGetValue(type, out string logicalName))
+            if (!typeCache.TryGetValue(type, out string logicalName))
             {
                 logicalName = type.GetCustomAttribute<EntityLogicalNameAttribute>()?.LogicalName
                     // fallback if attribute not provided
                     ?? type.Name.ToLowerInvariant();
 
-                typeChache.TryAdd(type, logicalName);
+                typeCache.TryAdd(type, logicalName);
             }
 
             return logicalName;

@@ -1,5 +1,4 @@
 ﻿using D365Extensions;
-using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections;
 using System.Collections.Generic;

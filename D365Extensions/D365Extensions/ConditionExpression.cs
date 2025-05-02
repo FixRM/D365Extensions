@@ -12,7 +12,6 @@ namespace Microsoft.Xrm.Sdk.Query
     /// <summary>
     /// Strongly typed version of the ConditionExpression class
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class ConditionExpression<T> where T : Entity
     {
         /// <summary>

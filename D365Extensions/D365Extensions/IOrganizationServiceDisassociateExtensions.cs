@@ -39,7 +39,6 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         public static void Disassociate(this IOrganizationService service, EntityReference primaryEntity, Relationship relationship, IList<EntityReference> relatedEntities)
         {
-
             service.Disassociate(primaryEntity, relationship, new EntityReferenceCollection(relatedEntities));
         }
 

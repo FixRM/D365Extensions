@@ -12,8 +12,18 @@ namespace Microsoft.Xrm.Sdk
         /// <summary>
         /// Simplifies getting values from Entity.FormattedValues collection
         /// <param name="attributeLogicalName">Attribute name</param>
-        /// <returns>Attribute formated value</returns>
-        public static String GetFormatedValue(this Entity entity, String attributeLogicalName)
+        /// <returns>Attribute formatted value</returns>
+        [Obsolete("Use GetFormattedValue")]
+        public static string GetFormatedValue(this Entity entity, string attributeLogicalName)
+        {
+            return GetFormattedValue(entity, attributeLogicalName);
+        }
+
+        /// <summary>
+        /// Simplifies getting values from Entity.FormattedValues collection
+        /// <param name="attributeLogicalName">Attribute name</param>
+        /// <returns>Attribute formatted value</returns>
+        public static string GetFormattedValue(this Entity entity, string attributeLogicalName)
         {
             CheckParam.CheckForNull(attributeLogicalName, nameof(attributeLogicalName));
 
@@ -25,8 +35,19 @@ namespace Microsoft.Xrm.Sdk
         /// Simplifies getting values from Entity.FormattedValues collection
         /// <param name="attributeLogicalName">Attribute name</param>
         /// <param name="attributeLogicalName">Entity alias</param>
-        /// <returns>Attribute formated value</returns>
+        /// <returns>Attribute formatted value</returns>
+        [Obsolete("Use GetFormattedValue")]
         public static string GetFormatedValue(this Entity entity, string attributeLogicalName, string alias)
+        {
+            return GetFormattedValue(entity, attributeLogicalName, alias);
+        }
+
+        /// <summary>
+        /// Simplifies getting values from Entity.FormattedValues collection
+        /// <param name="attributeLogicalName">Attribute name</param>
+        /// <param name="attributeLogicalName">Entity alias</param>
+        /// <returns>Attribute formatted value</returns>
+        public static string GetFormattedValue(this Entity entity, string attributeLogicalName, string alias)
         {
             CheckParam.CheckForNull(attributeLogicalName, nameof(attributeLogicalName));
             CheckParam.CheckForNull(attributeLogicalName, nameof(alias));
@@ -261,7 +282,7 @@ namespace Microsoft.Xrm.Sdk
         }
 
         /// <summary>
-        /// Update traget entity attributes with values from source entity and REMOVE values that didn't change
+        /// Update target entity attributes with values from source entity and REMOVE values that didn't change
         /// </summary>
         /// <param name="source">Changed entity instance</param>
         public static void ApplyChanges(this Entity target, Entity source, bool removeUnchanged = true)
@@ -277,7 +298,7 @@ namespace Microsoft.Xrm.Sdk
                 {
                     target.Attributes.Remove(key);
                 }
-                else if (removeUnchanged) 
+                else if (removeUnchanged)
                 {
                     target[key] = sValue;
                 }

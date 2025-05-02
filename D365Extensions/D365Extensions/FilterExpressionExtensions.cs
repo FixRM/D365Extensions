@@ -16,7 +16,6 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <summary>
         /// Adds a condition to the filter expression setting the entity name, attribute name, condition operator, and value array.
         /// </summary>
-        /// <typeparam name="T">Type of the entity.</typeparam>
         /// <param name="attributeName">Property expressions containing the name of the attribute.</param>
         /// <param name="conditionOperator">Condition operator.</param>
         /// <param name="values">The array of values to add.</param>

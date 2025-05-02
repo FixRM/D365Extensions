@@ -12,7 +12,6 @@ namespace Microsoft.Xrm.Sdk
         /// <summary>
         /// Safely gets value from DataCollection/ParameterCollection
         /// </summary>
-        /// <typeparam name="T">parameter type</typeparam>
         /// <param name="key">parameter name</param>
         /// <returns></returns>
         public static T GetValue<T>(this DataCollection<string, object> collection, string key)

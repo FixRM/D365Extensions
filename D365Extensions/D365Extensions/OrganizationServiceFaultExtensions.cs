@@ -9,7 +9,7 @@ namespace Microsoft.Xrm.Sdk
 {
 
     /// <summary>
-    /// Converts OrganizatioService fault`s ErrorCode to ErrorCodes enumeration value.
+    /// Converts OrganizationService fault`s ErrorCode to ErrorCodes enumeration value.
     /// 
     /// Returns null if ErrorCode is unknown
     /// </summary>
