@@ -10,7 +10,7 @@ namespace D365Extensions.Tests
     [TestClass()]
     public class LogicalNameTests
     {
-         [TestMethod()]
+        [TestMethod()]
         public void Get_Reference_Type_Property_Name_Test()
         {
             // Setup
@@ -187,6 +187,16 @@ namespace D365Extensions.Tests
 
             // Assert
             Assert.AreEqual("accountid", name);
+        }
+
+        [TestMethod()]
+        public void Reference_Id_Test()
+        {
+            // Act
+            var name = LogicalName.GetName<Account>(a => a.PrimaryContactId.Id);
+
+            // Assert
+            Assert.AreEqual("id", name);
         }
     }
 }

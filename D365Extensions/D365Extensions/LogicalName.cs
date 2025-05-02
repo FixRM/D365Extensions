@@ -45,7 +45,7 @@ namespace D365Extensions
 
                 // (Guid) Id attribute is declared in Entity class and is overriden in child EB-classes
                 // For some reason, lamda is assigned with MemberInfo of Entity instead of inheritor
-                if (member.DeclaringType != typeof(T))
+                if (member.DeclaringType != typeof(T) && member.DeclaringType.IsAssignableFrom(typeof(Entity)))
                     member = typeof(T).GetMember(member.Name).SingleOrDefault();
 
                 return GetName(member);
