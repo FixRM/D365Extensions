@@ -248,6 +248,10 @@ namespace Microsoft.Xrm.Sdk
             return clone;
         }
 
+        /// <summary>
+        /// Create ColumnSet based on entity attributes keys
+        /// </summary>
+        /// <returns>ColumnSet to retrieve entity</returns>
         public static ColumnSet ToColumnSet(this Entity entity)
         {
             var columnSet = new ColumnSet();
