@@ -73,17 +73,26 @@ namespace Microsoft.Xrm.Sdk
             /// Use LogicalName as alias if it is not specified
             string aliasPrefix = (alias ?? entityLogicalName) + ".";
 
-            var aliasedAttributes = entity.Attributes.Where(a => a.Key.StartsWith(aliasPrefix))
-                .Select(a => a.Value as AliasedValue)
-                .Where(a => a != null)
-                .Select(a => new KeyValuePair<string, object>(a.AttributeLogicalName, a.Value));
-
-            var aliasedFormatedValues = entity.FormattedValues.Where(a => a.Key.StartsWith(aliasPrefix))
-                .Select(a => new KeyValuePair<string, string>(GetAttributePart(a.Key), a.Value));
-
             Entity aliasedEntity = new Entity(entityLogicalName);
-            aliasedEntity.Attributes.AddRange(aliasedAttributes);
-            aliasedEntity.FormattedValues.AddRange(aliasedFormatedValues);
+
+            foreach (var a in entity.Attributes)
+            {
+                if (a.Value is AliasedValue av && a.Key.StartsWith(aliasPrefix))
+                {
+                    aliasedEntity.Attributes.Add(av.AttributeLogicalName, av.Value);
+
+                    if (av.IsPrimaryKey()) aliasedEntity.Id = av.GetValue<Guid>();
+                }
+            }
+
+            foreach (var f in entity.FormattedValues)
+            {
+                if (f.Key.StartsWith(aliasPrefix))
+                {
+                    aliasedEntity.FormattedValues.Add(GetAttributePart(f.Key), f.Value);
+                }
+            }
+
 
             return aliasedEntity;
         }

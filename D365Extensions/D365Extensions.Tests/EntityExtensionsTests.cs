@@ -244,9 +244,7 @@ namespace D365Extensions.Tests
             TestEntity actualEntity;
 
             /// Test
-#pragma warning disable CS0618 // Type or member is obsolete
             actualEntity = entity.GetAliasedEntity<TestEntity>(linkedEntityLogicalName1, alias1);
-#pragma warning restore CS0618 // Type or member is obsolete
 
             /// Instance is correct type
             Assert.IsNotNull(actualEntity);
@@ -337,6 +335,25 @@ namespace D365Extensions.Tests
             /// Assert "name" not matched with prefix "na" or "account
             Assert.IsNull(aliasedEntity1.GetAttributeValue<string>("accountid"));
             Assert.IsNull(aliasedEntity2.GetAttributeValue<string>("name"));
+        }
+
+        [TestMethod()]
+        public void GetAliasedEntityPrimaryKeyTest()
+        {
+            /// Setup
+            var taskId = Guid.NewGuid();
+
+            var account = new Account()
+            {
+                Id = Guid.NewGuid(),
+                ["t.activityid"] = new AliasedValue(Task.EntityLogicalName, "activityid", taskId)
+            };
+
+            /// Act
+            var result = account.GetAliasedEntity<Task>("t");
+
+            /// Assert
+            Assert.AreEqual(taskId, result.Id);
         }
 
         [TestMethod()]
@@ -990,7 +1007,7 @@ namespace D365Extensions.Tests
             Assert.IsNull(existingEntity.AccountNumber);
             Assert.AreEqual(expectedNumberOfEmployees, existingEntity.NumberOfEmployees);
             Assert.AreEqual(expectedTicker, updatedEntity.TickerSymbol);
-            Assert.IsNull (existingEntity.WebSiteURL);
+            Assert.IsNull(existingEntity.WebSiteURL);
         }
     }
 }
