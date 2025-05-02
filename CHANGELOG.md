@@ -1,4 +1,12 @@
 # What's new
+## [2.5.0](https://github.com/FixRM/D365Extensions/compare/v2.4.0...v2.5.0) (2025-05-02)
+
+
+### Features
+
+* add generic value of AliasedValue ([4d35791](https://github.com/FixRM/D365Extensions/commit/4d35791b71078c25765746ada21bf80261a096e0))
+* GetAliasedEntity now return Entity with Id ([45d1554](https://github.com/FixRM/D365Extensions/commit/45d1554c84904e15334dfd12a48a55ec09bbd1ad))
+
 ## [2.4.0](https://github.com/FixRM/D365Extensions/compare/v2.3.0...v2.4.0) (2025-04-27)
 
 
