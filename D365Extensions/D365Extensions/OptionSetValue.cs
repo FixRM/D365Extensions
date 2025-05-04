@@ -9,7 +9,7 @@ namespace Microsoft.Xrm.Sdk
     /// <summary>
     /// Strongly typed version of the OptionSetValue class
     /// </summary>
-    public class OptionSetValue<T> where T : Enum
+    public sealed class OptionSetValue<T> where T : Enum
     {
         /// <summary>
         /// Gets or sets the current value.

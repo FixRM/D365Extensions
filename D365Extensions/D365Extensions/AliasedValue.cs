@@ -8,7 +8,7 @@ namespace Microsoft.Xrm.Sdk
     /// Generic version if AliasedValue class
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class AliasedValue<T> where T : Entity
+    public sealed class AliasedValue<T> where T : Entity
     {
         public Expression<Func<T, object>> AttributeName { get; }
 
