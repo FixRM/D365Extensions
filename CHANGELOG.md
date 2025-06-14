@@ -1,4 +1,11 @@
 # What's new
+## [2.6.0](https://github.com/FixRM/D365Extensions/compare/v2.5.0...v2.6.0) (2025-06-14)
+
+
+### Features
+
+* ColumnSet<T> now supports expressions with anonimous object + general improvements in expression handling ([99fe57b](https://github.com/FixRM/D365Extensions/commit/99fe57bdd0c929dc93cd3c187809834b03ab5286))
+
 ## [2.5.0](https://github.com/FixRM/D365Extensions/compare/v2.4.0...v2.5.0) (2025-05-02)
 
 
