@@ -14,17 +14,16 @@ namespace D365Extensions.Tests
     public class ColumnSetTests
     {
         [TestMethod()]
-        public void Defaut_Constructor_Test()
+        public void Default_Constructor_Test()
         {
+            // Setup
+            ColumnSet defaultColumnSet = new ColumnSet();
             // Act
             ColumnSet columnSet = new ColumnSet<TestEntity>();
 
-            var query = new QueryExpression();
-
             // Assert
-            var actual = columnSet.Columns;
-
-            Assert.AreEqual(0, actual.Count);
+            CollectionAssert.AreEqual(defaultColumnSet.Columns, columnSet.Columns);
+            Assert.AreEqual(defaultColumnSet.AllColumns, columnSet.AllColumns);
         }
 
         [TestMethod()]

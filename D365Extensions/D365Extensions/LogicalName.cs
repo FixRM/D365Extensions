@@ -14,30 +14,39 @@ namespace D365Extensions
     /// </summary>
     internal static class LogicalName
     {
-        internal static IEnumerable<string> GetNames<T>(IEnumerable<Expression<Func<T, object>>> expressions)
+        internal static IEnumerable<string> GetNames<T>(IEnumerable<Expression<Func<T, object>>> lambdas)
         {
-            foreach (var expression in expressions)
+            foreach (var lambda in lambdas)
             {
-                if (expression.Body is NewExpression newExpressionBody)
+                //It is ok to take nulls as OOB ColumnSet accept null column names
+                if (lambda is null) yield return null;
+
+                if (lambda.Body is NewExpression newExpressionBody)
                 {
-                    for (int j = 0; j < newExpressionBody.Members.Count; j++)
+                    for (int i = 0; i < newExpressionBody.Members.Count; i++)
                     {
-                        yield return GetName<T>(newExpressionBody.Members[j], newExpressionBody.Arguments[j], isAnonymous: true);
+                        yield return GetName<T>(newExpressionBody.Arguments[i]);
                     }
                 }
                 else
                 {
-                    yield return GetName(expression);
+                    yield return GetName<T>(lambda.Body);
                 }
             }
         }
 
         internal static string GetName<T>(Expression<Func<T, object>> lambda)
         {
+            //It is ok to take nulls as all target name fields are nullable
             if (lambda == null) return null;
 
-            Expression expression = lambda.Body;
+            return GetName<T>(lambda.Body);
+        }
 
+        static ConcurrentDictionary<MemberInfo, string> memberCache = new ConcurrentDictionary<MemberInfo, string>();
+        
+        private static string GetName<T>(Expression expression)
+        {
             // Property, field of method returning value type
             if (expression is UnaryExpression unaryExpression)
             {
@@ -49,39 +58,31 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpression.Member;
 
-                return GetName<T>(member, expression);
-            }
-
-            throw CheckParam.InvalidExpression(nameof(expression), lambda.ToString());
-        }
-
-        static ConcurrentDictionary<MemberInfo, string> memberCache = new ConcurrentDictionary<MemberInfo, string>();
-
-        internal static string GetName<T>(MemberInfo member, Expression expression, bool isAnonymous = false)
-        {
-            CheckParam.CheckForNull(member, nameof(member));
-
-            if (isAnonymous || typeof(Entity).IsAssignableFrom(member.DeclaringType))
-            {
-                // (Guid) Id attribute is declared in Entity class and is overridden in child EB-classes
-                // For some reason, lambda is assigned with MemberInfo of Entity instead of inheritor
-                if (member.DeclaringType != typeof(T))
+                if (typeof(Entity).IsAssignableFrom(member.DeclaringType))
                 {
-                    member = typeof(T).GetMember(member.Name).SingleOrDefault();
+                    // (Guid) Id attribute is declared in Entity class and is overridden in child EB-classes
+                    // For some reason, lambda is assigned with MemberInfo of Entity instead of inheritor
+                    // Also we support anonymous types there member-expressions come from their original type
+                    if (member.DeclaringType != typeof(T))
+                    {
+                        member = typeof(T).GetMember(member.Name).SingleOrDefault();
+                    }
                 }
+                else throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
+
+                if (!memberCache.TryGetValue(member, out string logicalName))
+                {
+                    logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>()?.LogicalName
+                        // fallback if attribute not provided
+                        ?? member.Name.ToLowerInvariant();
+
+                    memberCache.TryAdd(member, logicalName);
+                }
+
+                return logicalName;
             }
-            else throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
 
-            if (!memberCache.TryGetValue(member, out string logicalName))
-            {
-                logicalName = member.GetCustomAttribute<AttributeLogicalNameAttribute>()?.LogicalName
-                    // fallback if attribute not provided
-                    ?? member.Name.ToLowerInvariant();
-
-                memberCache.TryAdd(member, logicalName);
-            }
-
-            return logicalName;
+            throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
         }
 
         static ConcurrentDictionary<Type, string> typeCache = new ConcurrentDictionary<Type, string>();

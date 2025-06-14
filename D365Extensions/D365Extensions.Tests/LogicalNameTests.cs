@@ -59,9 +59,9 @@ namespace D365Extensions.Tests
         public void Should_Throw_On_Methods_Test()
         {
             // Setup
-            var expectedMessage = string.Format(CheckParam.InvalidExpressionMessage, "t => t.ToEntityReference()");
+            var expectedMessage = string.Format(CheckParam.InvalidExpressionMessage, "t.ToEntityReference()");
 
-                // Act
+            // Act
             var e = Assert.ThrowsException<ArgumentException>(
                 () => LogicalName.GetName<TestEntity>(t => t.ToEntityReference()));
 
@@ -216,6 +216,25 @@ namespace D365Extensions.Tests
             Assert.AreEqual("accountid", names[0]);
             Assert.AreEqual("accountnumber", names[1]);
             Assert.AreEqual("primarycontactid", names[2]);
+        }
+
+        [TestMethod()]
+        public void Anonymous_Object_With_Error_Test()
+        {
+            // Setup
+            var expectedErrorMessage = string.Format(CheckParam.InvalidExpressionMessage, "a.PrimaryContactId.Id");
+
+            Expression<Func<Account, object>> expression = a => new 
+            { 
+                a.AccountNumber, 
+                a.PrimaryContactId.Id 
+            };
+            
+            // Act
+            var error = Assert.ThrowsException<ArgumentException>(() => LogicalName.GetNames([expression]).ToList());
+
+            // Assert
+            Assert.IsTrue(error.Message.StartsWith(expectedErrorMessage));
         }
     }
 }
