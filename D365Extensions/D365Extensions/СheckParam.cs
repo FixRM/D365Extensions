@@ -26,12 +26,11 @@ namespace D365Extensions
             }
         }
 
-        //TODO: details
-        internal const string InvalidExpressionMemberMessage = "Invalid expression";
+        internal const string InvalidExpressionMessage = "Invalid expression '{0}'";
 
-        internal static ArgumentException InvalidExpression(string name)
+        internal static ArgumentException InvalidExpression(string name, string expression)
         {
-            return new ArgumentException(InvalidExpressionMessage, name);
+            return new ArgumentException(string.Format(InvalidExpressionMessage, expression), name);
         }
 
         internal const string InvalidPageNumberMessage = @"Query page number is bigger than one. It may mean that you are trying to get second iterator from IEnumerable<Entity> returned from RetrieveMultiple extension overload. For instance you may be using FirstOrDefault(Predicate<T>) or similar in a loop. It is not supported because this method is yielding results WITHOUT allocating each page in memory. Most likely it will lead to wrong results as second iterator will start from the same page there first one has stopped. Reseting page counter is either not an option as this will result in querying same data from the system multiple times. If you need iterate over this data multiple times you are responsible for allocation it in memory yourself.";
@@ -58,14 +57,6 @@ namespace D365Extensions
         {
             if (collection.EntityName != "activityparty")
                 throw new ArgumentException(InvalidCollectionMessage);
-        }
-
-        //TODO: details
-        internal const string InvalidExpressionMessage = "Invalid expression member";
-
-        internal static Exception InvalidExpressionMember(string name)
-        {
-            throw new ArgumentException(InvalidExpressionMessage);
         }
     }
 }

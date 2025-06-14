@@ -22,7 +22,7 @@ namespace D365Extensions
                 {
                     for (int j = 0; j < newExpressionBody.Members.Count; j++)
                     {
-                        yield return GetName<T>(newExpressionBody.Members[j], isAnonymous: true);
+                        yield return GetName<T>(newExpressionBody.Members[j], newExpressionBody.Arguments[j], isAnonymous: true);
                     }
                 }
                 else
@@ -49,15 +49,15 @@ namespace D365Extensions
             {
                 MemberInfo member = memberExpression.Member;
 
-                return GetName<T>(member);
+                return GetName<T>(member, expression);
             }
 
-            throw CheckParam.InvalidExpression(nameof(expression));
+            throw CheckParam.InvalidExpression(nameof(expression), lambda.ToString());
         }
 
         static ConcurrentDictionary<MemberInfo, string> memberCache = new ConcurrentDictionary<MemberInfo, string>();
 
-        internal static string GetName<T>(MemberInfo member, bool isAnonymous = false)
+        internal static string GetName<T>(MemberInfo member, Expression expression, bool isAnonymous = false)
         {
             CheckParam.CheckForNull(member, nameof(member));
 
@@ -70,7 +70,7 @@ namespace D365Extensions
                     member = typeof(T).GetMember(member.Name).SingleOrDefault();
                 }
             }
-            else throw CheckParam.InvalidExpressionMember(nameof(member));
+            else throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
 
             if (!memberCache.TryGetValue(member, out string logicalName))
             {

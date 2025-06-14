@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using D365Extensions.Tests.Entities;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace D365Extensions.Tests
 {
@@ -57,14 +58,15 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void Should_Throw_On_Methods_Test()
         {
-            // Assert
-            ArgumentException e = Assert.ThrowsException<ArgumentException>(() =>
-            {
-                // Act
-                LogicalName.GetName<TestEntity>(t => t.ToEntityReference());
-            });
+            // Setup
+            var expectedMessage = string.Format(CheckParam.InvalidExpressionMessage, "t => t.ToEntityReference()");
 
-            Assert.IsTrue(e.Message.StartsWith(CheckParam.InvalidExpressionMessage));
+                // Act
+            var e = Assert.ThrowsException<ArgumentException>(
+                () => LogicalName.GetName<TestEntity>(t => t.ToEntityReference()));
+
+            // Assert
+            Assert.IsTrue(e.Message.StartsWith(expectedMessage));
         }
 
         [TestMethod()]
@@ -192,11 +194,14 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void Reference_Id_Should_Throw_Test()
         {
+            // Setup
+            var expectedMessage = string.Format(CheckParam.InvalidExpressionMessage, "a.PrimaryContactId.Id");
+
             // Act
             var error = Assert.ThrowsException<ArgumentException>(() => LogicalName.GetName<Account>(a => a.PrimaryContactId.Id));
 
             // Assert
-            Assert.IsTrue(error.Message.StartsWith(CheckParam.InvalidExpressionMessage));
+            Assert.IsTrue(error.Message.StartsWith(expectedMessage));
         }
 
         [TestMethod()]
