@@ -58,7 +58,10 @@ namespace Microsoft.Xrm.Sdk.Query
         {
             if (t == null) return null;
 
-            return new ColumnSet(LogicalName.GetNames(t.Columns.ToArray()));
+            var columnSet = new ColumnSet();
+            columnSet.Columns.AddRange(LogicalName.GetNames(t.Columns));
+
+            return columnSet;
         }
     }
 }

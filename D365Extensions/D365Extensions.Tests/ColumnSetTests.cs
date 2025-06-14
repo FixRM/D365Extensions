@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using D365Extensions.Tests.Entities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -109,6 +110,21 @@ namespace D365Extensions.Tests
 
             // Assert
             Assert.IsNull(columnSet);
+        }
+
+        [TestMethod()]
+        public void Anonymous_Object_Test()
+        {
+            // Setup
+            ColumnSet<Account> columnSetT = new ColumnSet<Account>(a => new { a.Id, a.AccountNumber });
+
+            // Act
+            ColumnSet columnSet = columnSetT;
+
+            // Assert
+            Assert.AreEqual(2, columnSet.Columns.Count);
+            Assert.AreEqual("accountid", columnSet.Columns[0]);
+            Assert.AreEqual("accountnumber", columnSet.Columns[1]);
         }
     }
 }

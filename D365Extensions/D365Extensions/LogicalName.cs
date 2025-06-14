@@ -14,16 +14,22 @@ namespace D365Extensions
     /// </summary>
     internal static class LogicalName
     {
-        internal static string[] GetNames<T>(params Expression<Func<T, object>>[] expressions)
+        internal static IEnumerable<string> GetNames<T>(IEnumerable<Expression<Func<T, object>>> expressions)
         {
-            var names = new string[expressions.Length];
-
-            for (int i = 0; i < names.Length; i++)
+            foreach (var expression in expressions)
             {
-                names[i] = GetName(expressions[i]);
+                if (expression.Body is NewExpression newExpressionBody)
+                {
+                    for (int j = 0; j < newExpressionBody.Members.Count; j++)
+                    {
+                        yield return GetName<T>(newExpressionBody.Members[j], isAnonymous: true);
+                    }
+                }
+                else
+                {
+                    yield return GetName(expression);
+                }
             }
-
-            return names;
         }
 
         internal static string GetName<T>(Expression<Func<T, object>> lambda)
@@ -39,16 +45,11 @@ namespace D365Extensions
             }
 
             // Reference type property or field
-            if (expression is MemberExpression memberExpession)
+            if (expression is MemberExpression memberExpression)
             {
-                MemberInfo member = memberExpession.Member;
+                MemberInfo member = memberExpression.Member;
 
-                // (Guid) Id attribute is declared in Entity class and is overridden in child EB-classes
-                // For some reason, lambda is assigned with MemberInfo of Entity instead of inheritor
-                if (member.DeclaringType != typeof(T) && member.DeclaringType.IsAssignableFrom(typeof(Entity)))
-                    member = typeof(T).GetMember(member.Name).SingleOrDefault();
-
-                return GetName(member);
+                return GetName<T>(member);
             }
 
             throw CheckParam.InvalidExpression(nameof(expression));
@@ -56,9 +57,20 @@ namespace D365Extensions
 
         static ConcurrentDictionary<MemberInfo, string> memberCache = new ConcurrentDictionary<MemberInfo, string>();
 
-        internal static string GetName(MemberInfo member)
+        internal static string GetName<T>(MemberInfo member, bool isAnonymous = false)
         {
             CheckParam.CheckForNull(member, nameof(member));
+
+            if (isAnonymous || typeof(Entity).IsAssignableFrom(member.DeclaringType))
+            {
+                // (Guid) Id attribute is declared in Entity class and is overridden in child EB-classes
+                // For some reason, lambda is assigned with MemberInfo of Entity instead of inheritor
+                if (member.DeclaringType != typeof(T))
+                {
+                    member = typeof(T).GetMember(member.Name).SingleOrDefault();
+                }
+            }
+            else throw CheckParam.InvalidExpressionMember(nameof(member));
 
             if (!memberCache.TryGetValue(member, out string logicalName))
             {

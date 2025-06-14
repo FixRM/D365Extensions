@@ -44,9 +44,9 @@ namespace D365Extensions.Tests
             string expected2 = nameof(TestEntity.ValueTypeProperty).ToLower();
 
             // Act
-            List<string> actual = LogicalName.GetNames<TestEntity>(
+            List<string> actual = LogicalName.GetNames<TestEntity>([
                 t => t.ReferenceTypeProperty,
-                t => t.ValueTypeProperty).ToList();
+                t => t.ValueTypeProperty]).ToList();
 
             // Assert
             Assert.AreEqual(2, actual.Count);
@@ -64,7 +64,7 @@ namespace D365Extensions.Tests
                 LogicalName.GetName<TestEntity>(t => t.ToEntityReference());
             });
 
-            Assert.IsTrue(e.Message.Contains(CheckParam.InvalidExpression(null).Message));
+            Assert.IsTrue(e.Message.StartsWith(CheckParam.InvalidExpressionMessage));
         }
 
         [TestMethod()]
@@ -83,7 +83,7 @@ namespace D365Extensions.Tests
             string expectedDecimal = nameof(Account.ExchangeRate).ToLowerInvariant();
 
             // Act
-            List<string> actual = LogicalName.GetNames<Account>(
+            List<string> actual = LogicalName.GetNames<Account>([
                 a => a.AccountNumber,
                 a => a.Address1_Longitude,
                 a => a.AccountRatingCode,
@@ -93,7 +93,7 @@ namespace D365Extensions.Tests
                 a => a.CreatedOn,
                 a => a.AccountId,
                 a => a.PrimaryContactId,
-                a => a.ExchangeRate).ToList();
+                a => a.ExchangeRate]).ToList();
 
             // Assert
             Assert.AreEqual(expectedString, actual[0]);
@@ -190,13 +190,27 @@ namespace D365Extensions.Tests
         }
 
         [TestMethod()]
-        public void Reference_Id_Test()
+        public void Reference_Id_Should_Throw_Test()
         {
             // Act
-            var name = LogicalName.GetName<Account>(a => a.PrimaryContactId.Id);
+            var error = Assert.ThrowsException<ArgumentException>(() => LogicalName.GetName<Account>(a => a.PrimaryContactId.Id));
 
             // Assert
-            Assert.AreEqual("id", name);
+            Assert.IsTrue(error.Message.StartsWith(CheckParam.InvalidExpressionMessage));
+        }
+
+        [TestMethod()]
+        public void Anonymous_Object_Test()
+        {
+            // Act
+            var names = LogicalName.GetNames<Account>([a => new { a.Id, a.AccountNumber, a.PrimaryContactId }])
+                .ToList();
+
+            // Assert
+            Assert.AreEqual(3, names.Count);
+            Assert.AreEqual("accountid", names[0]);
+            Assert.AreEqual("accountnumber", names[1]);
+            Assert.AreEqual("primarycontactid", names[2]);
         }
     }
 }
