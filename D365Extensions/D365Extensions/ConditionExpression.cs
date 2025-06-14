@@ -98,10 +98,13 @@ namespace Microsoft.Xrm.Sdk.Query
         {
             if (t == null) return null;
 
-            return new ConditionExpression(t.EntityName,
-                LogicalName.GetName(t.AttributeName),
-                t.Operator,
-                t.Values.ToArray());
+            var conditionExpression = new ConditionExpression();
+            conditionExpression.EntityName = t.EntityName;
+            conditionExpression.AttributeName = LogicalName.GetName(t.AttributeName);
+            conditionExpression.Operator = t.Operator;
+            conditionExpression.Values.AddRange(t.Values);
+
+            return conditionExpression;
         }
     }
 }
