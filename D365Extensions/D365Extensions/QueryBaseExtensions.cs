@@ -130,5 +130,40 @@ namespace Microsoft.Xrm.Sdk.Query
             string page = xDocument.Root.Attribute("page")?.Value;
             return page != null ? int.Parse(page) : 0;
         }
+
+        /// <summary>
+        /// Universal method to set Query top count value
+        /// </summary>
+        public static void SetTopCount(this QueryBase query, int count)
+        {
+            switch (query)
+            {
+                case QueryExpression qe: qe.SetTopCount(count);
+                    break;
+                case QueryByAttribute qa: qa.SetTopCount(count);
+                    break;
+                case FetchExpression fe: fe.SetTopCount(count);
+                    break;
+                default: throw new NotSupportedException();
+            }
+        }
+
+        public static void SetTopCount(this QueryExpression query, int count)
+        {
+            query.TopCount = count;
+        }
+
+        public static void SetTopCount(this QueryByAttribute query, int count)
+        {
+            query.TopCount = count;
+        }
+
+        public static void SetTopCount(this FetchExpression query, int count)
+        {
+            XDocument xDocument = XDocument.Parse(query.Query);
+            xDocument.Root.SetAttributeValue("top", count);
+
+            query.Query = xDocument.ToString();
+        }
     }
 }

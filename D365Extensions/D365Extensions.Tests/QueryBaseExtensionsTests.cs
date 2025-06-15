@@ -186,5 +186,89 @@ namespace D365Extensions.Tests
             //Assert
             Assert.AreEqual(0, actualPageNumber);
         }
+
+        [TestMethod]
+        public void FetchExpressionSetTopCountTest()
+        {
+            /// Setup
+            var expectedTopCount = 100; 
+
+            string fetch = $"""
+                <fetch no-lock='true' top='{expectedTopCount * 5}' >
+                    <entity name='account' >
+                        <attribute name='name' />
+                    </entity>
+                </fetch>
+                """;
+
+            FetchExpression query = new FetchExpression(fetch);
+
+            /// Act
+            (query as QueryBase).SetTopCount(expectedTopCount);
+
+            var xDocument = XDocument.Parse(query.Query);
+            var actualTopCount = xDocument.Root.Attribute("top")?.Value;
+
+            /// Assert
+            Assert.IsNotNull(actualTopCount);
+            Assert.AreEqual(expectedTopCount, int.Parse(actualTopCount));
+        }
+
+        [TestMethod]
+        public void FetchExpressionSetTopCount_NoAttribute_Test()
+        {
+            /// Setup
+            var expectedTopCount = 100;
+
+            string fetch = $"""
+                <fetch no-lock='true' >
+                    <entity name='account' >
+                        <attribute name='name' />
+                    </entity>
+                </fetch>
+                """;
+
+            FetchExpression query = new FetchExpression(fetch);
+
+            /// Act
+            (query as QueryBase).SetTopCount(expectedTopCount);
+
+            var xDocument = XDocument.Parse(query.Query);
+            var actualTopCount = xDocument.Root.Attribute("top")?.Value;
+
+            /// Assert
+            Assert.IsNotNull(actualTopCount);
+            Assert.AreEqual(expectedTopCount, int.Parse(actualTopCount));
+        }
+
+        [TestMethod]
+        public void QueryExpressionSetTopCountTest()
+        {
+            /// Setup
+            var expectedTopCount = 100;
+            
+            QueryExpression query = new QueryExpression();
+
+            // Act
+            (query as QueryBase).SetTopCount(expectedTopCount);
+
+            //Assert
+            Assert.AreEqual(expectedTopCount, query.TopCount);
+        }
+
+        [TestMethod]
+        public void QueryByAttributeSetTopCountTest()
+        {
+            /// Setup
+            var expectedTopCount = 100;
+
+            QueryByAttribute query = new QueryByAttribute();
+
+            // Act
+            (query as QueryBase).SetTopCount(expectedTopCount);
+
+            //Assert
+            Assert.AreEqual(expectedTopCount, query.TopCount);
+        }
     }
 }
