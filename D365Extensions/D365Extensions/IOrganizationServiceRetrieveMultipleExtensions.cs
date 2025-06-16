@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 
 namespace Microsoft.Xrm.Sdk
@@ -100,6 +101,34 @@ namespace Microsoft.Xrm.Sdk
             CheckParam.CheckForNull(fetchXml, nameof(fetchXml));
 
             return service.RetrieveMultiple(new FetchExpression(fetchXml));
+        }
+
+        public static Entity RetrieveSingle(this IOrganizationService service, QueryBase query)
+        {
+            query.SetTopCount(2);
+
+            var results = service.RetrieveMultiple(query);
+
+            return results.Entities.Single();
+        }
+
+        public static T RetrieveSingle<T>(this IOrganizationService service, QueryBase query) where T: Entity
+        {
+            return service.RetrieveSingle(query).ToEntity<T>();
+        }
+
+        public static Entity RetrieveSingleOrDefault(this IOrganizationService service, QueryBase query)
+        {
+            query.SetTopCount(1);
+
+            var results = service.RetrieveMultiple(query);
+
+            return results.Entities.SingleOrDefault();
+        }
+
+        public static T RetrieveSingleOrDefault<T>(this IOrganizationService service, QueryBase query) where T: Entity
+        {
+            return service.RetrieveSingleOrDefault(query)?.ToEntity<T>();
         }
     }
 }

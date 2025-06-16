@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS0618 // Type or member is obsolete
+using D365Extensions.Tests.Entities;
 using FakeXrmEasy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
@@ -203,6 +204,185 @@ namespace D365Extensions.Tests
             Assert.AreEqual(CheckParam.InvalidPageNumberMessage, error.Message);
             Assert.AreEqual(0, actualPages);
             Assert.AreEqual(0, actualItems);
+        }
+
+        [TestMethod()]
+        public void RetrieveSingleTest()
+        {
+            // Setup
+            Entity entity1 = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "contact"
+            };
+
+            var context = new XrmFakedContext();
+            context.Initialize(entity1);
+
+            var service = context.GetOrganizationService();
+
+            /// all records
+            var query = new QueryExpression(entity1.LogicalName);
+
+            // Act
+            Entity result = service.RetrieveSingle(query);
+
+            // Assert
+            Assert.AreEqual(entity1.Id, result.Id);
+        }
+
+        [TestMethod()]
+        public void RetrieveSingleTTest()
+        {
+            // Setup
+            Entity entity = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "account"
+            };
+
+            var context = new XrmFakedContext();
+            context.Initialize(entity);
+
+            var service = context.GetOrganizationService();
+
+            /// all records
+            var query = new QueryExpression(entity.LogicalName);
+
+            // Act
+            var result = service.RetrieveSingle<Account>(query);
+
+            // Assert
+            Assert.AreEqual(entity.Id, result.Id);
+        }
+
+        [TestMethod()]
+        public void RetrieveSingleShouldThrowTest()
+        {
+            // Setup
+            Entity entity1 = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "contact"
+            };
+
+            Entity entity2 = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "contact"
+            };
+
+            var context = new XrmFakedContext();
+            context.Initialize([entity1, entity2]);
+
+            var service = context.GetOrganizationService();
+
+            /// all records
+            var query = new QueryExpression(entity1.LogicalName);
+
+            // Act
+            var error = Assert.ThrowsException<InvalidOperationException>(()=> service.RetrieveSingle(query));
+
+            // Assert
+            Assert.AreEqual(-2146233079, error.HResult);
+        }
+
+        [TestMethod()]
+        public void RetrieveSingleOrDefaultTest()
+        {
+            // Setup
+            Entity entity1 = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "contact"
+            };
+
+            var context = new XrmFakedContext();
+            context.Initialize(entity1);
+
+            var service = context.GetOrganizationService();
+
+            /// all records
+            var query = new QueryExpression(entity1.LogicalName);
+
+            // Act
+            Entity result = service.RetrieveSingleOrDefault(query);
+
+            // Assert
+            Assert.AreEqual(entity1.Id, result.Id);
+        }
+
+        public void RetrieveSingleOrDefaultTTest()
+        {
+            // Setup
+            Entity entity1 = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "account"
+            };
+
+            var context = new XrmFakedContext();
+            context.Initialize(entity1);
+
+            var service = context.GetOrganizationService();
+
+            /// all records
+            var query = new QueryExpression(entity1.LogicalName);
+
+            // Act
+            var result = service.RetrieveSingleOrDefault<Account>(query);
+
+            // Assert
+            Assert.AreEqual(entity1.Id, result.Id);
+        }
+
+        [TestMethod()]
+        public void RetrieveSingleOrDefaultShouldReturnDefaultTest()
+        {
+            // Setup
+            var context = new XrmFakedContext();
+
+            var service = context.GetOrganizationService();
+
+            /// all records
+            var query = new QueryExpression("contact");
+
+            // Act
+            Entity result = service.RetrieveSingleOrDefault(query);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod()]
+        public void RetrieveSingleOrDefaultShouldNotThrowTest()
+        {
+            // Setup
+            Entity entity1 = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "contact"
+            };
+
+            Entity entity2 = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                LogicalName = "contact"
+            };
+
+            var context = new XrmFakedContext();
+            context.Initialize([entity1, entity2]);
+
+            var service = context.GetOrganizationService();
+
+            /// all records
+            var query = new QueryExpression(entity1.LogicalName);
+
+            // Act
+            var result = service.RetrieveSingleOrDefault(query);
+
+            // Assert
+            Assert.AreEqual(entity1.Id, result.Id);
         }
     }
 }
