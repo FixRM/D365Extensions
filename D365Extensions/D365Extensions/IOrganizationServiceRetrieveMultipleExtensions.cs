@@ -103,6 +103,13 @@ namespace Microsoft.Xrm.Sdk
             return service.RetrieveMultiple(new FetchExpression(fetchXml));
         }
 
+        /// <summary>
+        /// Retrieves single query result as Entity or throws InvalidOperationException 
+        /// if query returns nothing or more than one record
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>Entity</returns>
+        /// <exception cref="InvalidOperationException"/>
         public static Entity RetrieveSingle(this IOrganizationService service, QueryBase query)
         {
             query.SetTopCount(2);
@@ -112,11 +119,24 @@ namespace Microsoft.Xrm.Sdk
             return results.Entities.Single();
         }
 
-        public static T RetrieveSingle<T>(this IOrganizationService service, QueryBase query) where T: Entity
+        /// <summary>
+        /// Retrieves single query result as as strongly typed entity object or throws
+        /// InvalidOperationException if query returns nothing or more than one record
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>Strongly typed entity object</returns>
+        /// <exception cref="InvalidOperationException"/>
+
+        public static T RetrieveSingle<T>(this IOrganizationService service, QueryBase query) where T : Entity
         {
             return service.RetrieveSingle(query).ToEntity<T>();
         }
 
+        /// <summary>
+        /// Retrieves single query result as Entity or null if query did not return results
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>Entity</returns>
         public static Entity RetrieveSingleOrDefault(this IOrganizationService service, QueryBase query)
         {
             query.SetTopCount(1);
@@ -126,7 +146,14 @@ namespace Microsoft.Xrm.Sdk
             return results.Entities.SingleOrDefault();
         }
 
-        public static T RetrieveSingleOrDefault<T>(this IOrganizationService service, QueryBase query) where T: Entity
+        /// <summary>
+        /// Retrieves single query result as strongly typed entity object 
+        /// or null if query did not return results
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>Strongly typed entity object</returns>
+
+        public static T RetrieveSingleOrDefault<T>(this IOrganizationService service, QueryBase query) where T : Entity
         {
             return service.RetrieveSingleOrDefault(query)?.ToEntity<T>();
         }
