@@ -1,4 +1,12 @@
 # What's new
+## [2.7.0](https://github.com/FixRM/D365Extensions/compare/v2.6.0...v2.7.0) (2025-06-16)
+
+
+### Features
+
+* add RetrieveSingle and RetrieveSingleOrDefault extension methods for IOrganizationService ([003ccd7](https://github.com/FixRM/D365Extensions/commit/003ccd7f95af62dac76aa3cffb8333dbdc08bd7a))
+* add SetTopCount extension method for QueryBase ([0e9bca8](https://github.com/FixRM/D365Extensions/commit/0e9bca856efc59c3bad60c292d50a6e0820eebd6))
+
 ## [2.6.0](https://github.com/FixRM/D365Extensions/compare/v2.5.0...v2.6.0) (2025-06-14)
 
 
