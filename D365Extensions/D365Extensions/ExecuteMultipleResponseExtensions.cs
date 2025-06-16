@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Microsoft.Xrm.Sdk
 {
-    internal static class ExecuteMultipleResponseExtensions
+    public static class ExecuteMultipleResponseExtensions
     {
         //two methods above work in pair with IOrganizationServiceExtensions.Execute(IEnumerable<OrganizationRequest> requests) extensions
         #region Execute partners
