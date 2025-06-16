@@ -131,6 +131,7 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
+        [Obsolete("Use Retrieve<T>(this IOrganizationService service, string keyName, object keyValue, ColumnSet columnSet)")]
         public static T Retrieve<T>(this IOrganizationService service, string logicalName, string keyName, string keyValue, ColumnSet columnSet) where T : Entity
         {
             Entity entity = service.Retrieve(logicalName, keyName, keyValue, columnSet);
@@ -143,9 +144,32 @@ namespace Microsoft.Xrm.Sdk
         /// </summary>
         /// <param name="keyName">Name of alternative key</param>
         /// <param name="keyValue">Key value</param>
+        public static T Retrieve<T>(this IOrganizationService service, string keyName, object keyValue, ColumnSet columnSet) where T : Entity
+        {
+            Entity entity = service.Retrieve(LogicalName.GetName<T>(), keyName, keyValue, columnSet);
+
+            return entity.ToEntity<T>();
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrieves by Alternative key and returns strongly typed entity object
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        [Obsolete("Use Retrieve<T>(this IOrganizationService service, string keyName, object keyValue, params string[] columns)")]
         public static T Retrieve<T>(this IOrganizationService service, string logicalName, string keyName, string keyValue, params String[] columns) where T : Entity
         {
             return service.Retrieve<T>(logicalName, keyName, keyValue, new ColumnSet(columns));
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrieves by Alternative key and returns strongly typed entity object
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        public static T Retrieve<T>(this IOrganizationService service, string keyName, object keyValue, params string[] columns) where T : Entity
+        {
+            return service.Retrieve<T>(keyName, keyValue, new ColumnSet(columns));
         }
     }
 }
