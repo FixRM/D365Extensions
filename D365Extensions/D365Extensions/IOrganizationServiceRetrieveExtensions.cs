@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.Linq.Expressions;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -42,7 +43,7 @@ namespace Microsoft.Xrm.Sdk
         /// <summary>
         /// Retrieve method override. Returns strongly typed entity object
         /// </summary>
-        /// <param name="id">The Id of record that yu want to retrieve</param>
+        /// <param name="id">The Id of record that you want to retrieve</param>
         public static T Retrieve<T>(this IOrganizationService service, Guid id, ColumnSet columnSet) where T : Entity
         {
             Entity entity = service.Retrieve(LogicalName.GetName<T>(), id, columnSet);
@@ -53,7 +54,7 @@ namespace Microsoft.Xrm.Sdk
         /// <summary>
         /// Retrieve method override. Returns strongly typed entity object
         /// </summary>
-        /// <param name="id">The Id of record that yu want to retrieve</param>
+        /// <param name="id">The Id of record that you want to retrieve</param>
         public static T Retrieve<T>(this IOrganizationService service, Guid id, params string[] columns) where T : Entity
         {
             return service.Retrieve<T>(id, new ColumnSet(columns));
@@ -170,6 +171,44 @@ namespace Microsoft.Xrm.Sdk
         public static T Retrieve<T>(this IOrganizationService service, string keyName, object keyValue, params string[] columns) where T : Entity
         {
             return service.Retrieve<T>(keyName, keyValue, new ColumnSet(columns));
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrieves by Alternative key and returns strongly typed entity object
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Key value</param>
+        /// <param name="columns">Columns to retrieve</param>
+        public static T Retrieve<T>(this IOrganizationService service, Expression<Func<T, object>> keyName, object keyValue, params Expression<Func<T, object>>[] columns) where T : Entity
+        {
+            var columnSet = new ColumnSet();
+            columnSet.Columns.AddRange(LogicalName.GetNames(columns));
+
+            return service.Retrieve<T>(LogicalName.GetName(keyName), keyValue, columnSet);
+        }
+
+        /// <summary>
+        /// Retrieve method override. Returns strongly typed entity object
+        /// </summary>
+        /// <param name="id">The Id of record that you want to retrieve</param>
+        public static T Retrieve<T>(this IOrganizationService service, Guid id, params Expression<Func<T, object>>[] columns) where T : Entity
+        {
+            var columnSet = new ColumnSet();
+            columnSet.Columns.AddRange(LogicalName.GetNames(columns));
+
+            return service.Retrieve<T>(id, columnSet);
+        }
+
+        /// <summary>
+        /// Retrieve method override. Returns strongly typed entity object
+        /// </summary>
+        /// <param name="reference">Entity to retrieve</param>
+        public static T Retrieve<T>(this IOrganizationService service, EntityReference reference, params Expression<Func<T, object>>[] columns) where T : Entity
+        {
+            var columnSet = new ColumnSet();
+            columnSet.Columns.AddRange(LogicalName.GetNames(columns));
+
+            return service.Retrieve<T>(reference, columnSet);
         }
     }
 }
