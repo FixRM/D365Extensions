@@ -1,6 +1,7 @@
 ﻿using D365Extensions;
 using Microsoft.Xrm.Sdk.Messages;
 using System;
+using System.Linq.Expressions;
 
 namespace Microsoft.Xrm.Sdk
 {
@@ -64,10 +65,53 @@ namespace Microsoft.Xrm.Sdk
             CheckParam.CheckForNull(keyName, nameof(keyName));
             CheckParam.CheckForNull(keyValue, nameof(keyValue));
 
-            KeyAttributeCollection keys = new KeyAttributeCollection();
+            var keys = new KeyAttributeCollection();
             keys.Add(keyName, keyValue);
 
             service.Delete(logicalName, keys);
+        }
+
+        /// <summary>
+        /// Delete entity
+        /// </summary>
+        /// <param name="id">Entity id to delete</param>
+        public static void Delete<T>(this IOrganizationService service, Guid id) where T : Entity
+        {
+            CheckParam.CheckForNull(id, nameof(id));
+
+            service.Delete(LogicalName.GetName<T>(), id);
+        }
+
+        /// <summary>
+        /// Delete method override. Deletes by Alternative key
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Value of alternative key</param>
+        public static void Delete<T>(this IOrganizationService service, string keyName, object keyValue) where T : Entity
+        {
+            CheckParam.CheckForNull(keyName, nameof(keyName));
+            CheckParam.CheckForNull(keyValue, nameof(keyValue));
+
+            var keys = new KeyAttributeCollection();
+            keys.Add(keyName, keyValue);
+
+            service.Delete(LogicalName.GetName<T>(), keys);
+        }
+
+        /// <summary>
+        /// Delete method override. Deletes by Alternative key
+        /// </summary>
+        /// <param name="keyName">Name of alternative key</param>
+        /// <param name="keyValue">Value of alternative key</param>
+        public static void Delete<T>(this IOrganizationService service, Expression<Func<T, object>> keyName, object keyValue) where T : Entity
+        {
+            CheckParam.CheckForNull(keyName, nameof(keyName));
+            CheckParam.CheckForNull(keyValue, nameof(keyValue));
+
+            var keys = new KeyAttributeCollection();
+            keys.Add(keyName, keyValue);
+
+            service.Delete(LogicalName.GetName<T>(), keys);
         }
     }
 }
