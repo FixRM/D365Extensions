@@ -256,7 +256,7 @@ namespace D365Extensions.Tests
 
             for (int i = 0; i < expectedEMultipleRequestsCount; i++)
             {
-                //setings are set correctly
+                //settings are set correctly
                 ExecuteMultipleRequest actualEMultipleRequest = fakeExecutor.ActualRequests[i];
                 Assert.AreEqual(settings, actualEMultipleRequest.Settings);
 
@@ -391,9 +391,9 @@ namespace D365Extensions.Tests
 
             int batchSize = context.MaxRetrieveCount;
 
-            int actualResponceCount = 0;
+            int actualResponseCount = 0;
 
-            Action<ExecuteMultipleOperationResponse> onResponse = (r) => actualResponceCount++;
+            Action<ExecuteMultipleOperationResponse> onResponse = (r) => actualResponseCount++;
 
             var progressReports = new List<ExecuteMultipleProgress>();
 
@@ -419,7 +419,7 @@ namespace D365Extensions.Tests
             var updatedRecords = service.RetrieveMultiple(assertQuery, null).ToArray();
 
             Assert.AreEqual(entities.Length, updatedRecords.Length);
-            Assert.AreEqual(entities.Length, actualResponceCount);
+            Assert.AreEqual(entities.Length, actualResponseCount);
 
             //2 page loads, 2 batches and 1 final
             Assert.AreEqual(5, progressReports.Count);
