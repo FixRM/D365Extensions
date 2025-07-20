@@ -82,5 +82,4 @@ steps:
   displayName: 'Publish Artifact: drop'
   inputs:
     PathtoPublish: $(build.artifactstagingdirectory)
-    TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
     condition: ne(variables['Build.Reason'], 'PullRequest')
