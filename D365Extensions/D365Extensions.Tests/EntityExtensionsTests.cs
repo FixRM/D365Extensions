@@ -972,7 +972,7 @@ namespace D365Extensions.Tests
         }
 
         [TestMethod()]
-        public void ApplyChangesTest()
+        public void ApplyChangesShouldRemoveUnchangedTest()
         {
             // Setup
             const string expectedName = "FixRM Corp";
@@ -1008,6 +1008,45 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedNumberOfEmployees, existingEntity.NumberOfEmployees);
             Assert.AreEqual(expectedTicker, updatedEntity.TickerSymbol);
             Assert.IsNull(existingEntity.WebSiteURL);
+        }
+
+        [TestMethod()]
+        public void ApplyChangesShouldNotRemoveUnchangedTest()
+        {
+            // Setup
+            const string expectedName = "FixRM Corp";
+            const string expectedTicker = "FXRM";
+            const int expectedNumberOfEmployees = 1;
+
+            var existingEntity = new Account()
+            {
+                Id = Guid.NewGuid(),
+                Name = "FixRM",
+                AccountNumber = "1",
+                NumberOfEmployees = expectedNumberOfEmployees,
+                WebSiteURL = "https://github.com/FixRM/D365Extensions"
+            };
+
+            var updatedEntity = new Account()
+            {
+                Id = existingEntity.Id,
+                Name = expectedName,
+                AccountNumber = null,
+                TickerSymbol = expectedTicker,
+                WebSiteURL = "https://github.com/FixRM/D365Extensions"
+            };
+
+            // Act
+            existingEntity.ApplyChanges(updatedEntity, removeUnchanged: false);
+
+            // Assert
+            Assert.IsNotNull(existingEntity.AccountId);
+            Assert.AreEqual(existingEntity.Id, existingEntity.AccountId);
+            Assert.AreEqual(expectedName, existingEntity.Name);
+            Assert.IsNull(existingEntity.AccountNumber);
+            Assert.AreEqual(expectedNumberOfEmployees, existingEntity.NumberOfEmployees);
+            Assert.AreEqual(expectedTicker, updatedEntity.TickerSymbol);
+            Assert.AreEqual(existingEntity.WebSiteURL, updatedEntity.WebSiteURL);
         }
     }
 }

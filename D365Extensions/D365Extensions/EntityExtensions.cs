@@ -243,7 +243,7 @@ namespace Microsoft.Xrm.Sdk
             {
                 object tValue = target[key];
 
-                if (AreEqual(tValue, source.GetAttributeValue<object>(key)) && !target.Id.Equals(tValue))
+                if (!target.Id.Equals(tValue) && AreEqual(tValue, source.GetAttributeValue<object>(key)))
                 {
                     target.Attributes.Remove(key);
                 }
@@ -294,11 +294,11 @@ namespace Microsoft.Xrm.Sdk
                 object tValue = target.GetAttributeValue<object>(key);
                 object sValue = source[key];
 
-                if (AreEqual(sValue, tValue) && !target.Id.Equals(tValue))
+                if (removeUnchanged && !target.Id.Equals(tValue) && AreEqual(sValue, tValue))
                 {
                     target.Attributes.Remove(key);
                 }
-                else if (removeUnchanged)
+                else
                 {
                     target[key] = sValue;
                 }
