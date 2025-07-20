@@ -88,7 +88,7 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(fetchXml, nameof(fetchXml));
 
-            return RetrieveMultiple(service, new FetchExpression(fetchXml), callback);
+            return service.RetrieveMultiple(new FetchExpression(fetchXml), callback);
         }
 
         /// <summary>
@@ -101,6 +101,34 @@ namespace Microsoft.Xrm.Sdk
             CheckParam.CheckForNull(fetchXml, nameof(fetchXml));
 
             return service.RetrieveMultiple(new FetchExpression(fetchXml));
+        }
+
+        /// <summary>
+        /// Universal RetrieveMultiple method override. Returns all pages using callback or 'yield' iterator
+        /// 
+        /// WARNING: for performance reasons you should use this override only if proxy types are enabled for your
+        /// plugin assembly (via ProxyTypesAssembly attribute) or application (using EnableProxyTypes() method)
+        /// </summary>
+        /// <param name="query">A query that determines the set of record</param>
+        /// <param name="callback">Optional function to be called for each record page</param>
+        /// <returns>Entity set as 'yield' iterator</returns>
+        public static IEnumerable<T> RetrieveMultiple<T>(this IOrganizationService service, QueryBase query, Action<EntityCollection> callback = null) where T : Entity
+        {
+            return service.RetrieveMultiple(query, callback).Select(e => e.ToEntity<T>());
+        }
+
+        /// <summary>
+        /// RetrieveMultiple method override optimized for FetchExpression. Returns all pages using callback or 'yield' iterator
+        /// 
+        /// WARNING: for performance reasons you should use this override only if proxy types are enabled for your
+        /// plugin assembly (via ProxyTypesAssembly attribute) or application (using EnableProxyTypes() method)
+        /// </summary>
+        /// <param name="query">A query that determines the set of record</param>
+        /// <param name="callback">Optional function to be called for each record page</param>
+        /// <returns>Entity set as 'yield' iterator</returns>
+        public static IEnumerable<T> RetrieveMultiple<T>(this IOrganizationService service, FetchExpression query, Action<EntityCollection> callback = null) where T: Entity
+        {
+            return service.RetrieveMultiple(query, callback).Select(e => e.ToEntity<T>());
         }
 
         /// <summary>
