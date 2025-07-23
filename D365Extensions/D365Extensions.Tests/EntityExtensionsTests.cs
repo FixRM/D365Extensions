@@ -432,23 +432,32 @@ namespace D365Extensions.Tests
             {
                 Id = Guid.NewGuid(),
                 LogicalName = "account",
-                Name = "FixRM"
+                Name = "FixRM",
+                RowVersion = "42",
+                KeyAttributes =
+                {
+                    { "key", "value" }
+                }
             };
 
             Entity target = new Entity();
 
-            Entity source = new Entity();
-
-            source.Attributes.Add("accountid", accountId);
+            Entity source = new Entity()
+            {
+                ["accountid"] = accountId
+            };
 
             /// Act
             target.MergeAttributes(source, newRefs: true);
 
             /// Test for EntityReference attribute
             EntityReference actualAccountId = target.GetAttributeValue<EntityReference>("accountid");
+            Assert.IsTrue(accountId != actualAccountId);
             Assert.AreEqual(actualAccountId, accountId);
             Assert.AreEqual(actualAccountId.LogicalName, accountId.LogicalName);
             Assert.IsNull(actualAccountId.Name);
+            Assert.AreEqual(actualAccountId.RowVersion, accountId.RowVersion);
+            Assert.AreEqual(actualAccountId.KeyAttributes, accountId.KeyAttributes);
         }
 
         [TestMethod()]
@@ -1048,5 +1057,72 @@ namespace D365Extensions.Tests
             Assert.AreEqual(expectedTicker, updatedEntity.TickerSymbol);
             Assert.AreEqual(existingEntity.WebSiteURL, updatedEntity.WebSiteURL);
         }
+
+        [TestMethod()]
+        public void ApplyChangesShouldAddNewReferenceTest()
+        {
+            // Setup
+            const string expectedName = "FixRM Corp";
+            const string expectedTicker = "FXRM";
+            const int expectedNumberOfEmployees = 1;
+
+            var existingEntity = new Account()
+            {
+                Id = Guid.NewGuid(),
+                Name = "FixRM",
+                PrimaryContactId = new EntityReference()
+                {
+                    Id = Guid.NewGuid(),
+                    LogicalName = "contact",
+                    Name = "Artem Grunin",
+                    KeyAttributes = new KeyAttributeCollection()
+                    {
+                        { "key", "isNothing" }
+                    },
+                    RowVersion = "42"
+                },
+                AccountNumber = "1",
+                NumberOfEmployees = expectedNumberOfEmployees,
+                WebSiteURL = "https://github.com/FixRM/D365Extensions"
+            };
+
+            var updatedEntity = new Account()
+            {
+                Id = existingEntity.Id,
+                Name = expectedName,
+                PrimaryContactId = new EntityReference()
+                {
+                    Id = Guid.NewGuid(),
+                    LogicalName = "contact",
+                    Name = "Artem Grunin",
+                    KeyAttributes = new KeyAttributeCollection()
+                    {
+                        { "key", "isValue" }
+                    },
+                    RowVersion = "42"
+                },
+                AccountNumber = null,
+                TickerSymbol = expectedTicker,
+                WebSiteURL = "https://github.com/FixRM/D365Extensions"
+            };
+
+            // Act
+            existingEntity.ApplyChanges(updatedEntity, newRefs: true);
+
+            // Assert
+            Assert.IsNotNull(existingEntity.AccountId);
+            Assert.AreEqual(existingEntity.Id, existingEntity.AccountId);
+            Assert.AreEqual(expectedName, existingEntity.Name);
+            Assert.IsNull(existingEntity.AccountNumber);
+            Assert.AreEqual(expectedNumberOfEmployees, existingEntity.NumberOfEmployees);
+            Assert.AreEqual(expectedTicker, updatedEntity.TickerSymbol);
+            Assert.IsNull(existingEntity.WebSiteURL);
+
+            Assert.IsTrue(existingEntity.PrimaryContactId != updatedEntity.PrimaryContactId);
+            Assert.AreEqual(existingEntity.PrimaryContactId.Id, updatedEntity.PrimaryContactId.Id);
+            Assert.AreEqual(existingEntity.PrimaryContactId.LogicalName, updatedEntity.PrimaryContactId.LogicalName);
+            Assert.AreEqual(existingEntity.PrimaryContactId.KeyAttributes, updatedEntity.PrimaryContactId.KeyAttributes);
+            Assert.AreEqual(existingEntity.PrimaryContactId.RowVersion, updatedEntity.PrimaryContactId.RowVersion);
+            Assert.IsNull(existingEntity.PrimaryContactId.Name);        }
     }
 }

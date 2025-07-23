@@ -160,7 +160,13 @@ namespace Microsoft.Xrm.Sdk
 
                     if (newRefs && attribute.Value is EntityReference reference)
                     {
-                        var newReference = new EntityReference(reference.LogicalName, reference.Id);
+                        var newReference = new EntityReference()
+                        {
+                            Id = reference.Id,
+                            LogicalName = reference.LogicalName,
+                            KeyAttributes = reference.KeyAttributes,
+                            RowVersion = reference.RowVersion,
+                        };
 
                         target.Attributes.Add(attribute.Key, newReference);
                     }
@@ -285,7 +291,9 @@ namespace Microsoft.Xrm.Sdk
         /// Update target entity attributes with values from source entity and REMOVE values that didn't change
         /// </summary>
         /// <param name="source">Changed entity instance</param>
-        public static void ApplyChanges(this Entity target, Entity source, bool removeUnchanged = true)
+        /// <param name="removeUnchanged">Default: true. Set this parameter to false if you want to keep attribute values that had not changed</param>
+        /// <param name="newRefs">Create new EntityReference values instead of taking from source entity. In rare cases, messages like MergeRequest can fail if entityReference.Name is specified</param>
+        public static void ApplyChanges(this Entity target, Entity source, bool removeUnchanged = true, bool newRefs = false)
         {
             CheckParam.CheckForNull(source, nameof(source));
 
@@ -297,6 +305,18 @@ namespace Microsoft.Xrm.Sdk
                 if (removeUnchanged && !target.Id.Equals(tValue) && AreEqual(sValue, tValue))
                 {
                     target.Attributes.Remove(key);
+                }
+                else if (newRefs && sValue is EntityReference reference)
+                {
+                    var newReference = new EntityReference()
+                    {
+                        Id = reference.Id,
+                        LogicalName = reference.LogicalName,
+                        KeyAttributes = reference.KeyAttributes,
+                        RowVersion = reference.RowVersion,
+                    };
+
+                    target[key] = newReference;
                 }
                 else
                 {
