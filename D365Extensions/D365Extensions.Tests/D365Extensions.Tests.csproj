@@ -2,47 +2,22 @@
 	<PropertyGroup>
 		<TargetFramework>net452</TargetFramework>
 		<LangVersion>latest</LangVersion>
-		<ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-		<VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-		<ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
-		<IsCodedUITest>False</IsCodedUITest>
-		<TestProjectType>UnitTest</TestProjectType>
 		<AssemblyTitle>D365Extensions.Tests</AssemblyTitle>
 		<Product>D365Extensions.Tests</Product>
-		<Copyright>Copyright ©  2018</Copyright>
+		<Copyright>Copyright © 2018</Copyright>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<SignAssembly>true</SignAssembly>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	<PropertyGroup>
 	  <NoWarn>1701;1702;CS0618</NoWarn>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <NoWarn>1701;1702;CS0618</NoWarn>
-	</PropertyGroup>
-	<Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
 		<PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
 		<PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
 		<PackageReference Include="FakeXrmEasy.2016" Version="1.58.1" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="PresentationFramework" />
-		<Reference Include="System.Activities" />
-		<Reference Include="System.Activities.Presentation" />
-		<Reference Include="System.IdentityModel" />
-		<Reference Include="System.Security" />
-		<Reference Include="System.ServiceModel" />
-		<Reference Include="System.ServiceModel.Web" />
-		<Reference Include="System.Web" />
-		<Reference Include="System.Web.Services" />
-		<Reference Include="System.Workflow.Activities" />
-		<Reference Include="System.Workflow.ComponentModel" />
-		<Reference Include="System.Workflow.Runtime" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\D365Extensions\D365Extensions.csproj" />
