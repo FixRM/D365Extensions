@@ -1,4 +1,14 @@
 # What's new
+## [2.8.0](https://github.com/FixRM/D365Extensions/compare/v2.7.1...v2.8.0) (2025-09-04)
+
+
+### Features
+
+* add new Delete<T> overrides ([9adccd2](https://github.com/FixRM/D365Extensions/commit/9adccd2e3e04323e25621df3628b5b5c7509bb75))
+* add new Retrieve<T> overrides ([9df7bf2](https://github.com/FixRM/D365Extensions/commit/9df7bf231e04ec5902111a0247ac28f31e58c363))
+* better newRefs logic for MergeAttributes and ApplyChanges ([dd0b9ab](https://github.com/FixRM/D365Extensions/commit/dd0b9ab657cbb17b562530214a0e6b686794875d))
+* finally add RetrieveMultiple<T> override ([c9c551e](https://github.com/FixRM/D365Extensions/commit/c9c551ee6be199e4bcc27378eada732fdbe3bb3d))
+
 ### [2.7.1](https://github.com/FixRM/D365Extensions/compare/v2.7.0...v2.7.1) (2025-06-16)
 
 ## [2.7.0](https://github.com/FixRM/D365Extensions/compare/v2.6.0...v2.7.0) (2025-06-16)
