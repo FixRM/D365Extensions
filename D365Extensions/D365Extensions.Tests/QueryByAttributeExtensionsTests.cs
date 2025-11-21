@@ -21,7 +21,7 @@ namespace D365Extensions.Tests
             var expectedAttributeValue = "not used";
 
             // Act
-            query.AddAttribute<TestEntity>(t => t.ReferenceTypeProperty, expectedAttributeValue);
+            query.AddAttributeValue<TestEntity>(t => t.ReferenceTypeProperty, expectedAttributeValue);
 
             // Assert
             Assert.AreEqual(1, query.Attributes.Count);

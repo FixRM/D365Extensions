@@ -19,7 +19,19 @@ namespace Microsoft.Xrm.Sdk.Query
         /// <typeparam name="T">Type of the entity</typeparam>
         /// <param name="attributeName">The property expressions containing the name of the attribute</param>
         /// <param name="value">The attribute value.</param>
+        [Obsolete("Use AddAttributeValue<T>")]
         public static void AddAttribute<T>(this QueryByAttribute query, Expression<Func<T, object>> attributeName, object value) where T : Entity
+        {
+            query.AddAttributeValue(LogicalName.GetName(attributeName), value);
+        }
+
+        /// <summary>
+        /// Adds an attribute value to the attributes collection.
+        /// </summary>
+        /// <typeparam name="T">Type of the entity</typeparam>
+        /// <param name="attributeName">The property expressions containing the name of the attribute</param>
+        /// <param name="value">The attribute value.</param>
+        public static void AddAttributeValue<T>(this QueryByAttribute query, Expression<Func<T, object>> attributeName, object value) where T : Entity
         {
             query.AddAttributeValue(LogicalName.GetName(attributeName), value);
         }
