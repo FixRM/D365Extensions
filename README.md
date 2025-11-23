@@ -1,4 +1,4 @@
-[![NuGet version (D365Extensions)](https://img.shields.io/nuget/v/D365Extensions.svg?style=flat-square)](https://www.nuget.org/packages/D365Extensions/) [![Build Status](https://dev.azure.com/fixrm/FixRM/_apis/build/status/D365Extensions%20YAML?branchName=master)](https://dev.azure.com/fixrm/FixRM/_build/latest?definitionId=20&branchName=master) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+﻿[![NuGet version (D365Extensions)](https://img.shields.io/nuget/v/D365Extensions.svg?style=flat-square)](https://www.nuget.org/packages/D365Extensions/) [![Build Status](https://dev.azure.com/fixrm/FixRM/_apis/build/status/D365Extensions%20YAML?branchName=master)](https://dev.azure.com/fixrm/FixRM/_build/latest?definitionId=20&branchName=master) [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 # D365Extensions
 A collection of Extension methods for Microsoft Dynamics CRM/D365 SDK base classes
@@ -32,7 +32,14 @@ To configure this task your should add `ILRepack.targets` file to you project. F
   </Target>
 </Project>
 ```
-You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies. You shouldn't overrite your assembly with merged one as has some side effects. For instance, it may complicate developing of unit tests if test project and plugin library has common dependencies. In this case you can get runtime errors saying that some types are ambiguous.
+
+By default assembly level attributes like `[assembly: Microsoft.Xrm.Sdk.Client.ProxyTypesAssemblyAttribute()]` are not merged by `ILRepack`.
+
+>**Consider using `CopyAttributes="true"` argument if your Early Bound types are stored in separate assembly from plugins**
+
+Otherwise, it may lead to additional memory allocations when using `ToEntity<T>` method or even **invalid class cast exceptions** at runtime.
+
+You should use `KeyFile` parameter as your plugin assembly should be signed. We also recommend use `LibraryPath` parameter as shown to avoid merge problems with dependent SDK assemblies.
 
 >**!!! Never merge SDK assemblies in your code. It will cause runtime errors !!!**
 
@@ -61,9 +68,9 @@ Set of extension methods for Microsoft.Xrm.Sdk.IServiceProvider base class. Just
 Set of extension methods for Microsoft.Xrm.Sdk.EntityReference base class. At the moment just two simple but sometimes useful type conversion methods.
 
 ## [Query Extensions](../../wiki/Query-Extensions)
-Set of extension methods to support some expression-style/LINQ techniques while using QueryExpression/QueryByAttribute classes.
+Set of extension methods to support some expression-style/LINQ techniques while using QueryExpression/QueryByAttribute classes under the hood.
 
 # Contributing
 Please fill free to create issue if you find a bug or have an idea. PR's are welcomed as well! :) Help wanted in the following areas:
-+ Unit tests. Most of extensions are just wrappers/overrides of SDK classes but as list of extension grows method call chain grows as well. It seems like it's a time to unit check all methods
-+ Code documentation. As it turns out XML code documentation and wiki documentation are very different. Help with updating code doc is appreciated 
++ Unit tests. Most of extensions are just wrappers/overrides of SDK classes but as list of extension grows method call chain grows as well. It seems like it's a time to unit test all methods
++ Code documentation. As it turns out, XML code documentation and wiki documentation are very different. Help with updating code doc is appreciated 
