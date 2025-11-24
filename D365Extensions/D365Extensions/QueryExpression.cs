@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.Xrm.Sdk.Query
 {
-    public class QueryExpression<T> where T : Entity
+    public sealed class QueryExpression<T> where T : Entity
     {
         /// <summary>
         /// Gets or sets the number of rows to be returned.
