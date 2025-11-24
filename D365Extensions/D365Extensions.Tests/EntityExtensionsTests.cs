@@ -1123,6 +1123,26 @@ namespace D365Extensions.Tests
             Assert.AreEqual(existingEntity.PrimaryContactId.LogicalName, updatedEntity.PrimaryContactId.LogicalName);
             Assert.AreEqual(existingEntity.PrimaryContactId.KeyAttributes, updatedEntity.PrimaryContactId.KeyAttributes);
             Assert.AreEqual(existingEntity.PrimaryContactId.RowVersion, updatedEntity.PrimaryContactId.RowVersion);
-            Assert.IsNull(existingEntity.PrimaryContactId.Name);        }
+            Assert.IsNull(existingEntity.PrimaryContactId.Name);
+        }
+
+        [TestMethod()]
+        public void ToEntityReferenceTTest()
+        {
+            //Setup
+            var entity = new Entity()
+            {
+                Id = Guid.NewGuid(),
+                RowVersion = "42",                
+            };
+
+            //Act
+            var reference = entity.ToEntityReference<Account>();
+
+            //Assert
+            Assert.AreEqual(entity.Id, reference.Id);
+            Assert.AreEqual(entity.RowVersion, reference.RowVersion);
+            Assert.AreEqual(entity.KeyAttributes, reference.KeyAttributes);
+        }
     }
 }

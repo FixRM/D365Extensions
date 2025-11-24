@@ -213,12 +213,29 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static EntityReference ToEntityReference(this Entity entity, bool withKeys)
         {
-            EntityReference reference = entity.ToEntityReference();
+            var reference = entity.ToEntityReference();
 
             if (withKeys == true)
             {
                 reference.KeyAttributes = entity.KeyAttributes;
             }
+
+            return reference;
+        }
+
+        /// <summary>
+        /// Gets an entity reference for this entity instance.
+        /// </summary>
+        /// <typeparam name="T">Entity type</typeparam>
+        /// <returns></returns>
+        public static EntityReference<T> ToEntityReference<T>(this Entity entity) where T : Entity
+        {
+            var reference = new EntityReference<T>()
+            {
+                Id = entity.Id,
+                KeyAttributes = entity.KeyAttributes,
+                RowVersion = entity.RowVersion,
+            };
 
             return reference;
         }
