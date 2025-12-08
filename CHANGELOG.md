@@ -1,4 +1,13 @@
 # What's new
+## [2.9.0](https://github.com/FixRM/D365Extensions/compare/v2.8.0...v2.9.0) (2025-12-08)
+
+
+### Features
+
+* add QueryByAttribute<T> ([9580655](https://github.com/FixRM/D365Extensions/commit/9580655763b5a8bba5e6fbfb7b25d5f14555a68e))
+* add QueryExpression<T> ([585a8da](https://github.com/FixRM/D365Extensions/commit/585a8dac104af08566e2279d9a7912d0b9eca5f2))
+* add ToEntityReference<T> extension method ([cdc1dea](https://github.com/FixRM/D365Extensions/commit/cdc1deaa3321cd4ff2b89eea3e2e09e7d9c1ca06))
+
 ## [2.8.0](https://github.com/FixRM/D365Extensions/compare/v2.7.1...v2.8.0) (2025-09-04)
 
 
