@@ -113,5 +113,32 @@ namespace Microsoft.Xrm.Sdk
 
             service.Delete(LogicalName.GetName<T>(), keys);
         }
+
+        /// <summary>
+        /// Delete method override. Provide a way to specify concurrency behavior
+        /// </summary>
+        /// <param name="entityName">The logical name of the entity</param>
+        /// <param name="id">The ID of the record that you want to delete</param>
+        /// <param name="concurrencyBehavior"></param>
+        public static void Delete(this IOrganizationService service, string entityName, Guid id, ConcurrencyBehavior concurrencyBehavior)
+        {
+            service.Delete(new EntityReference(entityName, id), concurrencyBehavior);
+        }
+
+        /// <summary>
+        /// Delete method override. Provide a way to specify concurrency behavior
+        /// </summary>
+        /// <param name="reference">Entity to delete</param>
+        /// <param name="concurrencyBehavior">Concurrency behavior type</param>
+        public static void Delete(this IOrganizationService service, EntityReference reference, ConcurrencyBehavior concurrencyBehavior)
+        {
+            var deleteRequest = new DeleteRequest()
+            {
+                Target = reference,
+                ConcurrencyBehavior = concurrencyBehavior,
+            };
+
+            service.Execute(deleteRequest);
+        }
     }
 }
