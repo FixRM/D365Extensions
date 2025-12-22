@@ -30,9 +30,6 @@ namespace D365Extensions.Tests
         [TestMethod()]
         public void IsPrimaryKeyShouldReturnTrueForActivityTest()
         {
-            FakeXrmEasy.XrmFakedContext context = new FakeXrmEasy.XrmFakedContext();
-
-
             // Setup
             var av = new AliasedValue(
                 entityLogicalName: "task",
