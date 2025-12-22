@@ -1,7 +1,7 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿#if NET452
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System;
-using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,3 +42,4 @@ namespace System.Activities
         }
     }
 }
+#endif

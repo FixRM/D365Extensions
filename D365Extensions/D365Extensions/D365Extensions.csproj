@@ -1,24 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <AssemblyTitle>D365Extensions</AssemblyTitle>
-    <Company>Artem Grunin</Company>
-    <Product>D365Extensions</Product>
-    <Title>D365Extensions</Title>
-    <Description>A collection of extension methods for Microsoft Dynamics CRM/D365 SDK base classes</Description>
-    <Copyright>Copyright 2018</Copyright>
-    <Version>1.0.0.0</Version>
-    <Authors>Artem Grunin</Authors>
-  </PropertyGroup>
-  <PropertyGroup>
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.1.0" />
-    <PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.1.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net452;net8.0</TargetFrameworks>
+		<AssemblyTitle>D365Extensions</AssemblyTitle>
+		<Company>Artem Grunin</Company>
+		<Product>D365Extensions</Product>
+		<Title>D365Extensions</Title>
+		<Description>A collection of extension methods for Microsoft Dynamics CRM/D365 SDK base classes</Description>
+		<Copyright>Copyright 2018</Copyright>
+		<Version>1.0.0.0</Version>
+		<Authors>Artem Grunin</Authors>
+	</PropertyGroup>
+	<PropertyGroup>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.1.0" />
+		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.1.0" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.0.1" />
+		<PackageReference Include="System.ServiceModel.Primitives" Version="4.10.3" />
+	</ItemGroup>
 </Project>
