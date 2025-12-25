@@ -51,7 +51,7 @@ steps:
     TargetFolder: D365Extensions/D365Extensions.Tests
 
 - task: VSBuild@1
-  displayName: Build solution **\*.sln
+  displayName: Build solution **\*.sln and create NuGet package
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
@@ -69,22 +69,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     diagnosticsEnabled: True
-
-# - task: NuGetCommand@2
-#   displayName: NuGet pack
-#   inputs:
-#     command: pack
-#     searchPatternPack: '**/*.csproj;!**\*.Tests.csproj;!**\*.Benchmark.csproj'
-#     versioningScheme: byEnvVar
-#     versionEnvVar: semver
-#     condition: ne(variables['Build.Reason'], 'PullRequest')
-
-# - task: CopyFiles@2
-#   displayName: 'Copy NuGet package to staging directory'
-#   inputs:
-#     SourceFolder: '$(Build.BinariesDirectory)' 
-#     Contents: '*.nupkg' 
-#     TargetFolder: '$(Build.ArtifactStagingDirectory)/'
+    condition: ne(variables['Build.Reason'], 'PullRequest')
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
