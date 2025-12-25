@@ -21,9 +21,9 @@ pool:
 
 steps:
 - task: NuGetToolInstaller@0
-  displayName: Use NuGet 5.10.0
+  displayName: Use NuGet 6.14.2
   inputs:
-    versionSpec: '5.10.0'
+    versionSpec: '6.14.2'
 
 - task: NuGetCommand@2
   displayName: NuGet restore
