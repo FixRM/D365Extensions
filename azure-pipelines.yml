@@ -79,6 +79,13 @@ steps:
 #     versionEnvVar: semver
 #     condition: ne(variables['Build.Reason'], 'PullRequest')
 
+- task: CopyFiles@2
+  displayName: 'Copy NuGet package to staging directory'
+  inputs:
+    SourceFolder: '$(Build.BinariesDirectory)' 
+    Contents: '*.nupkg' 
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/'
+
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
