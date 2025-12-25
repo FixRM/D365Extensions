@@ -56,6 +56,7 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    msbuildArguments: '/p:PackageVersion=$(semver)'
 
 - task: VSTest@2
   displayName: VsTest - testAssemblies
