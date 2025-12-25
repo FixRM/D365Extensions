@@ -69,7 +69,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     diagnosticsEnabled: True
-    condition: ne(variables['Build.Reason'], 'PullRequest')
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
