@@ -14,6 +14,15 @@
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageProjectUrl>https://github.com/FixRM/D365Extensions</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/FixRM/D365Extensions</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>D365 CRM</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>fixrmlogo_64.png</PackageIcon>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
@@ -24,5 +33,15 @@
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.0.1" />
 		<PackageReference Include="System.ServiceModel.Primitives" Version="4.10.3" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\fixrmlogo_64.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 </Project>

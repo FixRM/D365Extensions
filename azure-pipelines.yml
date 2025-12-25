@@ -69,14 +69,14 @@ steps:
     configuration: '$(buildConfiguration)'
     diagnosticsEnabled: True
 
-- task: NuGetCommand@2
-  displayName: NuGet pack
-  inputs:
-    command: pack
-    searchPatternPack: '**/*.csproj;!**\*.Tests.csproj;!**\*.Benchmark.csproj'
-    versioningScheme: byEnvVar
-    versionEnvVar: semver
-    condition: ne(variables['Build.Reason'], 'PullRequest')
+# - task: NuGetCommand@2
+#   displayName: NuGet pack
+#   inputs:
+#     command: pack
+#     searchPatternPack: '**/*.csproj;!**\*.Tests.csproj;!**\*.Benchmark.csproj'
+#     versioningScheme: byEnvVar
+#     versionEnvVar: semver
+#     condition: ne(variables['Build.Reason'], 'PullRequest')
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
