@@ -15,9 +15,9 @@
 		<tags>D365 CRM</tags>
 		<!--Has to add it here manually because of a known bug in NuGet: https://github.com/NuGet/Home/issues/5979-->
 		<dependencies>
-			<group targetFramework="net462">
-				<dependency version="8.2.0.2" id="Microsoft.CrmSdk.CoreAssemblies"/>
-				<dependency version="8.2.0.2" id="Microsoft.CrmSdk.Workflow"/>
+			<group targetFramework=".NETFramework4.5.2">
+				<dependency version="8.1.0" id="Microsoft.CrmSdk.CoreAssemblies"/>
+				<dependency version="8.1.0" id="Microsoft.CrmSdk.Workflow"/>
 			</group>
 			<group targetFramework="net8.0">
 				<dependency version="1.0.1" id="Microsoft.PowerPlatform.Dataverse.Client"/>
