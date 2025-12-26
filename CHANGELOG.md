@@ -1,4 +1,13 @@
 # What's new
+## [2.10.0](https://github.com/FixRM/D365Extensions/compare/v2.9.0...v2.10.0) (2025-12-26)
+
+
+### Features
+
+* add Delete method override that provide a way to specify concurrency behavior ([9ecce93](https://github.com/FixRM/D365Extensions/commit/9ecce9306451c7505746cc2b7a8a40a0404b63e5))
+* experimental support for .net 8.0 ([6363269](https://github.com/FixRM/D365Extensions/commit/6363269ceca4603e356b20f240cc640a47f2209c))
+* multi targeting for net452 and net8.0 ([7640777](https://github.com/FixRM/D365Extensions/commit/7640777c4c6386fd187c7452bbd51210d88f85f9))
+
 ## [2.9.0](https://github.com/FixRM/D365Extensions/compare/v2.8.0...v2.9.0) (2025-12-08)
 
 
