@@ -11,7 +11,7 @@
 		<AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
 	<PropertyGroup>
-	  <NoWarn>1701;1702;CS0618</NoWarn>
+		<NoWarn>1701;1702;CS0618</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />

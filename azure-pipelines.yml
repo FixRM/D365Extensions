@@ -21,9 +21,9 @@ pool:
 
 steps:
 - task: NuGetToolInstaller@0
-  displayName: Use NuGet 5.10.0
+  displayName: Use NuGet 6.14.0
   inputs:
-    versionSpec: '5.10.0'
+    versionSpec: '6.14.0'
 
 - task: NuGetCommand@2
   displayName: NuGet restore
@@ -51,11 +51,12 @@ steps:
     TargetFolder: D365Extensions/D365Extensions.Tests
 
 - task: VSBuild@1
-  displayName: Build solution **\*.sln
+  displayName: Build solution **\*.sln and create NuGet package
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+    msbuildArgs: '/p:PackageVersion=$(semver) /p:PackageOutputPath=$(Build.ArtifactStagingDirectory)'
 
 - task: VSTest@2
   displayName: VsTest - testAssemblies
@@ -68,15 +69,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     diagnosticsEnabled: True
-
-- task: NuGetCommand@2
-  displayName: NuGet pack
-  inputs:
-    command: pack
-    searchPatternPack: '**/*.csproj;!**\*.Tests.csproj;!**\*.Benchmark.csproj'
-    versioningScheme: byEnvVar
-    versionEnvVar: semver
-    condition: ne(variables['Build.Reason'], 'PullRequest')
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
