@@ -1,20 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFrameworks>net452;net8.0</TargetFrameworks>
+		<TargetFrameworks>net452;net462;net8.0</TargetFrameworks>
 		<AssemblyTitle>D365Extensions</AssemblyTitle>
 		<Company>Artem Grunin</Company>
 		<Product>D365Extensions</Product>
-		<Title>D365Extensions</Title>
-		<Description>A collection of extension methods for Microsoft Dynamics CRM/D365 SDK base classes</Description>
-		<Copyright>Copyright 2018</Copyright>
 		<Version>1.0.0.0</Version>
-		<Authors>Artem Grunin</Authors>
 	</PropertyGroup>
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
 	</PropertyGroup>
+	<!--NuGet Properties-->
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Title>D365Extensions</Title>
+		<Description>A collection of extension methods and classes for Microsoft Dynamics CRM/D365 SDK</Description>
+		<Copyright>Copyright 2018-2055</Copyright>
+		<Authors>Artem Grunin</Authors>
 		<PackageProjectUrl>https://github.com/FixRM/D365Extensions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/FixRM/D365Extensions</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
@@ -22,18 +23,27 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>fixrmlogo_64.png</PackageIcon>
 	</PropertyGroup>
+	<!--Assembly Strong name signing-->
 	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>FixRM.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
+	<!--CRM 2016+-->
 	<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
 		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="8.1.0" />
 		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="8.1.0" />
 	</ItemGroup>
+	<!--CRM v9+-->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+		<PackageReference Include="Microsoft.CrmSdk.CoreAssemblies" Version="9.0.2.9" />
+		<PackageReference Include="Microsoft.CrmSdk.Workflow" Version="9.0.2.9" />
+	</ItemGroup>
+	<!--Core Client-->
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
 		<PackageReference Include="Microsoft.PowerPlatform.Dataverse.Client" Version="1.0.1" />
 		<PackageReference Include="System.ServiceModel.Primitives" Version="4.10.3" />
 	</ItemGroup>
+	<!--NuGet resources-->
 	<ItemGroup>
 		<None Include="..\..\fixrmlogo_64.png">
 			<Pack>True</Pack>

@@ -1,4 +1,4 @@
-﻿#if NET452
+﻿#if NET452 || NET462
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Workflow;
 using System;
