@@ -48,7 +48,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="settings">The settings that define whether execution should continue if an
         //  error occurs and if responses for each message request processed are to be returned</param>
         /// <param name="batchSize">The number of requests to be sent in each ExecuteMultipleRequest.</param>
-        [Obsolete("Use IEnumerable<ExecuteMultipleOperationResponse> Execute(IEnumerable<OrganizationRequest> requests,int batchSize, ExecuteMultipleSettings settings, Action<ExecuteMultipleResponse> callback")]
+        [Obsolete("This method will be deleted in the next major release")]
         public static IEnumerable<ExecuteMultipleResponse> Execute(this IOrganizationService service,
             IEnumerable<OrganizationRequest> requests,
             int batchSize = 100,
@@ -89,6 +89,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="batchSize">The number of requests to be sent in each ExecuteMultipleRequest.</param>
         /// <param name="callback">Optional function to be called for each ExecuteMultipleResponse</param>
         /// <returns></returns>
+        [Obsolete("This method will be deleted in the next major release")]
         public static IEnumerable<ExecuteMultipleOperationResponse> Execute(this IOrganizationService service,
             IEnumerable<OrganizationRequest> requests,
             int batchSize = 100,
@@ -137,6 +138,7 @@ namespace Microsoft.Xrm.Sdk
         /// <param name="onResponse">Optional function to be called for each ExecuteMultipleOperationResponse</param>
         /// <param name="onProgress">Optional function to report progress. Progress is calculated as processed * 100.0 / queried items</param>
         /// <param name="cancellationToken">Optional cancellation token that can be used to cancel bulk processing</param>
+        [Obsolete("This method will be deleted in the next major release")]
         public static void Execute(this IOrganizationService service,
             QueryBase query,
             Func<Entity, OrganizationRequest> toRequest,
