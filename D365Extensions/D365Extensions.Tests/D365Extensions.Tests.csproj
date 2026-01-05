@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net452</TargetFramework>
+		<TargetFramework>net462</TargetFramework>
 		<LangVersion>latest</LangVersion>
 		<AssemblyTitle>D365Extensions.Tests</AssemblyTitle>
 		<Product>D365Extensions.Tests</Product>
@@ -17,7 +17,7 @@
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
 		<PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
 		<PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
-		<PackageReference Include="FakeXrmEasy.2016" Version="1.58.1" />
+		<PackageReference Include="FakeXrmEasy.9" Version="1.58.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\D365Extensions\D365Extensions.csproj" />
