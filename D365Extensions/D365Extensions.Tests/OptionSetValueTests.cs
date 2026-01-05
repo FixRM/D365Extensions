@@ -1,5 +1,4 @@
-﻿using D365Extensions.Tests;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
@@ -23,6 +22,19 @@ namespace D365Extensions.Tests
 
             // Assert
             Assert.AreEqual((int) expectedValue, optionSet.Value);
+        }
+
+        [TestMethod()]
+        public void OptionSetValueNullTest()
+        {
+            // Setup
+            OptionSetValue<StateCode> optionSetValueT = null;
+
+            // Act
+            OptionSetValue optionSet = optionSetValueT;
+
+            // Assert
+            Assert.IsNull(optionSet);
         }
     }
 }
