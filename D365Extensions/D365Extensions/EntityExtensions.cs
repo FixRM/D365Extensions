@@ -132,7 +132,7 @@ namespace Microsoft.Xrm.Sdk
         [Obsolete("Use public T GetAliasedEntity<T>(String alias = null) where T : Entity; method instead")]
         public static T GetAliasedEntity<T>(this Entity entity, String entityLogicalName, String alias = null) where T : Entity
         {
-            return GetAliasedEntity(entity, entityLogicalName, alias).ToEntity<T>();
+            return GetAliasedEntity(entity, entityLogicalName, alias).ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetAliasedEntity<T>(this Entity entity, String alias = null) where T : Entity
         {
-            return GetAliasedEntity(entity, LogicalName.GetName<T>(), alias).ToEntity<T>();
+            return GetAliasedEntity(entity, LogicalName.GetName<T>(), alias).ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -412,6 +412,35 @@ namespace Microsoft.Xrm.Sdk
             var sIds = sValue.Entities.Select(e => e.Id).OrderBy(id => id);
 
             return tIds.SequenceEqual(sIds);
+        }
+
+        /// <summary>
+        /// If ProxyTypesAssemblyAttribute is present, entities will be deserialized as corresponding early
+        /// bound types. That means that entites can be simply casted to T instead of calling .ToEntity<T>.
+        /// It may not be a case if one use OrganizationServiceProxy without caling .EnableProxyTypes() method,
+        /// but it is a kind of outdated API (which is still used internally by modern ones).
+        /// 
+        /// In its turn, ToEntity<T> ALWAYS return a new object even if type of T matches with initial type 
+        /// of the entity. More than that, if you call ToEntity<Entity> it will not cast object to parent type, 
+        /// it will create new instance of Entity (but in slightly more efficient way comparing to child types).
+        /// 
+        /// I believe there was a reason for that decision, but "casted" objects still share same references to
+        /// ALL internal properties as the original entity. In the same time, they are not reference equal.
+        /// There might be some edge cases there it may make sense, but not in the case of this library.
+        /// 
+        /// It may be fixed in newer SDK versions but it was a case for Microsoft.PowerPlatform.Dataverse.Client 
+        /// v1.0.1 and previous versions.
+        /// </summary>
+        internal static T ToEntitySmart<T>(this Entity entity) where T : Entity
+        {
+            CheckParam.CheckForNull(entity, nameof(entity));
+
+            //If entity and T represent the same type, or entity is derived from T directly or indirectly
+            if (typeof(T).IsAssignableFrom(entity.GetType()))
+                return entity as T;
+
+            // this will create new object
+            return entity.ToEntity<T>();
         }
     }
 }

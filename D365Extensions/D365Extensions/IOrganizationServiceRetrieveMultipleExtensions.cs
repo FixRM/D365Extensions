@@ -114,7 +114,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns>Entity set as 'yield' iterator</returns>
         public static IEnumerable<T> RetrieveMultiple<T>(this IOrganizationService service, QueryBase query, Action<EntityCollection> callback = null) where T : Entity
         {
-            return service.RetrieveMultiple(query, callback).Select(e => e.ToEntity<T>());
+            return service.RetrieveMultiple(query, callback).Select(e => e.ToEntitySmart<T>());
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns>Entity set as 'yield' iterator</returns>
         public static IEnumerable<T> RetrieveMultiple<T>(this IOrganizationService service, FetchExpression query, Action<EntityCollection> callback = null) where T: Entity
         {
-            return service.RetrieveMultiple(query, callback).Select(e => e.ToEntity<T>());
+            return service.RetrieveMultiple(query, callback).Select(e => e.ToEntitySmart<T>());
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Microsoft.Xrm.Sdk
 
         public static T RetrieveSingle<T>(this IOrganizationService service, QueryBase query) where T : Entity
         {
-            return service.RetrieveSingle(query).ToEntity<T>();
+            return service.RetrieveSingle(query).ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace Microsoft.Xrm.Sdk
 
         public static T RetrieveSingleOrDefault<T>(this IOrganizationService service, QueryBase query) where T : Entity
         {
-            return service.RetrieveSingleOrDefault(query)?.ToEntity<T>();
+            return service.RetrieveSingleOrDefault(query)?.ToEntitySmart<T>();
         }
     }
 }

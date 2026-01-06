@@ -129,7 +129,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPreImage<T>(this IPluginExecutionContext context, string name = PreImage) where T : Entity
         {
-            return context.PreEntityImages[name]?.ToEntity<T>();
+            return context.PreEntityImages[name]?.ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPostImage<T>(this IPluginExecutionContext context, string name = PostImage) where T : Entity
         {
-            return context.PostEntityImages[name]?.ToEntity<T>();
+            return context.PostEntityImages[name]?.ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetTarget<T>(this IPluginExecutionContext context) where T : Entity
         {
-            return GetTarget(context)?.ToEntity<T>();
+            return GetTarget(context)?.ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPreTarget<T>(this IPluginExecutionContext context, string preImageName = PreImage) where T : Entity
         {
-            return GetPreTarget(context, preImageName).ToEntity<T>();
+            return GetPreTarget(context, preImageName).ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetPostTarget<T>(this IPluginExecutionContext context, string postImageName = PostImage) where T : Entity
         {
-            return GetPostTarget(context, postImageName).ToEntity<T>();
+            return GetPostTarget(context, postImageName).ToEntitySmart<T>();
         }
 
         /// <summary>

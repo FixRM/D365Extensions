@@ -826,8 +826,8 @@ namespace D365Extensions.Tests
             A.CallTo(() => service.Update(A<Entity>.Ignored)).Invokes((Entity e) => actualEntity = e);
 
             // Act
-            service.UpdateChanged(entity.ToEntity<Entity>());
-            var actualAccount = actualEntity.ToEntity<Account>();
+            service.UpdateChanged(entity);
+            var actualAccount = actualEntity as Account;
 
             // Assert
             Assert.AreEqual(expectedName, actualAccount.Name);

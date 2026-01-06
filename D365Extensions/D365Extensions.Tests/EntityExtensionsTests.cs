@@ -1133,7 +1133,7 @@ namespace D365Extensions.Tests
             var entity = new Entity()
             {
                 Id = Guid.NewGuid(),
-                RowVersion = "42",                
+                RowVersion = "42",
             };
 
             //Act
@@ -1143,6 +1143,49 @@ namespace D365Extensions.Tests
             Assert.AreEqual(entity.Id, reference.Id);
             Assert.AreEqual(entity.RowVersion, reference.RowVersion);
             Assert.AreEqual(entity.KeyAttributes, reference.KeyAttributes);
+        }
+
+        [TestMethod()]
+        public void ToEntitySmartTest()
+        {
+            // cheat sheet
+            //string s = "test";
+            //object o = s;
+            //Assert.AreEqual(o, s); //true
+
+            //Setup
+            Account expectedReference = new Account();
+            Entity expectedReferenceOfBaseType = new Entity(Account.EntityLogicalName);
+
+            //Act
+            Account actualReferenceSameType = expectedReference.ToEntitySmart<Account>();
+            Entity actualReferenceParentType = expectedReference.ToEntitySmart<Entity>();
+            Account actualReferenceConverted = expectedReferenceOfBaseType.ToEntitySmart<Account>();
+
+            //Assert
+            Assert.AreEqual(expectedReference, actualReferenceSameType);
+            Assert.AreEqual(expectedReference, actualReferenceParentType);
+            Assert.AreNotEqual(expectedReferenceOfBaseType, actualReferenceConverted);
+        }
+
+        [TestMethod()]
+        public void ToEntitySdkTest()
+        {
+            // In case SDK changes one day
+
+            //Setup
+            Account expectedReference = new Account();
+            Entity expectedReferenceOfBaseType = new Entity(Account.EntityLogicalName);
+
+            //Act
+            Account actualReferenceSameType = expectedReference.ToEntity<Account>();
+            Entity actualReferenceParentType = expectedReference.ToEntity<Entity>();
+            Account actualReferenceConverted = expectedReferenceOfBaseType.ToEntity<Account>();
+
+            //Assert
+            Assert.AreNotEqual(expectedReference, actualReferenceSameType);
+            Assert.AreNotEqual(expectedReference, actualReferenceParentType);
+            Assert.AreNotEqual(expectedReferenceOfBaseType, actualReferenceConverted);
         }
     }
 }

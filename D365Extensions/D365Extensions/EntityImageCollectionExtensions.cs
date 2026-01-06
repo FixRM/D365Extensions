@@ -31,7 +31,7 @@ namespace Microsoft.Xrm.Sdk
         /// <returns></returns>
         public static T GetImage<T>(this EntityImageCollection images, string name) where T : Entity
         {            
-            return images.GetImage(name)?.ToEntity<T>();
+            return images.GetImage(name)?.ToEntitySmart<T>();
         }
     }
 }

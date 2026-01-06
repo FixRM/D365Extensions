@@ -48,7 +48,7 @@ namespace Microsoft.Xrm.Sdk
         {
             Entity entity = service.Retrieve(LogicalName.GetName<T>(), id, columnSet);
 
-            return entity.ToEntity<T>();
+            return entity.ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Microsoft.Xrm.Sdk
         {
             Entity entity = service.Retrieve(reference, columnSet);
 
-            return entity.ToEntity<T>();
+            return entity.ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Microsoft.Xrm.Sdk
         {
             Entity entity = service.Retrieve(logicalName, keyName, keyValue, columnSet);
 
-            return entity.ToEntity<T>();
+            return entity.ToEntitySmart<T>();
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace Microsoft.Xrm.Sdk
         {
             Entity entity = service.Retrieve(LogicalName.GetName<T>(), keyName, keyValue, columnSet);
 
-            return entity.ToEntity<T>();
+            return entity.ToEntitySmart<T>();
         }
 
         /// <summary>
