@@ -77,11 +77,10 @@ namespace D365Extensions.Tests
             var key = "accountnumber";
             var value = "42";
 
-            var reference1 = new EntityReference()
+            var reference1 = new EntityReference<Account>()
             {
                 Id = id,
                 Name = name,
-                LogicalName = Account.EntityLogicalName,
                 RowVersion = rowVersion,
                 KeyAttributes =
                 {
@@ -101,8 +100,8 @@ namespace D365Extensions.Tests
             };
 
             // Act + Assert
-            Assert.IsTrue(reference1.Equals((EntityReference) reference2));
-            Assert.IsTrue(reference2.Equals(reference1));
+            Assert.IsTrue(reference1.Equals(reference2));
+            Assert.IsFalse(reference1.Equals((EntityReference) reference2));
         }
 
         [TestMethod()]

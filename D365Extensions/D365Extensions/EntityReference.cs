@@ -103,12 +103,15 @@ namespace Microsoft.Xrm.Sdk
         /// WARNING: EntityReference and EntityReference<T> are different types! You can't compare them directly!
         /// You should always explicitly cast EntityReference<T> to EntityReference before comparison:
         /// <code>
-        /// reference1.Equals((EntityReference) reference2)
+        /// reference.Equals((EntityReference) referenceT)
         /// </code>
         /// </summary>
         public override bool Equals(object obj)
         {
-            return reference.Equals(obj);
+            if (obj is not EntityReference<T> referenceT)
+                return false;
+
+            return reference.Equals(referenceT.reference);
         }
 
         public override int GetHashCode()
