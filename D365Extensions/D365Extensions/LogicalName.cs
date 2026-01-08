@@ -49,26 +49,25 @@ namespace D365Extensions
         {
             // Property, field of method returning value type
             if (expression is UnaryExpression unaryExpression)
-            {
                 expression = unaryExpression.Operand;
-            }
 
             // Reference type property or field
-            if (expression is MemberExpression memberExpression)
-            {
+            if (expression is not MemberExpression memberExpression)
+                throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
+
                 MemberInfo member = memberExpression.Member;
 
-                if (typeof(Entity).IsAssignableFrom(member.DeclaringType))
-                {
+            // e.g.: a => a.PrimaryContact.Id instead of a => a.PrimaryContact
+            if (!typeof(Entity).IsAssignableFrom(member.DeclaringType))
+                throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
+            
                     // (Guid) Id attribute is declared in Entity class and is overridden in child EB-classes
                     // For some reason, lambda is assigned with MemberInfo of Entity instead of inheritor
-                    // Also we support anonymous types there member-expressions come from their original type
+            // Also we support anonymous types where member-expressions come from their original type
                     if (member.DeclaringType != typeof(T))
                     {
                         member = typeof(T).GetMember(member.Name).SingleOrDefault();
                     }
-                }
-                else throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
 
                 if (!memberCache.TryGetValue(member, out string logicalName))
                 {
@@ -81,9 +80,6 @@ namespace D365Extensions
 
                 return logicalName;
             }
-
-            throw CheckParam.InvalidExpression(nameof(expression), expression.ToString());
-        }
 
         static ConcurrentDictionary<Type, string> typeCache = new ConcurrentDictionary<Type, string>();
 
