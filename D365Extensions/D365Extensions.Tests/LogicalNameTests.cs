@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using D365Extensions.Tests.Entities;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.Xrm.Sdk;
+using Task = D365Extensions.Tests.Entities.Task;
 
 namespace D365Extensions.Tests
 {
@@ -232,6 +234,68 @@ namespace D365Extensions.Tests
             
             // Act
             var error = Assert.ThrowsException<ArgumentException>(() => LogicalName.GetNames([expression]).ToList());
+
+            // Assert
+            Assert.IsTrue(error.Message.StartsWith(expectedErrorMessage));
+        }
+
+        [TestMethod()]
+        public void Get_Enumerable_Relationship_Test()
+        {
+            // Setup
+            Expression<Func<Account, object>> expression = a => a.Account_Tasks;
+            var expectedSchemaName = nameof(Account.Account_Tasks);
+
+            // Act
+            var relationship = LogicalName.GetRelationshipInfo(expression);
+
+            // Assert
+            Assert.AreEqual(expectedSchemaName, relationship.SchemaName);
+            Assert.AreEqual(Task.EntityLogicalName, relationship.RelatedEntityName);
+            Assert.IsNull(relationship.PrimaryEntityRole);
+        }
+
+        [TestMethod()]
+        public void Get_Entity_Relationship_Test()
+        {
+            // Setup
+            Expression<Func<Account, object>> expression = a => a.Referencingaccount_master_account;
+            var expectedSchemaName = "account_master_account";
+
+            // Act
+            var relationship = LogicalName.GetRelationshipInfo(expression);
+
+            // Assert
+            Assert.AreEqual(expectedSchemaName, relationship.SchemaName);
+            Assert.AreEqual(Account.EntityLogicalName, relationship.RelatedEntityName);
+            Assert.AreEqual(EntityRole.Referencing, relationship.PrimaryEntityRole);
+        }
+
+        [TestMethod()]
+        public void Get_Relationship_Bad_Expression_Test()
+        {
+            // Setup
+            var expectedErrorMessage = string.Format(CheckParam.InvalidExpressionMessage, "Convert(a.CreditOnHold)");
+
+            Expression<Func<Account, object>> expression = a => a.CreditOnHold;
+
+            // Act
+            var error = Assert.ThrowsException<ArgumentException>(()=> LogicalName.GetRelationshipInfo(expression));
+            
+            // Assert
+            Assert.IsTrue(error.Message.StartsWith(expectedErrorMessage));
+        }
+
+        [TestMethod()]
+        public void Get_Relationship_Bad_Property_Type_Test()
+        {
+            // Setup
+            var expectedErrorMessage = string.Format(CheckParam.InvalidRelationshipExpressionMessage, "a.AccountNumber");
+
+            Expression<Func<Account, object>> expression = a => a.AccountNumber;
+
+            // Act
+            var error = Assert.ThrowsException<ArgumentException>(() => LogicalName.GetRelationshipInfo(expression));
 
             // Assert
             Assert.IsTrue(error.Message.StartsWith(expectedErrorMessage));

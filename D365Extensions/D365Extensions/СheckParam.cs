@@ -58,5 +58,12 @@ namespace D365Extensions
             if (collection.EntityName != "activityparty")
                 throw new ArgumentException(InvalidCollectionMessage);
         }
+
+        internal const string InvalidRelationshipExpressionMessage = "Invalid relationship property expression '{0}'. Property type must be 'Entity' or 'IEnumerable<Entity>' or derived types";
+
+        internal static Exception InvalidRelationshipExpression(string name, string expression)
+        {
+            throw new ArgumentException(string.Format(InvalidRelationshipExpressionMessage, expression), name);
+        }
     }
 }
