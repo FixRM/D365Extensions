@@ -31,5 +31,18 @@ namespace Microsoft.Xrm.Sdk
 
             return new OptionSetValue((int) (object) t.Value);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not OptionSetValue<T> optionSet)
+                return false;
+
+            return Equals(Value, optionSet.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
     }
 }
