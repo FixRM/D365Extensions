@@ -19,7 +19,7 @@ namespace Microsoft.Xrm.Sdk
         {
             CheckParam.CheckForNull(reference, nameof(reference));
 
-            /// Retrieve by id if possible as is supposed to be faster
+            /// Retrieve by id if possible as it is supposed to be faster
             if (reference.Id != Guid.Empty)
             {
                 return service.Retrieve(reference.LogicalName, reference.Id, columnSet);
@@ -209,6 +209,29 @@ namespace Microsoft.Xrm.Sdk
             columnSet.Columns.AddRange(LogicalName.GetNames(columns));
 
             return service.Retrieve<T>(reference, columnSet);
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrieves using RetrieveRequest
+        /// </summary>
+        /// <param name="request">Request to be executed</param>
+        public static Entity Retrieve(this IOrganizationService service, RetrieveRequest request)
+        {
+            var response = service.Execute(request) as RetrieveResponse;
+
+            return response.Entity;
+        }
+
+        /// <summary>
+        /// Retrieve method override. Retrieves using RetrieveRequest
+        /// </summary>
+        /// <param name="request">Request to be executed</param>
+
+        public static T Retrieve<T>(this IOrganizationService service, RetrieveRequest request) where T : Entity
+        {
+            var entity = service.Retrieve(request);
+
+            return entity.ToEntitySmart<T>();
         }
     }
 }
