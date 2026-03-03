@@ -1,4 +1,21 @@
 # What's new
+## [2.11.0](https://github.com/FixRM/D365Extensions/compare/v2.10.0...v2.11.0) (2026-03-03)
+
+
+### Features
+
+* add net462 ([d481342](https://github.com/FixRM/D365Extensions/commit/d4813425839f5dd0e032dace778396bd4697082a))
+* add OptionSetValueCollection<T> class ([ab3c939](https://github.com/FixRM/D365Extensions/commit/ab3c939f0124527b20625484e035ec7a69a85370))
+* add RelatedEntityCollection Extensions ([181cd15](https://github.com/FixRM/D365Extensions/commit/181cd15bc8107f3b9a01ee75d6553b7765014ae1))
+* add Relationship<T> class ([ab9c81a](https://github.com/FixRM/D365Extensions/commit/ab9c81ac947da479ac16cb91d086d0f42d6297d7))
+* add RelationshipQueryCollection extensions ([589d163](https://github.com/FixRM/D365Extensions/commit/589d16339019a6513515909bbcbd162056c38805))
+* add RetrieveRequest extensions ([0c8b2cb](https://github.com/FixRM/D365Extensions/commit/0c8b2cbe6dbe89250490d8bca7873609f32eb1cd))
+
+
+### Bug Fixes
+
+* add missed parts to OptionSetValue<T> class ([a6a7a50](https://github.com/FixRM/D365Extensions/commit/a6a7a501d0e39787ed7aa1da17f665d90601d152))
+
 ## [2.10.0](https://github.com/FixRM/D365Extensions/compare/v2.9.0...v2.10.0) (2025-12-26)
 
 
